@@ -129,6 +129,7 @@ obj-$(CONFIG_REGULATOR_WM8350) += wm8350-regulator.o
 obj-$(CONFIG_REGULATOR_WM8400) += wm8400-regulator.o
 obj-$(CONFIG_REGULATOR_WM8994) += wm8994-regulator.o
 obj-$(CONFIG_REGULATOR_CPR) += cpr-regulator.o
+obj-$(CONFIG_REGULATOR_CPR2_GFX) += cpr2-gfx-regulator.o
 obj-$(CONFIG_REGULATOR_CPR3) += cpr3-regulator.o cpr3-util.o
 obj-$(CONFIG_REGULATOR_CPR4_MMSS_LDO) += cpr4-mmss-ldo-regulator.o
 obj-$(CONFIG_REGULATOR_CPR4_HMSS_LDO) += cpr4-hmss-ldo-regulator.o
