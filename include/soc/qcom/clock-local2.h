@@ -263,6 +263,7 @@ extern const struct clk_ops clk_ops_branch_hw_ctl;
 extern const struct clk_ops clk_ops_vote;
 extern const struct clk_ops clk_ops_rcg_hdmi;
 extern const struct clk_ops clk_ops_rcg_edp;
+extern const struct clk_ops clk_ops_rcg_dp;
 extern const struct clk_ops clk_ops_byte;
 extern const struct clk_ops clk_ops_pixel;
 extern const struct clk_ops clk_ops_byte_multiparent;
