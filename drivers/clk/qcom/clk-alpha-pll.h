@@ -45,6 +45,8 @@ struct clk_alpha_pll {
 
 	const struct pll_vco *vco_table;
 	size_t num_vco;
+#define SUPPORTS_FSM_MODE	BIT(0)
+	u8 flags;
 
 	struct clk_regmap clkr;
 	u32 config_ctl_val;
