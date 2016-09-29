@@ -20,6 +20,7 @@
 #include <linux/delay.h>
 
 #include "clk-alpha-pll.h"
+#include "common.h"
 
 #define PLL_MODE		0x00
 #define PLL_STANDBY		0x0
@@ -171,6 +172,9 @@ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
 	mask |= config->post_div_mask;
 
 	regmap_update_bits(regmap, pll->offset + PLL_USER_CTL, mask, val);
+
+	if (pll->flags & SUPPORTS_FSM_MODE)
+		qcom_pll_set_fsm_mode(regmap, pll->offset + PLL_MODE, 6, 0);
 }
 
 static int clk_alpha_pll_hwfsm_enable(struct clk_hw *hw)
