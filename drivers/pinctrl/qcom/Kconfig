@@ -228,4 +228,10 @@ config PINCTRL_QCOM_SSBI_PMIC
          which are using SSBI for communication with SoC. Example PMIC's
          devices are pm8058 and pm8921.
 
+config PINCTRL_SOMC
+	bool "SoMC pinctrl driver"
+	default n
+	help
+	  Select this to enable SoMC pinctrl driver.
+
 endif
