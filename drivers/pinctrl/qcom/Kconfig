@@ -260,4 +260,10 @@ config PINCTRL_SDM429W
 	  Technologies Inc SDM429W platform.
 	  If unsure say N.
 
+config PINCTRL_SOMC
+	bool "SoMC pinctrl driver"
+	default n
+	help
+	  Select this to enable SoMC pinctrl driver.
+
 endif
