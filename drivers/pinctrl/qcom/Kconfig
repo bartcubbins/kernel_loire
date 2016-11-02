@@ -232,4 +232,10 @@ config PINCTRL_SLPI
 	  This is the pinctrl, pinmux and pinconf driver for the
 	  SLPI pin controller block.
 
+config PINCTRL_SOMC
+	bool "SoMC pinctrl driver"
+	default n
+	help
+	  Select this to enable SoMC pinctrl driver.
+
 endif
