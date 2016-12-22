@@ -1642,9 +1642,6 @@ int mdss_mdp_scaler_lut_cfg(struct mdp_scale_data_v2 *scaler,
 		}
 	}
 
-	if (scaler->lut_flag & SCALER_LUT_SWAP)
-		writel_relaxed(BIT(0), MDSS_MDP_REG_SCALER_COEF_LUT_CTRL +
-				offset);
 	mutex_unlock(&mdata->scaler_off->scaler_lock);
 
 	return 0;
@@ -1816,6 +1813,10 @@ int mdss_mdp_qseed3_setup(struct mdss_mdp_pipe *pipe,
 						__func__);
 				return -EINVAL;
 			}
+			if (scaler->lut_flag & SCALER_LUT_SWAP)
+				writel_relaxed(BIT(0),
+					MDSS_MDP_REG_SCALER_COEF_LUT_CTRL +
+					offset);
 		}
 
 		writel_relaxed(phase_init,
