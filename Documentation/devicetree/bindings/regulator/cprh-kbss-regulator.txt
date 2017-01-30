@@ -35,6 +35,7 @@ KBSS specific properties:
 		    "qcom,cprh-msm8998-v2-kbss-regulator",
 		    "qcom,cprh-msm8998-kbss-regulator",
 		    "qcom,cprh-sdm660-kbss-regulator",
+		    "qcom,cprh-sdm630-kbss-regulator",
 		    "qcom,cprh-sdm845-v1-kbss-regulator",
 		    "qcom,cprh-sdm845-v2-kbss-regulator",
 		    "qcom,cprh-sdm845-kbss-regulator".
