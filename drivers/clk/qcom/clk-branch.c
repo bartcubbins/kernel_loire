@@ -24,6 +24,7 @@
 #include <linux/clk/qcom.h>
 
 #include "clk-branch.h"
+#include "clk-debug.h"
 #include "clk-regmap.h"
 #include "clk-debug.h"
 
