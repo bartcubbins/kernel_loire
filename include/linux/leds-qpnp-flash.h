@@ -22,8 +22,17 @@
 
 #define FLASH_LED_PREPARE_OPTIONS_MASK	GENMASK(3, 0)
 
-int qpnp_flash_led_prepare(struct led_trigger *trig, int options,
+#if (defined CONFIG_LEDS_QPNP_FLASH || defined CONFIG_LEDS_QPNP_FLASH_V2)
+extern int (*qpnp_flash_led_prepare)(struct led_trigger *trig, int options,
 					int *max_current);
+#else
+static inline int qpnp_flash_led_prepare(struct led_trigger *trig, int options,
+					int *max_current)
+{
+	return -ENODEV;
+}
+#endif
+
 #ifdef CONFIG_BACKLIGHT_QCOM_SPMI_WLED
 int wled_flash_led_prepare(struct led_trigger *trig, int options,
 					int *max_current);
