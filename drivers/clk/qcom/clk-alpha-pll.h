@@ -101,6 +101,7 @@ extern const struct clk_ops clk_generic_pll_postdiv_ops;
 extern const struct clk_ops clk_trion_pll_ops;
 extern const struct clk_ops clk_trion_fixed_pll_ops;
 extern const struct clk_ops clk_trion_pll_postdiv_ops;
+extern const struct clk_ops clk_alpha_pll_slew_ops;
 
 void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
 		const struct pll_config *config);
