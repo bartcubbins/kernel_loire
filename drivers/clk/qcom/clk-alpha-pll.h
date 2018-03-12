@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -18,6 +18,11 @@
 #include "clk-regmap.h"
 #include "clk-pll.h"
 
+struct pll_vco_data {
+	unsigned long freq;
+	u8 post_div_val;
+};
+
 struct pll_vco {
 	unsigned long min_freq;
 	unsigned long max_freq;
@@ -35,6 +40,7 @@ enum pll_type {
  * @offset: base address of registers
  * @inited: flag that's set when the PLL is initialized
  * @vco_table: array of VCO settings
+ * @vco_data: array of VCO data settings like post div
  * @clkr: regmap clock handle
  * @pll_type: Specify the type of PLL
  */
@@ -46,7 +52,16 @@ struct clk_alpha_pll {
 	const struct pll_vco *vco_table;
 	size_t num_vco;
 #define SUPPORTS_FSM_MODE	BIT(0)
+	/*
+	 * Some PLLs support dynamically updating their rate without disabling
+	 * the PLL first. Set this flag to enable this support.
+	 */
+#define SUPPORTS_DYNAMIC_UPDATE	BIT(1)
+#define SUPPORTS_SLEW		BIT(2)
 	u8 flags;
+
+	const struct pll_vco_data *vco_data;
+	size_t num_vco_data;
 
 	struct clk_regmap clkr;
 	u32 config_ctl_val;
@@ -56,6 +71,7 @@ struct clk_alpha_pll {
 #define PLLOUT_EARLY	BIT(3)
 	u32 pllout_flags;
 	enum pll_type type;
+	unsigned long min_supported_freq;
 };
 
 /**
