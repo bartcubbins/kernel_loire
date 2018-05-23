@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2016-2017, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013, 2016-2018, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -76,6 +76,7 @@ extern const struct clk_ops clk_pll_ops;
 extern const struct clk_ops clk_pll_vote_ops;
 extern const struct clk_ops clk_pll_acpu_vote_ops;
 extern const struct clk_ops clk_pll_sr2_ops;
+extern const struct clk_ops clk_pll_hf_ops;
 
 #define to_clk_pll(_hw) container_of(to_clk_regmap(_hw), struct clk_pll, clkr)
 #define to_clk_pll_acpu_vote(_hw) \
