@@ -611,6 +611,10 @@ static const struct of_device_id mpm_gic_chip_data_table[] = {
 		.data = mpm_msm8937_gic_chip_data,
 	},
 	{
+		.compatible = "qcom,mpm-gic-msm8956",
+		.data = mpm_msm8956_gic_chip_data,
+	},
+	{
 		.compatible = "qcom,mpm-gic-qcs405",
 		.data = mpm_qcs405_gic_chip_data,
 	},
@@ -638,6 +642,10 @@ static const struct of_device_id mpm_gpio_chip_data_table[] = {
 	{
 		.compatible = "qcom,mpm-gpio-msm8937",
 		.data = mpm_msm8937_gpio_chip_data,
+	},
+	{
+		.compatible = "qcom,mpm-gpio-msm8956",
+		.data = mpm_msm8956_gpio_chip_data,
 	},
 	{
 		.compatible = "qcom,mpm-gpio-qcs405",
