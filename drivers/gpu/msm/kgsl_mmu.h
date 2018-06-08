@@ -140,6 +140,8 @@ struct kgsl_mmu_pt_ops {
 #define KGSL_MMU_NEED_GUARD_PAGE BIT(9)
 /* The device supports IO coherency */
 #define KGSL_MMU_IO_COHERENT BIT(10)
+/* MMU needs early secure pagetable setting */
+#define KGSL_MMU_PT_EARLY_ALLOC BIT(11)
 
 /**
  * struct kgsl_mmu - Master definition for KGSL MMU devices
