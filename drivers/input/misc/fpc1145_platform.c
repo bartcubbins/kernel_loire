@@ -107,7 +107,6 @@ struct fpc1145_data {
 	struct regulator *vreg[ARRAY_SIZE(vreg_conf)];
 
 	int irq_gpio;
-	int rst_gpio;
 	int ldo_gpio;
 
 	int irq;
@@ -559,10 +558,6 @@ static int fpc1145_probe(struct platform_device *pdev)
 
 	rc = fpc1145_request_named_gpio(fpc1145, "fpc,gpio_irq",
 					&fpc1145->irq_gpio);
-	if (rc)
-		goto exit;
-	rc = fpc1145_request_named_gpio(fpc1145, "fpc,gpio_rst",
-					&fpc1145->rst_gpio);
 	if (rc)
 		goto exit;
 	rc = fpc1145_request_named_gpio(fpc1145, "fpc,gpio_ldo",
