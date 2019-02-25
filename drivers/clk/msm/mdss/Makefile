@@ -7,3 +7,6 @@ obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-8996-util.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-hdmi-pll-8996.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-12nm.o
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-12nm-util.o
+
+# MSM8956/76
+obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-28hpm.o
