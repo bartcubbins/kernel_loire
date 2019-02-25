@@ -934,9 +934,16 @@ static int qpnp_regulator_common_set_voltage(struct regulator_dev *rdev,
 
 static int qpnp_regulator_common_get_voltage(struct regulator_dev *rdev)
 {
-	struct qpnp_regulator *vreg = rdev_get_drvdata(rdev);
+	struct qpnp_regulator *vreg = NULL;
 	struct qpnp_voltage_range *range = NULL;
 	int range_sel, voltage_sel, i;
+
+	if (rdev == NULL) {
+		pr_err("rdev regulator driver data is NULL!\n");
+		return VOLTAGE_UNKNOWN;
+	}
+
+	vreg = rdev_get_drvdata(rdev);
 
 	range_sel = vreg->ctrl_reg[QPNP_COMMON_IDX_VOLTAGE_RANGE];
 	voltage_sel = vreg->ctrl_reg[QPNP_COMMON_IDX_VOLTAGE_SET];
