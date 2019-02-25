@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, 2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, 2018-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,6 +16,8 @@
 #define MAX_DSI_PLL_EN_SEQS	10
 
 #define DSI_PHY_PLL_UNIPHY_PLL_GLB_CFG		(0x0020)
+#define DSI_PHY_PLL_UNIPHY_PLL_LKDET_CFG0	(0x005c)
+#define DSI_PHY_PLL_UNIPHY_PLL_LKDET_CFG1	(0x0060)
 #define DSI_PHY_PLL_UNIPHY_PLL_LKDET_CFG2	(0x0064)
 #define DSI_PHY_PLL_UNIPHY_PLL_TEST_CFG		(0x0068)
 #define DSI_PHY_PLL_UNIPHY_PLL_CAL_CFG1		(0x0070)
