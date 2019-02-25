@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -30,6 +30,7 @@
 
 enum {
 	MDSS_DSI_PLL_LPM,
+	MDSS_DSI_PLL_HPM,
 	MDSS_DSI_PLL_8996,
 	MDSS_DSI_PLL_12NM,
 	MDSS_HDMI_PLL_8996,
@@ -45,6 +46,7 @@ enum {
 	MDSS_PLL_TARGET_8937,
 	MDSS_PLL_TARGET_8953,
 	MDSS_PLL_TARGET_8909,
+	MDSS_PLL_TARGET_8976,
 	MDSS_PLL_TARGET_SDM439,
 };
 
