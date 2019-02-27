@@ -734,6 +734,13 @@ config REGULATOR_QPNP_LABIBB
           negative boost regulator. LAB/IBB regulators can also be used
           together for LCD or AMOLED.
 
+config REGULATOR_QPNP_LABIBB_SOMC
+	bool "Qualcomm Technologies, Inc. QPNP LAB/IBB regulator - SoMC extensions"
+	depends on REGULATOR_QPNP_LABIBB
+	help
+	  Select this to enable SoMC extensions to QTI QPNP LAB/IBB
+	  regulator driver.
+
 config REGULATOR_QPNP_LCDB
         tristate "Qualcomm Technologies, Inc. QPNP LCDB support"
         depends on SPMI
