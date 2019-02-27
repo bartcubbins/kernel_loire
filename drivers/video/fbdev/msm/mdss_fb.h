@@ -267,6 +267,12 @@ struct msm_fb_fps_info {
 	u32 measured_fps;
 };
 
+#ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
+struct fb_specific_data {
+	bool off_sts;
+};
+#endif
+
 struct msm_fb_data_type {
 	u32 key;
 	u32 index;
@@ -373,6 +379,10 @@ struct msm_fb_data_type {
 	bool pending_switch;
 	struct mutex switch_lock;
 	struct input_handler *input_handler;
+
+#ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
+	struct fb_specific_data spec_mfd;
+#endif
 };
 
 static inline void mdss_fb_update_notify_update(struct msm_fb_data_type *mfd)
