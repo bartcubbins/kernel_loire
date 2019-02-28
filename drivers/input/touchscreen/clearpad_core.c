@@ -1201,7 +1201,7 @@ static int touchctrl_hwreset(struct clearpad_t *this, int mode)
 	}
 
 	for (retry = 0; retry < SYN_RETRY_NUM; retry++) {
-		rc = incell_control_mode(raw_mode, INCELL_FORCE);
+		rc = panel_incell_control_mode(raw_mode, INCELL_FORCE);
 		if (rc != INCELL_EBUSY)
 			break;
 	}
@@ -1218,7 +1218,7 @@ static int touchctrl_display_off(struct clearpad_t *this)
 	this->wakeup.unblank_done = false;
 	this->wakeup.unblank_early_done = false;
 	for (retry = 0; retry < SYN_RETRY_NUM; retry++) {
-		rc = incell_control_mode(INCELL_DISPLAY_OFF, INCELL_FORCE);
+		rc = panel_incell_control_mode(INCELL_DISPLAY_OFF, INCELL_FORCE);
 		if (rc != INCELL_EBUSY)
 			break;
 	}
@@ -1228,10 +1228,10 @@ static int touchctrl_display_off(struct clearpad_t *this)
 
 static bool touchctrl_is_touch_powered(struct clearpad_t *this)
 {
-	incell_pw_status status = { false, false };
+	panel_incell_pw_status status = { false, false };
 	int rc;
 
-	rc = incell_get_power_status(&status);
+	rc = panel_incell_get_power_status(&status);
 	if (rc)
 		LOGE(this, "failed to get power status\n");
 	else
@@ -1244,10 +1244,10 @@ static bool touchctrl_is_touch_powered(struct clearpad_t *this)
 
 static bool touchctrl_is_display_powered(struct clearpad_t *this)
 {
-	incell_pw_status status = { false, false };
+	panel_incell_pw_status status = { false, false };
 	int rc;
 
-	rc = incell_get_power_status(&status);
+	rc = panel_incell_get_power_status(&status);
 	if (rc)
 		LOGE(this, "failed to get power status\n");
 	else
@@ -1268,14 +1268,14 @@ static bool touchctrl_lock_power(struct clearpad_t *this, const char *id,
 				bool need_touch_power, bool need_display_power)
 {
 	struct clearpad_touchctrl_t *touchctrl = &this->touchctrl;
-	incell_pw_status status = { false, false };
+	panel_incell_pw_status status = { false, false };
 	int rc;
 	bool result = false;
 
 	LOG_STAT(this, "(will lock power) <%s>\n", id);
 
 	if (touchctrl->power_user != 0) {
-		rc = incell_get_power_status(&status);
+		rc = panel_incell_get_power_status(&status);
 		if (rc)
 			LOGE(this, "failed to get power status (rc=%d)\n", rc);
 		goto check_condition;
@@ -1288,7 +1288,7 @@ static bool touchctrl_lock_power(struct clearpad_t *this, const char *id,
 	}
 
 	/* the first user locks power */
-	rc = incell_power_lock_ctrl(INCELL_DISPLAY_POWER_LOCK, &status);
+	rc = panel_incell_power_lock_ctrl(INCELL_DISPLAY_POWER_LOCK, &status);
 	switch (rc) {
 	case INCELL_OK:
 		break;
@@ -1310,7 +1310,7 @@ check_condition:
 			 need_touch_power ? "required" : "optional",
 			 status.display_power ? "On" : "Off",
 			 need_display_power ? "required" : "optional");
-		if (incell_power_lock_ctrl(INCELL_DISPLAY_POWER_UNLOCK,
+		if (panel_incell_power_lock_ctrl(INCELL_DISPLAY_POWER_UNLOCK,
 								&status))
 			LOGE(this, "failed to unlock power\n");
 		rc = 0;
@@ -1329,7 +1329,7 @@ err_in_condition_of_powerdown:
 static void touchctrl_unlock_power(struct clearpad_t *this, const char *id)
 {
 	struct clearpad_touchctrl_t *touchctrl = &this->touchctrl;
-	incell_pw_status status = { false, false };
+	panel_incell_pw_status status = { false, false };
 	int rc;
 	unsigned long flags;
 
@@ -1378,7 +1378,7 @@ static void touchctrl_unlock_power(struct clearpad_t *this, const char *id)
 		}
 	}
 
-	rc = incell_power_lock_ctrl(INCELL_DISPLAY_POWER_UNLOCK, &status);
+	rc = panel_incell_power_lock_ctrl(INCELL_DISPLAY_POWER_UNLOCK, &status);
 	switch (rc) {
 	case INCELL_OK:
 		break;
@@ -1404,7 +1404,7 @@ static void touchctrl_notify_wakeup_gesture_mode(struct clearpad_t *this,
 {
 	LOG_STAT(this, "%s\n", enabled ? "enable" : "disable");
 
-	incell_ewu_mode_ctrl(enabled ? INCELL_DISPLAY_EWU_ENABLE
+	panel_incell_ewu_mode_ctrl(enabled ? INCELL_DISPLAY_EWU_ENABLE
 				     : INCELL_DISPLAY_EWU_DISABLE);
 }
 
