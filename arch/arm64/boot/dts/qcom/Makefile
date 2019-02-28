@@ -628,6 +628,9 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 	sda429-mtp.dtb \
 	sda429-cdp.dtb
 
+# MSM8956
+dtb-$(CONFIG_MACH_SONY_SUZU) += msm8956-v1.1-loire-suzu_generic.dtb
+
 endif
 
 always		:= $(dtb-y)
