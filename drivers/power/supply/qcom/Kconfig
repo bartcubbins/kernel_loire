@@ -9,6 +9,12 @@ config QPNP_FG
 	  fuel gauge. The state of charge is reported through a BMS power
 	  supply property and also sends uevents when the capacity is updated.
 
+config QPNP_FG_EXTENSION
+	tristate "QPNP fuel gauge driver extension"
+	depends on QPNP_FG
+	help
+	  Say Y here to enable extensional QPNP fuel gauge functions.
+
 config QPNP_FG_GEN3
 	tristate "QPNP GEN3 fuel gauge driver"
 	depends on MFD_SPMI_PMIC
