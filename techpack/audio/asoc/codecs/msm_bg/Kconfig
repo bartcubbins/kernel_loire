@@ -1,0 +1,6 @@
+menu "BG Codec driver"
+
+config SND_SOC_BG_CODEC
+	bool "BG Codec driver"
+
+endmenu

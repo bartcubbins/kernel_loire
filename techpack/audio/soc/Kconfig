@@ -1,0 +1,15 @@
+menu "SoC based drivers (pinctrl/regmap/soundwire)"
+
+config PINCTRL_WCD
+	bool "WCD GPIO pin control driver"
+
+config PINCTRL_LPI
+	bool "LPI GPIO pin control driver"
+
+config SOUNDWIRE
+	bool "Soundwire module"
+
+config SOUNDWIRE_WCD_CTRL
+	bool "WCD SoundWire Controller"
+
+endmenu
