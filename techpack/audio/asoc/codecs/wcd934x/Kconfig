@@ -1,0 +1,6 @@
+menu "WCD934X Tavil Codec Driver"
+
+config SND_SOC_WCD934X
+	bool "WCD934X Tavil Codec driver"
+
+endmenu

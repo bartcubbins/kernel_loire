@@ -1,0 +1,10 @@
+menu "MSM Internal soundwire codec"
+
+config SND_SOC_MSM_SDW
+	bool "MSM Internal soundwire codec"
+	help
+	  MSM-based soundwire codec core driver
+	  supported along with internal digital
+	  codec core.
+
+endmenu

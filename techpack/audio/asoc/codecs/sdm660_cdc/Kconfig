@@ -1,0 +1,12 @@
+menu "SDM660 MSM Audio Codec Driver"
+
+config SND_SOC_ANALOG_CDC
+	bool "MSM Audio Analog codec driver"
+
+config SND_SOC_DIGITAL_CDC
+	bool "MSM Audio Digital codec driver"
+
+config SND_SOC_DIGITAL_CDC_LEGACY
+	bool "MSM Audio Digital codec driver legacy"
+
+endmenu
