@@ -1,0 +1,50 @@
+menu "APR IPC communication drivers"
+
+config MSM_QDSP6_APRV2
+	bool "Audio QDSP6 APRv2 support"
+	help
+	  Enable APRv2 IPC protocol support between
+	  application processor and QDSP6. APR is
+	  used by audio driver to configure QDSP6's
+	  ASM, ADM and AFE.
+
+config MSM_QDSP6_APRV3
+	bool "Audio QDSP6 APRv3 support"
+	help
+	  Enable APRv3 IPC protocol support between
+	  application processor and QDSP6. APR is
+	  used by audio driver to configure QDSP6v2's
+	  ASM, ADM and AFE.
+
+config MSM_QDSP6_APRV2_GLINK
+	bool "Audio QDSP6 APRv2 over Glink support"
+	help
+	  Enable APRv2 IPC protocol support over
+	  Glink between application processor and
+	  QDSP6. APR is used by audio driver to
+	  configure QDSP6's ASM, ADM and AFE.
+
+config MSM_QDSP6_APRV3_GLINK
+	bool "Audio QDSP6 APRv3 over Glink support"
+	help
+	  Enable APRv3 IPC protocol support over
+	  Glink between application processor and
+	  QDSP6. APR is used by audio driver to
+	  configure QDSP6v2's ASM, ADM and AFE.
+
+config MSM_BG_GLINK
+	bool "WCD DSP GLINK Driver"
+	help
+	  This option enables driver which provides communication interface
+	  between MSM and BG over glink transport protocol. This driver
+	  provides read and write interface via char device.This driver is
+	  used by the audio codec driver to interface with BG.
+
+config WCD_DSP_GLINK
+	bool "WCD DSP GLINK Driver"
+	help
+	  This option enables driver which provides communication interface
+	  between MSM and WCD DSP over glink transport protocol. This driver
+	  provides read and write interface via char device.
+
+endmenu

@@ -1,0 +1,108 @@
+menu "ALSA based drivers"
+
+config SND_SOC_MACHINE_MSM8998
+	bool "SoC Machine Driver for MSM8998 Boards"
+	help
+	  To add support for SoC audio on MSM8998.
+
+config SND_SOC_SDM670
+	bool "SoC Machine Driver for SDM670 Boards"
+	help
+	  To add support for SoC audio on SDM670.
+
+config SND_SOC_INT_CODEC
+	bool "SND_SOC_INT_CODEC"
+
+config SND_SOC_EXT_CODEC
+	bool "SND_SOC_INT_CODEC"
+
+config SND_SOC_MACHINE_SDM845
+	bool "SoC Machine Driver for SDM845 Boards"
+	help
+	  To add support for SoC audio on SDM845.
+
+config SND_SOC_MACHINE_SDXPOORWILLS
+	bool "SoC Machine Driver for SDXPOORWILLS Boards"
+	help
+	  To add support for SoC audio on SDXPOORWILLS.
+
+config SND_SOC_EXT_CODEC_8909
+	bool "SoC Machine Driver for MSM8909 External Codec"
+	help
+	  To add support for SoC Machine Driver for
+	  MSM8909 External Codec.
+
+config SND_SOC_SDM450
+	bool "SoC Machine Driver for SDM450 Boards"
+	help
+	  To add support for SoC audio on SDM450.
+
+config SND_SOC_EXT_CODEC_SDM450
+	bool "SoC Machine Driver for SDM450 External Codec"
+	help
+	  To add support for SoC Machine Driver for
+	  SDM450 External Codec.
+
+config SND_SOC_MSM8909
+	bool "SoC Machine Driver for MSM8909 Boards"
+	help
+	  To add support for SoC audio on MSM8909.
+
+config SND_SOC_8909_DIG_CDC
+	bool "SoC Machine Driver for MSM8909 Digital Codec"
+	help
+	  To add support for SoC Machine Driver for
+	  MSM8909 Digital Codec.
+
+config SND_SOC_CPE
+	bool "CPE LSM platform driver"
+	help
+	  To add support for Codec Processing Engine. This support
+	  is to enable CPE block on the codec and this config needs
+	  to be added to codecs that contain the CPE hardware block.
+	  The configuration includes the cpe lsm driver to enable
+	  listen on codec.
+
+config SND_SOC_QDSP6V2
+	bool "SoC ALSA audio driver for QDSP6V2"
+	help
+	  To add support for MSM QDSP6V2 Soc Audio.
+	  This will enable sound soc platform specific
+	  audio drivers. This includes q6asm, q6adm,
+	  q6afe interfaces to DSP using apr.
+
+config SND_SOC_MSM_HOSTLESS_PCM
+	bool "SND_SOC_MSM_HOSTLESS_PCM"
+
+config SND_HWDEP_ROUTING
+	bool "SND_HWDEP_ROUTING"
+
+config DOLBY_DS2
+	bool "Dolby DS2"
+	help
+	  To add support for dolby DAP post processing.
+	  This support is to configure the post processing parameters
+	  to DSP. The configuration includes sending the end point
+	  device, end point dependent post processing parameters and
+	  the various posrt processing parameters.
+
+config DOLBY_LICENSE
+	bool "Dolby LICENSE"
+	help
+	  To add support for dolby DAP post processing,
+	  and retain DAP set license functionality only.
+	  This is required by Dolby GEF implementation which needs
+	  nothing but dolby license validation functionality in driver.
+
+config QTI_PP
+	bool "QTI PP"
+	help
+	  To add support for default QTI post processing.
+	  This support is to configure the post processing
+	  parameters to DSP. The configuration includes sending
+	  tuning parameters of various modules such as equalizer,
+	  customized mixing.
+
+source "techpack/audio/asoc/codecs/Kconfig"
+
+endmenu
