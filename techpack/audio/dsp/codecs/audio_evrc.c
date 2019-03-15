@@ -169,7 +169,7 @@ static struct miscdevice audio_evrc_misc = {
 	.fops = &audio_evrc_fops,
 };
 
-int __init audio_evrc_init(void)
+static int __init audio_evrc_init(void)
 {
 	int ret = misc_register(&audio_evrc_misc);
 
@@ -180,9 +180,11 @@ int __init audio_evrc_init(void)
 
 	return ret;
 }
+device_initcall(audio_evrc_init);
 
-void audio_evrc_exit(void)
+static void __exit audio_evrc_exit(void)
 {
 	mutex_destroy(&audio_evrc_ws_mgr.ws_lock);
 	misc_deregister(&audio_evrc_misc);
 }
+__exitcall(audio_evrc_exit);

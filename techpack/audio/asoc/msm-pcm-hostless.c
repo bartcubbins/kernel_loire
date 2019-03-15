@@ -66,15 +66,17 @@ static struct platform_driver msm_pcm_hostless_driver = {
 	.remove = msm_pcm_hostless_remove,
 };
 
-int __init msm_pcm_hostless_init(void)
+static int __init msm_pcm_hostless_init(void)
 {
 	return platform_driver_register(&msm_pcm_hostless_driver);
 }
+module_init(msm_pcm_hostless_init);
 
-void msm_pcm_hostless_exit(void)
+static void __exit msm_pcm_hostless_exit(void)
 {
 	platform_driver_unregister(&msm_pcm_hostless_driver);
 }
+module_exit(msm_pcm_hostless_exit);
 
 MODULE_DESCRIPTION("Hostless platform driver");
 MODULE_LICENSE("GPL v2");

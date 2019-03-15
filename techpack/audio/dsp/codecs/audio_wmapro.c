@@ -403,7 +403,7 @@ static struct miscdevice audio_wmapro_misc = {
 	.fops = &audio_wmapro_fops,
 };
 
-int __init audio_wmapro_init(void)
+static int __init audio_wmapro_init(void)
 {
 	int ret = misc_register(&audio_wmapro_misc);
 
@@ -414,9 +414,11 @@ int __init audio_wmapro_init(void)
 
 	return ret;
 }
+device_initcall(audio_wmapro_init);
 
-void audio_wmapro_exit(void)
+static void __exit audio_wmapro_exit(void)
 {
 	mutex_destroy(&audio_wmapro_ws_mgr.ws_lock);
 	misc_deregister(&audio_wmapro_misc);
 }
+__exitcall(audio_wmapro_exit);

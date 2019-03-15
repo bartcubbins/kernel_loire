@@ -1273,15 +1273,17 @@ static struct platform_driver msm_pcm_driver_noirq = {
 	.remove = msm_pcm_remove,
 };
 
-int __init msm_pcm_noirq_init(void)
+static int __init msm_pcm_noirq_init(void)
 {
 	return platform_driver_register(&msm_pcm_driver_noirq);
 }
+module_init(msm_pcm_noirq_init);
 
-void msm_pcm_noirq_exit(void)
+static void __exit msm_pcm_noirq_exit(void)
 {
 	platform_driver_unregister(&msm_pcm_driver_noirq);
 }
+module_exit(msm_pcm_noirq_exit);
 
 MODULE_DESCRIPTION("PCM NOIRQ module platform driver");
 MODULE_LICENSE("GPL v2");

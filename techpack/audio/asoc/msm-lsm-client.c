@@ -2430,15 +2430,17 @@ static struct platform_driver msm_lsm_driver = {
 	.remove = msm_lsm_remove,
 };
 
-int __init msm_lsm_client_init(void)
+static int __init msm_lsm_client_init(void)
 {
 	return platform_driver_register(&msm_lsm_driver);
 }
+module_init(msm_lsm_client_init);
 
-void msm_lsm_client_exit(void)
+static void __exit msm_lsm_client_exit(void)
 {
 	platform_driver_unregister(&msm_lsm_driver);
 }
+module_exit(msm_lsm_client_exit);
 
 MODULE_DESCRIPTION("LSM client platform driver");
 MODULE_DEVICE_TABLE(of, msm_lsm_client_dt_match);
