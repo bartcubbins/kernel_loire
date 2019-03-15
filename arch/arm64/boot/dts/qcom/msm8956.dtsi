@@ -2673,9 +2673,9 @@
 
 	clock_audio: audio_ext_clk {
 		compatible = "qcom,audio-ref-clk";
-//		pinctrl-names = "active", "sleep";
-//		pinctrl-0 = <&pm8950_gpio_1>;
-//		pinctrl-1 = <&pm8950_gpio_1>;
+		pinctrl-names = "active", "sleep";
+		pinctrl-0 = <&pm8950_gpio_1>;
+		pinctrl-1 = <&pm8950_gpio_1>;
 		qcom,audio-ref-clk-gpio = <&pm8950_gpios 1 0>;
 		clock-names = "osr_clk";
 		clocks = <&clock_gcc clk_div_clk2>;
