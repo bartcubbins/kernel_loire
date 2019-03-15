@@ -173,7 +173,7 @@ struct wcd_cpe_lsm_ops {
 			    struct cpe_lsm_session *session, void *data);
 };
 
-#if IS_ENABLED(CONFIG_SND_SOC_WCD_CPE)
+#ifdef CONFIG_SND_SOC_WCD_CPE
 int wcd_cpe_get_lsm_ops(struct wcd_cpe_lsm_ops *lsm_ops);
 int wcd_cpe_get_afe_ops(struct wcd_cpe_afe_ops *afe_ops);
 void *wcd_cpe_get_core_handle(struct snd_soc_codec *codec);

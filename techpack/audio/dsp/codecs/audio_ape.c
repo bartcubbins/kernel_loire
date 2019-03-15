@@ -344,7 +344,7 @@ static struct miscdevice audio_ape_misc = {
 	.fops = &audio_ape_fops,
 };
 
-int __init audio_ape_init(void)
+static int __init audio_ape_init(void)
 {
 	int ret = misc_register(&audio_ape_misc);
 
@@ -355,9 +355,11 @@ int __init audio_ape_init(void)
 
 	return ret;
 }
+device_initcall(audio_ape_init);
 
-void audio_ape_exit(void)
+static void __exit audio_ape_exit(void)
 {
 	mutex_destroy(&audio_ape_ws_mgr.ws_lock);
 	misc_deregister(&audio_ape_misc);
 }
+__exitcall(audio_ape_exit);

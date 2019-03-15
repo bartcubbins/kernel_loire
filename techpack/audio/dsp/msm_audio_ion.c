@@ -913,15 +913,17 @@ static struct platform_driver msm_audio_ion_driver = {
 	.remove = msm_audio_ion_remove,
 };
 
-int __init msm_audio_ion_init(void)
+static int __init msm_audio_ion_init(void)
 {
 	return platform_driver_register(&msm_audio_ion_driver);
 }
+module_init(msm_audio_ion_init);
 
-void msm_audio_ion_exit(void)
+static void __exit msm_audio_ion_exit(void)
 {
 	platform_driver_unregister(&msm_audio_ion_driver);
 }
+module_exit(msm_audio_ion_exit);
 
 MODULE_DESCRIPTION("MSM Audio ION module");
 MODULE_LICENSE("GPL v2");

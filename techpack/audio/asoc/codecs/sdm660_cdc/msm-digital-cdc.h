@@ -125,8 +125,8 @@ enum {
 	BAND_MAX,
 };
 
-#if (IS_ENABLED(CONFIG_SND_SOC_DIGITAL_CDC) || \
-	 IS_ENABLED(CONFIG_SND_SOC_DIGITAL_CDC_LEGACY))
+#if defined(CONFIG_SND_SOC_DIGITAL_CDC) || \
+	defined(CONFIG_SND_SOC_DIGITAL_CDC_LEGACY)
 extern void msm_dig_cdc_hph_comp_cb(
 		int (*codec_hph_comp_gpio)(
 			bool enable, struct snd_soc_codec *codec),

@@ -1203,14 +1203,14 @@ static int __init apr_init(void)
 	apr_dummy_init();
 	return 0;
 }
-module_init(apr_init);
+device_initcall(apr_init);
 
 static void __exit apr_exit(void)
 {
 	apr_dummy_exit();
 	platform_driver_unregister(&apr_driver);
 }
-module_exit(apr_exit);
+__exitcall(apr_exit);
 
 MODULE_DESCRIPTION("APR DRIVER");
 MODULE_LICENSE("GPL v2");
