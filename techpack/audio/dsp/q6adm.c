@@ -5268,7 +5268,7 @@ done:
 }
 EXPORT_SYMBOL(adm_get_source_tracking);
 
-int __init adm_init(void)
+static int __init adm_init(void)
 {
 	int i = 0, j;
 
@@ -5321,11 +5321,13 @@ int __init adm_init(void)
 
 	return 0;
 }
+device_initcall(adm_init);
 
-void adm_exit(void)
+static void __exit adm_exit(void)
 {
 	if (this_adm.apr)
 		adm_reset_data();
 	mutex_destroy(&dts_srs_lock);
 	adm_delete_cal_data();
 }
+__exitcall(adm_exit);

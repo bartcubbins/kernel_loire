@@ -137,7 +137,7 @@ enum {
 	RX_GAIN_OFFSET_0_DB,
 };
 
-#if IS_ENABLED(CONFIG_SND_SOC_WCD9335)
+#ifdef CONFIG_SND_SOC_WCD9335
 extern void *tasha_get_afe_config(struct snd_soc_codec *codec,
 				  enum afe_config_type config_type);
 extern int tasha_cdc_mclk_enable(struct snd_soc_codec *codec, int enable,

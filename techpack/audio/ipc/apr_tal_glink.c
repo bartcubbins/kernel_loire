@@ -448,7 +448,7 @@ static struct glink_link_info lpass_link_info = {
 	.glink_link_state_notif_cb = apr_tal_link_state_cb,
 };
 
-int apr_tal_init(void)
+static int __init apr_tal_init(void)
 {
 	int i, j, k;
 
@@ -480,3 +480,4 @@ int apr_tal_init(void)
 
 	return 0;
 }
+device_initcall(apr_tal_init);
