@@ -2411,6 +2411,9 @@ static struct snd_soc_dai_driver msm_fe_dais[] = {
 			.rate_min =	8000,
 			.rate_max = 384000,
 		},
+#ifdef CONFIG_ARCH_SONY_LOIRE
+		.compress_new = snd_soc_new_compress,
+#else
 		.capture = {
 			.stream_name = "MultiMedia16 Capture",
 			.aif_name = "MM_UL16",
@@ -2425,6 +2428,7 @@ static struct snd_soc_dai_driver msm_fe_dais[] = {
 			.rate_min =     8000,
 			.rate_max =     48000,
 		},
+#endif
 		.ops = &msm_fe_Multimedia_dai_ops,
 		.name = "MultiMedia16",
 		.probe = fe_dai_probe,
