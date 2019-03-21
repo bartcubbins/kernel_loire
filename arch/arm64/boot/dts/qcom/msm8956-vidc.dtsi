@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2015, 2017, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014-2015, 2017-2019, The Linux Foundation. All rights reserved.
  * (c) 2017, AngeloGioacchino Del Regno <kholk11@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,9 @@
 	msm_vidc: qcom,vidc@1d00000 {
 		compatible = "qcom,msm-vidc";
 		reg = <0x01d00000 0xff000>,
-			<0x000a4120 0x4>;
-		reg-names = "vidc", "efuse";
+			<0x000a4120 0x4>,
+			<0x000a0164 0x4>;
+		reg-names = "vidc", "efuse", "efuse2";
 		interrupts = <0 44 0>;
 
 		vdd-cx-supply = <&pm8950_s2_level_ao>;
@@ -28,7 +29,8 @@
 		qcom,hfi = "venus";
 		qcom,hfi-version = "3xx";
 		qcom,firmware-name = "venus-v1";
-		//qcom,platform-version = <0x600000000 0x1D>;
+		qcom,platform-version = <0x00180000 0x13>;
+		qcom,capability-version = <0x00002000 0x0d>;
 
 		clocks =
 			<&clock_gcc clk_gcc_venus0_vcodec0_clk>,
