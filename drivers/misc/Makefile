@@ -70,6 +70,7 @@ obj-$(CONFIG_OKL4_RINGBUF)	+= okl4-ringbuf.o
 obj-$(CONFIG_TEST_IRQ_REQUESTER) += irq_requester.o
 
 obj-$(CONFIG_LDO_VIBRATOR)	+= ldo_vibrator.o
+obj-$(CONFIG_NFC_PN547)		+= pn547.o
 
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_core.o
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_bugs.o

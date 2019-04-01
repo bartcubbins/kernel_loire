@@ -594,6 +594,16 @@ config LDO_VIBRATOR
 	  on the LDO line. The vibrator is controlled using the
 	  timed output class.
 
+config NFC_PN547
+	tristate "NFC driver for PN547"
+	depends on I2C
+	default n
+	help
+	  This option enables device driver for PN547.
+	  GPIO, and PMIC GPIO configurations are controlled.
+	  The sysfs files provides the interface to send and receive
+	  the data, response and notification.
+
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"
 source "drivers/misc/cb710/Kconfig"
