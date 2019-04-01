@@ -5102,7 +5102,7 @@ static void handle_usb_insertion(struct smbchg_chip *chip)
 	/* If APSD returned "OTHER". */
 	if (rc == 1) {
 		rc = get_prop_proprietary_charger(chip);
-		if (IS_ERR_VALUE((unsigned long)rc)) {
+		if (rc < 0) {
 			if (rc == -EPROBE_DEFER) {
 				usb_supply_type = POWER_SUPPLY_TYPE_USB;
 			} else if (rc == -ERANGE) {
