@@ -344,13 +344,13 @@ static int get_prop_proprietary_charger(struct smbchg_chip *chip)
 	int i;
 
 	dp = get_prop_usb_dp_voltage_now(chip);
-	if (IS_ERR_VALUE((unsigned long)dp)) {
+	if (dp < 0) {
 		dev_err(chip->dev, "%s: read D+ voltage fail\n", __func__);
 		return dp;
 	}
 
 	dm = get_prop_usb_dm_voltage_now(chip);
-	if (IS_ERR_VALUE((unsigned long)dm)) {
+	if (dm < 0) {
 		dev_err(chip->dev, "%s: read D- voltage fail\n", __func__);
 		return dm;
 	}
