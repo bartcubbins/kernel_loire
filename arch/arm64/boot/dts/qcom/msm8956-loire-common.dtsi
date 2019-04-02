@@ -144,13 +144,13 @@
 	};
 
 	bluesleep {
-		compatible = "qcom,bluesleep";
+		compatible = "bcm,bluesleep";
 		bt_host_wake = <&msm_gpio 17 0x00>; /* BT_HOST_WAKE */
 		bt_ext_wake = <&msm_gpio 18 0x00>; /* BT_DEV_WAKE */
 		interrupt-parent = <&msm_gpio>;
 		interrupts = <17 0>;
 		interrupt-names = "host_wake";
-		pinctrl-names = "default", "sleep";
+		pinctrl-names = "wake_irq_active", "wake_irq_suspend";
 		pinctrl-0 = <&msm_gpio_17_act &msm_gpio_18_def>;
 		pinctrl-1 = <&msm_gpio_17_sus &msm_gpio_18_def>;
 	};
