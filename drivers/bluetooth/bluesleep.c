@@ -144,12 +144,6 @@ static struct bluesleep_info *bsi;
 static atomic_t open_count = ATOMIC_INIT(1);
 
 /*
- * Local function prototypes
- */
-static int bluesleep_start(void);
-static void bluesleep_stop(void);
-
-/*
  * Global variables
  */
 
@@ -164,6 +158,9 @@ static spinlock_t rw_lock;
 
 struct proc_dir_entry *bluetooth_dir, *sleep_dir;
 
+/** State variable: whether uart clock is turned on by bluesleep. */
+static atomic_t uart_is_on = ATOMIC_INIT(0);
+
 /*
  * Local functions
  */
@@ -172,12 +169,16 @@ static void hsuart_power(int on)
 {
 	if (test_bit(BT_SUSPEND, &flags))
 		return;
-	if (on) {
+	if (on && atomic_read(&uart_is_on) == 0) {
 		msm_hs_request_clock_on(bsi->uport);
 		msm_hs_set_mctrl(bsi->uport, TIOCM_RTS);
-	} else {
+		atomic_inc(&uart_is_on);
+	} else if (!on && atomic_read(&uart_is_on) == 1) {
 		msm_hs_set_mctrl(bsi->uport, 0);
 		msm_hs_request_clock_off(bsi->uport);
+		atomic_set(&uart_is_on, 0);
+	} else {
+		pr_err("Inconsistent UART clock request state.\n");
 	}
 }
 
@@ -280,7 +281,7 @@ static void bluesleep_hostwake_task(unsigned long data)
  * Handles proper timer action when outgoing data is delivered to the
  * HCI line discipline. Sets BT_TXDATA.
  */
-static void bluesleep_outgoing_data(void)
+void bluesleep_outgoing_data(void)
 {
 	unsigned long irq_flags;
 	int power_on_uart = 0;
@@ -316,7 +317,7 @@ static void bluesleep_outgoing_data(void)
  * Function to check wheather bluetooth can sleep when btwrite was deasserted
  * by bluedroid.
  */
-static void bluesleep_tx_allow_sleep(void)
+void bluesleep_tx_allow_sleep(void)
 {
 	unsigned long irq_flags;
 
@@ -353,7 +354,7 @@ static irqreturn_t bluesleep_hostwake_isr(int irq, void *dev_id)
  * @return On success, 0. On error, -1, and <code>errno</code> is set
  * appropriately.
  */
-static int bluesleep_start(void)
+int bluesleep_start(bool is_clock_enabled)
 {
 	unsigned long irq_flags;
 
@@ -365,6 +366,9 @@ static int bluesleep_start(void)
 	}
 
 	spin_unlock_irqrestore(&rw_lock, irq_flags);
+
+	if (is_clock_enabled)
+		atomic_set(&uart_is_on, 1);
 
 	if (!atomic_dec_and_test(&open_count)) {
 		atomic_inc(&open_count);
@@ -391,7 +395,7 @@ static int bluesleep_start(void)
 /**
  * Stops the Sleep-Mode Protocol on the Host.
  */
-static void bluesleep_stop(void)
+void bluesleep_stop(void)
 {
 	unsigned long irq_flags;
 
@@ -418,6 +422,7 @@ static void bluesleep_stop(void)
 		spin_unlock_irqrestore(&rw_lock, irq_flags);
 	}
 
+	atomic_set(&uart_is_on, 0);
 	atomic_inc(&open_count);
 
 	enable_wakeup_irq(0);
@@ -574,6 +579,8 @@ static int bluesleep_probe(struct platform_device *pdev)
 		goto free_bt_ext_wake;
 	}
 
+	bsi->uport = msm_hs_get_uart_port(BT_PORT_ID);
+
 	enable_wakeup_irq(0);
 	return 0;
 
@@ -686,7 +693,7 @@ static ssize_t bluesleep_proc_write(struct file *file, const char *buf,
 				has_lpm_enabled = true;
 				bsi->uport = msm_hs_get_uart_port(BT_PORT_ID);
 				/* if bluetooth started, start bluesleep*/
-				bluesleep_start();
+				bluesleep_start(false);
 			}
 		}
 		break;
