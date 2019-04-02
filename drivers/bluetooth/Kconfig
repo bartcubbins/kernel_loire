@@ -388,6 +388,16 @@ config BT_BCM43XX
 	  Say Y here to compile support for Broadcom BCM43xx control driver
 	  into the kernel or say M to compile it as module.
 
+config BT_MSM_SLEEP
+	tristate "MSM Bluesleep driver"
+	depends on BT && SERIAL_MSM_HS
+	help
+	  Bluetooth MSM bluesleep driver.
+	  This driver provides support for BTS sleep.
+
+	  Say Y here to compile support for BTS sleep into the
+	  kernel or say M to compile it as module (bfusb).
+
 config MSM_BT_POWER
 	bool "MSM Bluetooth Power Control"
 	depends on ARCH_QCOM && RFKILL
