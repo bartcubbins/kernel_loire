@@ -26,6 +26,7 @@ obj-$(CONFIG_BT_BCM)		+= btbcm.o
 obj-$(CONFIG_BT_RTL)		+= btrtl.o
 obj-$(CONFIG_BT_QCA)		+= btqca.o
 obj-$(CONFIG_BT_BCM43XX)	+= bcm43xx.o
+obj-$(CONFIG_BT_MSM_SLEEP)	+= bluesleep.o
 
 obj-$(CONFIG_BT_HCIUART_NOKIA)	+= hci_nokia.o
 
