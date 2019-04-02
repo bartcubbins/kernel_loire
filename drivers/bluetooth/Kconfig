@@ -378,6 +378,16 @@ config BT_QCOMSMD
 	  Say Y here to compile support for HCI over Qualcomm SMD into the
 	  kernel or say M to compile as a module.
 
+config BT_BCM43XX
+	tristate "Broadcom BCM43xx control driver"
+	depends on SERIAL_MSM_HS && RFKILL
+	help
+	  This enables the Bluetooth driver for Broadcom BCM43xx.
+	  This driver controls BT power/HOST_WAKE and BT_WAKE via GPIO.
+
+	  Say Y here to compile support for Broadcom BCM43xx control driver
+	  into the kernel or say M to compile it as module.
+
 config MSM_BT_POWER
 	bool "MSM Bluetooth Power Control"
 	depends on ARCH_QCOM && RFKILL
