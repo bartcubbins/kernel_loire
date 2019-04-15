@@ -1094,6 +1094,30 @@ static int mmc_sdio_resume(struct mmc_host *host)
 	return err;
 }
 
+#ifdef CONFIG_MMC_SOMC_LOW_VOLTAGE
+/*
+ * Select low voltage 1.8v if mmc host has the capability
+ * and other volatages are not available.
+ */
+static u32 mmc_select_low_voltage(struct mmc_host *host, u32 ocr)
+{
+	int bit;
+
+	if ((host->ocr_avail == MMC_VDD_165_195) && mmc_host_uhs(host) &&
+		((ocr & host->ocr_avail) == 0)) {
+		/* Interpret non-standard IO_OP_COND */
+		bit = ffs(ocr) - 1;
+		ocr &= 3 << bit;
+		ocr = ocr >> 1;
+
+		/* Power cycle card to select lowest possible voltage */
+		mmc_power_cycle(host, ocr);
+	}
+
+	return ocr;
+}
+#endif
+
 static int mmc_sdio_power_restore(struct mmc_host *host)
 {
 	int ret;
@@ -1199,7 +1223,11 @@ int mmc_attach_sdio(struct mmc_host *host)
 		host->ocr_avail = host->ocr_avail_sdio;
 
 
+#ifdef CONFIG_MMC_SOMC_LOW_VOLTAGE
+	rocr = mmc_select_low_voltage(host, ocr);
+#else
 	rocr = mmc_select_voltage(host, ocr);
+#endif
 
 	/*
 	 * Can we support the voltage(s) of the card(s)?
