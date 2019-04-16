@@ -187,6 +187,7 @@ void brcmf_feat_attach(struct brcmf_pub *drvr)
 	case BRCM_CC_4345_CHIP_ID:
 		drvr->chip_quirks |= BIT(BRCMF_FEAT_QUIRK_SKIP_ACTION_FRAMES);
 		drvr->chip_quirks |= BIT(BRCMF_FEAT_QUIRK_FAKE_WOWL);
+		drvr->chip_quirks |= BIT(BRCMF_FEAT_QUIRK_OLD_FIRMWARE);
 		break;
 	default:
 		/* no quirks */
