@@ -49,7 +49,7 @@
 
 	chosen {
 		stdout-path = "serial0";
-		bootargs = "sched_enable_hmp=1 restore_msm_uart=0x01014000";
+		bootargs = "restore_msm_uart=0x01014000";
 	};
 
 	clocks {
