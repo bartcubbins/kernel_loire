@@ -13,7 +13,6 @@
 
 #include "msm8956-pinctrl.dtsi"
 #include "msm8956-mdss-mtp.dtsi"
-#include "msm8956-wsa881x.dtsi"
 
 &i2c_4 { /* BLSP1 QUP4 */
 	synaptics@20 {
@@ -87,27 +86,6 @@
 			linux,code = <115>;
 			debounce-interval = <15>;
 		};
-	};
-
-	sound-9335 {
-		qcom,msm-gpios =
-			"quin_i2s",
-			"us_eu_gpio";
-		qcom,pinctrl-names =
-			"all_off",
-			"quin_act",
-			"us_eu_gpio_act",
-			"quin_us_eu_gpio_act";
-		pinctrl-names =
-			"all_off",
-			"quin_act",
-			"us_eu_gpio_act",
-			"quin_us_eu_gpio_act";
-		pinctrl-0 = <&pri_tlmm_lines_sus &cross_conn_det_sus>;
-		pinctrl-1 = <&pri_tlmm_lines_act &cross_conn_det_sus>;
-		pinctrl-2 = <&pri_tlmm_lines_sus &cross_conn_det_act>;
-		pinctrl-3 = <&pri_tlmm_lines_act &cross_conn_det_act>;
-		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
 	};
 };
 
