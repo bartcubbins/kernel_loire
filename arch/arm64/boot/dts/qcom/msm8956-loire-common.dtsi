@@ -864,42 +864,7 @@
 		};
 	};
 };
-#if 0
-&pm8950_mpps {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pm8950_mpp2_def &pm8950_mpp4_def>;
 
-	/* MPP_1: VDD_PX_BIAS */
-	/* Follow QTI */
-
-	/* MPP_2: PA_THERM1 */
-	/* Follow QTI */
-	pm8950_mpp2_def: pa_therm {
-		gpio {
-			pins = "mpp2";
-			function = "analog";
-			input-enable;
-			qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH6>;
-			/* Function constant, Enable MPP */
-		};
-	};
-
-	/* MPP_3: VREF_TXDAC_0_1 */
-	/* Follow QTI */
-
-	/* MPP_4: QUIET_THERM */
-	pm8950_mpp4_def: case_therm {
-		gpio {
-			pins = "mpp4";
-			function = "analog";
-			input-enable;
-			qcom,amux-route = <PMIC_MPP_AMUX_ROUTE_CH8>;
-			/* Function constant, Enable MPP */
-		};
-	};
-	/* Follow QTI */
-};
-#endif
 &pmi8950_mpps {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pmi_mpp1_def &pmi_mpp3_def &pmi_mpp4_def>;
