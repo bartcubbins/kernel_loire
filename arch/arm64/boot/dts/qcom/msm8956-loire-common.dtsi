@@ -579,12 +579,11 @@
 
 		asoc-platform = <&pcm0>, <&pcm1>, <&pcm2>, <&pcm3>, <&voip>, <&voice>,
 				<&loopback>, <&compress>, <&hostless>,
-				<&afe>, <&lsm>, <&routing>, <&cpe>, <&lpa>;
+				<&afe>, <&lsm>, <&routing>, <&cpe>;
 		asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1", "msm-pcm-dsp.2", "msm-pcm-dsp.3",
 				"msm-voip-dsp", "msm-pcm-voice", "msm-pcm-loopback",
 				"msm-compress-dsp", "msm-pcm-hostless", "msm-pcm-afe",
-				"msm-lsm-client", "msm-pcm-routing", "msm-cpe-lsm",
-				"msm-pcm-lpa";
+				"msm-lsm-client", "msm-pcm-routing", "msm-cpe-lsm";
 	};
 
 	ldo_vibrator {
@@ -703,16 +702,6 @@
 		qcom,min-clock-rate = <200000000>;
 	};
 
-	qcom,msm-dai-mi2s {
-		compatible = "qcom,msm-dai-mi2s";
-		dai_mi2s5: qcom,msm-dai-q6-mi2s-quin {
-			compatible = "qcom,msm-dai-q6-mi2s";
-			qcom,msm-dai-q6-mi2s-dev-id = <5>;
-			qcom,msm-mi2s-rx-lines = <0>;
-			qcom,msm-mi2s-tx-lines = <1>;
-		};
-	};
-
 	/delete-node/ qseecom@85e00000;
 	qcom_seecom: qseecom@8dd00000 {
 		compatible = "qcom,qseecom";
@@ -766,6 +755,14 @@
 	/delete-node/ qcom,pronto@a21b000;
 	/delete-node/ qcom,wcnss-wlan@0a000000;
 
+};
+
+&msm_dai_mi2s {
+	dai_mi2s5 {
+		qcom,msm-dai-q6-mi2s-dev-id = <5>;
+		qcom,msm-mi2s-rx-lines = <0>;
+		qcom,msm-mi2s-tx-lines = <1>;
+	};
 };
 
 &pm8950_gpios {
