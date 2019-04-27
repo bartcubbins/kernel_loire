@@ -1333,7 +1333,7 @@
 		reg = <1>;
 		compatible = "brcm,bcm4329-fmac";
 		interrupt-parent = <&msm_gpio>;
-		interrupts = <45 8>;
+		interrupts = <45 4>;
 		interrupt-names = "host-wake";
 	};
 };
