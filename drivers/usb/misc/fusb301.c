@@ -226,7 +226,8 @@ struct fusb301_chip {
 	int irq_cbl_det;
 	bool cbl_det;
 	struct power_supply *batt_psy;
-	struct power_supply type_c_psy;
+	struct power_supply *type_c_psy;
+	struct power_supply_desc type_c_psy_d;
 	int current_ma;
 	int typec_state;
 #ifdef CONFIG_FB
@@ -1315,7 +1316,7 @@ static void fusb301_src_detected(struct fusb301_chip *chip)
 	chip->type = FUSB301_TYPE_SRC;
 
 	chip->typec_state = POWER_SUPPLY_TYPE_UFP;
-	chip->type_c_psy.type = POWER_SUPPLY_TYPE_UFP;
+	chip->type_c_psy_d.type = POWER_SUPPLY_TYPE_UFP;
 	set_property_on_battery(chip, POWER_SUPPLY_PROP_TYPEC_MODE);
 }
 
@@ -1371,7 +1372,7 @@ static void fusb301_snk_detected(struct fusb301_chip *chip)
 
 		chip->current_ma = 0;
 		chip->typec_state = POWER_SUPPLY_TYPE_DFP;
-		chip->type_c_psy.type = POWER_SUPPLY_TYPE_DFP;
+		chip->type_c_psy_d.type = POWER_SUPPLY_TYPE_DFP;
 		set_property_on_battery(chip, POWER_SUPPLY_PROP_TYPEC_MODE);
 	}
 }
@@ -1506,7 +1507,7 @@ static void fusb301_detach(struct fusb301_chip *chip)
 
 	chip->current_ma = 0;
 	chip->typec_state = POWER_SUPPLY_TYPE_UNKNOWN;
-	chip->type_c_psy.type = POWER_SUPPLY_TYPE_UNKNOWN;
+	chip->type_c_psy_d.type = POWER_SUPPLY_TYPE_UNKNOWN;
 	set_property_on_battery(chip, POWER_SUPPLY_PROP_TYPEC_MODE);
 
 	if (!chip->cbl_det) {
@@ -2175,8 +2176,7 @@ static int fusb301_set_property(struct power_supply *psy,
 				enum power_supply_property prop,
 				const union power_supply_propval *val)
 {
-	struct fusb301_chip *chip = container_of(psy,
-					struct fusb301_chip, type_c_psy);
+	struct fusb301_chip *chip = power_supply_get_drvdata(psy);
 
 	switch (prop) {
 	case POWER_SUPPLY_PROP_TYPE:
@@ -2195,8 +2195,7 @@ static int fusb301_get_property(struct power_supply *psy,
 				enum power_supply_property prop,
 				union power_supply_propval *val)
 {
-	struct fusb301_chip *chip = container_of(psy,
-					struct fusb301_chip, type_c_psy);
+	struct fusb301_chip *chip = power_supply_get_drvdata(psy);
 
 	switch (prop) {
 	case POWER_SUPPLY_PROP_TYPE:
@@ -2256,6 +2255,7 @@ static int fusb301_probe(struct i2c_client *client,
 	struct power_supply *usb_psy;
 	struct dual_role_phy_desc *desc;
 	struct dual_role_phy_instance *dual_role;
+	struct power_supply_config type_c_psy_cfg = {};
 	int ret = 0;
 
 #ifndef FUSB301_NOT_USE_USB_PSY
@@ -2422,15 +2422,19 @@ static int fusb301_probe(struct i2c_client *client,
 
 	INIT_WORK(&chip->cwork, fusb301_change_charger_type_work);
 
-	chip->type_c_psy.name		= TYPEC_PSY_NAME;
-	chip->type_c_psy.get_property	= fusb301_get_property;
-	chip->type_c_psy.properties	= fusb301_properties;
-	chip->type_c_psy.num_properties	= ARRAY_SIZE(fusb301_properties);
-	chip->type_c_psy.set_property	= fusb301_set_property;
-	chip->type_c_psy.property_is_writeable = fusb301_property_is_writeable;
+	chip->type_c_psy_d.name		= TYPEC_PSY_NAME;
+	chip->type_c_psy_d.get_property	= fusb301_get_property;
+	chip->type_c_psy_d.properties	= fusb301_properties;
+	chip->type_c_psy_d.num_properties	= ARRAY_SIZE(fusb301_properties);
+	chip->type_c_psy_d.set_property	= fusb301_set_property;
+	chip->type_c_psy_d.property_is_writeable = fusb301_property_is_writeable;
 
-	ret = power_supply_register(cdev, &chip->type_c_psy);
-	if (ret < 0) {
+	type_c_psy_cfg.drv_data = chip;
+	type_c_psy_cfg.num_supplicants = 0;
+
+	chip->type_c_psy = devm_power_supply_register(cdev,
+			&chip->type_c_psy_d, &type_c_psy_cfg);
+	if (IS_ERR(chip->type_c_psy)) {
 		dev_err(cdev, "Unable to register  type_c_psy ret=%d\n", ret);
 		goto err6;
 	}
@@ -2448,7 +2452,7 @@ static int fusb301_probe(struct i2c_client *client,
 	return 0;
 
 err7:
-	power_supply_unregister(&chip->type_c_psy);
+	power_supply_unregister(chip->type_c_psy);
 err6:
 #ifdef CONFIG_FB
 	fb_unregister_client(&chip->fb_notif);
@@ -2484,7 +2488,7 @@ static int fusb301_remove(struct i2c_client *client)
 		return -ENODEV;
 	}
 
-	power_supply_unregister(&chip->type_c_psy);
+	power_supply_unregister(chip->type_c_psy);
 
 #ifdef CONFIG_FB
 	fb_unregister_client(&chip->fb_notif);
