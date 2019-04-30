@@ -385,6 +385,15 @@ struct msm_fb_data_type {
 
 #ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
 	struct fb_specific_data spec_mfd;
+#ifdef CONFIG_FB_MSM_MDSS_EARLY_UNBLANK
+	/* speed up wakeup */
+	/* do unblank (>150ms) on own kworker
+	 * so we don't starve other works
+	 */
+	struct workqueue_struct *unblank_kworker;
+	struct work_struct unblank_work;
+	bool early_unblank_completed;
+#endif /* CONFIG_FB_MSM_MDSS_EARLY_UNBLANK */
 #endif
 };
 
