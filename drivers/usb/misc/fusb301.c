@@ -346,7 +346,7 @@ static int set_property_on_battery(struct fusb301_chip *chip,
 	switch (prop) {
 	case POWER_SUPPLY_PROP_CURRENT_CAPABILITY:
 		ret.intval = chip->current_ma;
-		rc = chip->batt_psy->set_property(chip->batt_psy,
+		rc = power_supply_set_property(chip->batt_psy,
 			POWER_SUPPLY_PROP_CURRENT_CAPABILITY, &ret);
 		if (rc)
 			pr_err("failed to set current max rc=%d\n", rc);
@@ -358,7 +358,7 @@ static int set_property_on_battery(struct fusb301_chip *chip,
 		 * charger driver.
 		 */
 		ret.intval = chip->typec_state;
-		rc = chip->batt_psy->set_property(chip->batt_psy,
+		rc = power_supply_set_property(chip->batt_psy,
 				POWER_SUPPLY_PROP_TYPEC_MODE, &ret);
 		if (rc)
 			pr_err("failed to set typec mode rc=%d\n", rc);
@@ -1247,8 +1247,8 @@ static int fusb301_power_set_icurrent_max(struct fusb301_chip *chip,
 
 	chip->ufp_power = icurrent;
 
-	if (chip->usb_psy && chip->usb_psy->set_property)
-		return chip->usb_psy->set_property(chip->usb_psy,
+	if (chip->usb_psy)
+		return power_supply_set_property(chip->usb_psy,
 				POWER_SUPPLY_PROP_INPUT_CURRENT_MAX, &ret);
 
 	chip->current_ma = icurrent;
@@ -1322,6 +1322,7 @@ static void fusb301_src_detected(struct fusb301_chip *chip)
 static void fusb301_snk_detected(struct fusb301_chip *chip)
 {
 	struct device *cdev = &chip->client->dev;
+	union power_supply_propval pval;
 
 	if (chip->mode & (FUSB301_SNK | FUSB301_SNK_ACC)) {
 		dev_err(cdev, "not support in sink mode\n");
@@ -1356,8 +1357,11 @@ static void fusb301_snk_detected(struct fusb301_chip *chip)
 		 * or
 		 * mode == FUSB301_SRC/FUSB301_SRC_ACC
 		 */
-		if (chip->usb_psy)
-			power_supply_set_usb_otg(chip->usb_psy, true);
+		if (chip->usb_psy) {
+			pval.intval = true;
+			power_supply_set_property(chip->usb_psy,
+						POWER_SUPPLY_PROP_USB_OTG, &pval);
+		}
 		fusb301_set_dfp_power(chip, chip->pdata->dfp_power);
 		if (chip->state == FUSB_STATE_TRYWAIT_SRC)
 			cancel_delayed_work(&chip->twork);
@@ -1434,14 +1438,18 @@ static void fusb301_timer_try_expired(struct fusb301_chip *chip)
 static void fusb301_detach(struct fusb301_chip *chip)
 {
 	struct device *cdev = &chip->client->dev;
+	union power_supply_propval pval;
 
 	dev_dbg(cdev, "%s: type[0x%02x] chipstate[0x%02x]\n",
 			__func__, chip->type, chip->state);
 
 	switch (chip->state) {
 	case FUSB_STATE_ATTACHED_SRC:
-		if (chip->usb_psy)
-			power_supply_set_usb_otg(chip->usb_psy, false);
+		if (chip->usb_psy) {
+			pval.intval = false;
+			power_supply_set_property(chip->usb_psy,
+						POWER_SUPPLY_PROP_USB_OTG, &pval);
+		}
 		fusb301_init_force_dfp_power(chip);
 		break;
 	case FUSB_STATE_ATTACHED_SNK:
