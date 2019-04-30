@@ -14,4 +14,12 @@ config FB_MSM_MDSS_SPECIFIC_PANEL_INCELL
 	prompt "Sony Xperia In-Cell Panel Driver"
 	default n
 	---help---
-	  Sony Xperia In-Cell Panel Driver support
+	  Sony Xperia In-Cell Panel Driver support.
+
+config FB_MSM_MDSS_EARLY_UNBLANK
+	depends on FB_MSM_MDSS_SPECIFIC_PANEL_INCELL
+	bool
+	prompt "Sony Early Unblank feature for quick display wakeup"
+	default y
+	---help---
+	  Sony Early Unblank feature for quick display wakeup.
