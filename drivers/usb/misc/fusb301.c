@@ -28,7 +28,6 @@
 #include <linux/power_supply.h>
 #include <linux/irq.h>
 #include <linux/delay.h>
-#include <linux/wakelock.h>
 #include <linux/workqueue.h>
 #include <linux/fb.h>
 #include <linux/random.h>
@@ -217,7 +216,7 @@ struct fusb301_chip {
 	int try_attcnt;
 	struct delayed_work dwork;
 	struct delayed_work twork;
-	struct wake_lock wlock;
+	struct wakeup_source wake_src;
 	struct mutex mlock;
 	struct power_supply *usb_psy;
 	struct dual_role_phy_instance *dual_role;
@@ -1732,7 +1731,7 @@ work_unlock:
 	mutex_unlock(&chip->mlock);
 
 	if (int_sts && chip->dwork_looped++ < DWORK_LOOP_MAX) {
-		wake_lock_timeout(&chip->wlock,
+		__pm_wakeup_event(&chip->wake_src,
 				msecs_to_jiffies(FUSB301_WAKE_LOCK_TIMEOUT));
 		if (!queue_delayed_work(chip->cc_wq, &chip->dwork,
 							msecs_to_jiffies(1)))
@@ -1752,10 +1751,10 @@ static irqreturn_t fusb301_interrupt(int irq, void *data)
 	}
 
 	/*
-	 * wake_lock_timeout, prevents multiple suspend entries
+	 * __pm_wakeup_event, prevents multiple suspend entries
 	 * before charger gets chance to trigger usb core for device
 	 */
-	wake_lock_timeout(&chip->wlock,
+	__pm_wakeup_event(&chip->wake_src,
 				msecs_to_jiffies(FUSB301_WAKE_LOCK_TIMEOUT));
 	if (!queue_delayed_work(chip->cc_wq, &chip->dwork, 0))
 		dev_err(&chip->client->dev, "%s: can't alloc work\n", __func__);
@@ -2326,7 +2325,7 @@ static int fusb301_probe(struct i2c_client *client,
 	}
 	INIT_DELAYED_WORK(&chip->dwork, fusb301_work_handler);
 	INIT_DELAYED_WORK(&chip->twork, fusb301_timer_work_handler);
-	wake_lock_init(&chip->wlock, WAKE_LOCK_SUSPEND, "fusb301_wake");
+	wakeup_source_init(&chip->wake_src, "fusb301_wake");
 	mutex_init(&chip->mlock);
 
 	ret = fusb301_create_devices(cdev);
@@ -2455,7 +2454,7 @@ err4:
 err3:
 	destroy_workqueue(chip->cc_wq);
 	mutex_destroy(&chip->mlock);
-	wake_lock_destroy(&chip->wlock);
+	wakeup_source_trash(&chip->wake_src);
 	fusb301_free_gpio(chip);
 err2:
 	if (&client->dev.of_node)
@@ -2501,7 +2500,7 @@ static int fusb301_remove(struct i2c_client *client)
 	fusb301_destory_device(cdev);
 	destroy_workqueue(chip->cc_wq);
 	mutex_destroy(&chip->mlock);
-	wake_lock_destroy(&chip->wlock);
+	wakeup_source_trash(&chip->wake_src);
 	fusb301_free_gpio(chip);
 
 	if (&client->dev.of_node)
