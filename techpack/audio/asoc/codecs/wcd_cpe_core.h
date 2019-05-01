@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -222,8 +222,22 @@ struct wcd_cpe_params {
 	struct cpe_svc_init_param *cpe_svc_params;
 };
 
+#ifdef CONFIG_SND_SOC_WCD_CPE
 int wcd_cpe_ssr_event(void *core_handle,
 		      enum wcd_cpe_ssr_state_event event);
 struct wcd_cpe_core *wcd_cpe_init(const char *img_fname,
-struct snd_soc_codec *codec, struct wcd_cpe_params *params);
+		      struct snd_soc_codec *codec, struct wcd_cpe_params *params);
+#else
+static inline int wcd_cpe_ssr_event(void *core_handle,
+		      enum wcd_cpe_ssr_state_event event)
+{
+	return 0;
+}
+
+static inline struct wcd_cpe_core *wcd_cpe_init(const char *img_fname,
+		      struct snd_soc_codec *codec, struct wcd_cpe_params *params)
+{
+	return 0;
+}
+#endif /* CONFIG_SND_SOC_WCD_CPE */
 #endif
