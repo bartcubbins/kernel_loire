@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -38,6 +38,9 @@ struct msm8952_codec {
 struct msm8952_asoc_mach_data {
 	int ext_pa;
 	int us_euro_gpio;
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	int ear_en_gpio;
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 	struct delayed_work hs_detect_dwork;
 	struct snd_soc_codec *codec;
 	struct msm8952_codec msm8952_codec_fn;

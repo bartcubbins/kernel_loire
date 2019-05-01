@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -117,6 +117,10 @@ static int mi2s_rx_bit_format = SNDRV_PCM_FORMAT_S16_LE;
 static int msm_proxy_rx_ch = 2;
 static void *adsp_state_notifier;
 
+#ifdef CONFIG_ARCH_SONY_LOIRE
+static int msm_ear_enable_states;
+#endif /* CONFIG_ARCH_SONY_LOIRE */
+
 /* TDM default channels */
 static int msm_pri_tdm_rx_0_ch = 8;
 static int msm_pri_tdm_tx_0_ch = 8;
@@ -189,7 +193,11 @@ static void *def_tasha_mbhc_cal(void)
 		return NULL;
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(tasha_wcd_cal)->X) = (Y))
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	S(v_hs_max, 1600);
+#else
 	S(v_hs_max, 1500);
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 #undef S
 #define S(X, Y) ((WCD_MBHC_CAL_BTN_DET_PTR(tasha_wcd_cal)->X) = (Y))
 	S(num_btn, WCD_MBHC_DEF_BUTTONS);
@@ -199,6 +207,16 @@ static void *def_tasha_mbhc_cal(void)
 	btn_high = ((void *)&btn_cfg->_v_btn_low) +
 		(sizeof(btn_cfg->_v_btn_low[0]) * btn_cfg->num_btn);
 
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	btn_high[0] = 75;
+	btn_high[1] = 137;
+	btn_high[2] = 237;
+	btn_high[3] = 500;
+	btn_high[4] = 500;
+	btn_high[5] = 500;
+	btn_high[6] = 500;
+	btn_high[7] = 500;
+#else
 	btn_high[0] = 75;
 	btn_high[1] = 150;
 	btn_high[2] = 237;
@@ -207,6 +225,7 @@ static void *def_tasha_mbhc_cal(void)
 	btn_high[5] = 450;
 	btn_high[6] = 450;
 	btn_high[7] = 450;
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 
 	return tasha_wcd_cal;
 }
@@ -1650,6 +1669,52 @@ static int  msm_sec_tdm_tx_0_sample_rate_put(struct snd_kcontrol *kcontrol,
 	return 0;
 }
 
+#ifdef CONFIG_ARCH_SONY_LOIRE
+static int msm_ear_enable_get(struct snd_kcontrol *kcontrol,
+				struct snd_ctl_elem_value *ucontrol)
+{
+	ucontrol->value.integer.value[0] = msm_ear_enable_states;
+
+	pr_debug("%s: msm_ear_enable_states = %d\n", __func__,
+			msm_ear_enable_states);
+
+	return 0;
+}
+
+static int msm_ear_enable_put(struct snd_kcontrol *kcontrol,
+				struct snd_ctl_elem_value *ucontrol)
+{
+	struct snd_soc_codec *codec = snd_soc_kcontrol_codec(kcontrol);
+	struct snd_soc_card *card = codec->component.card;
+	struct msm8952_asoc_mach_data *pdata = snd_soc_card_get_drvdata(card);
+	int ret;
+
+	pr_err("%s: ucontrol value = %ld\n", __func__,
+			ucontrol->value.integer.value[0]);
+
+	if (!gpio_is_valid(pdata->ear_en_gpio)) {
+		pr_err("%s: Invalid gpio: %d\n", __func__,
+			pdata->ear_en_gpio);
+		return 0;
+	}
+
+	msm_ear_enable_states = ucontrol->value.integer.value[0];
+
+	ret = gpio_request(pdata->ear_en_gpio, "ear_en_gpio");
+	if (ret) {
+		pr_err("%s: cannot requesting gpio %s\n",
+			__func__, "ear_en_gpio");
+		return ret;
+	}
+
+	gpio_set_value(pdata->ear_en_gpio, msm_ear_enable_states);
+
+	gpio_free(pdata->ear_en_gpio);
+
+	return 0;
+}
+#endif /* CONFIG_ARCH_SONY_LOIRE */
+
 static const char *const spk_function[] = {"Off", "On"};
 static const char *const slim0_rx_ch_text[] = {"One", "Two", "Three", "Four",
 						"Five", "Six", "Seven",
@@ -1687,6 +1752,9 @@ static char const *slim5_rx_bit_format_text[] = {"S16_LE", "S24_LE", "S24_3LE"};
 static const char *const proxy_rx_ch_text[] = {"One", "Two", "Three", "Four",
 	"Five", "Six", "Seven", "Eight"};
 static char const *slim6_rx_bit_format_text[] = {"S16_LE", "S24_LE", "S24_3LE"};
+#ifdef CONFIG_ARCH_SONY_LOIRE
+static char const *ear_enable_states_text[] = {"Disable", "Enable"};
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 
 static const struct soc_enum msm_snd_enum[] = {
 	SOC_ENUM_SINGLE_EXT(2, spk_function),
@@ -1719,6 +1787,10 @@ static const struct soc_enum msm_snd_enum[] = {
 			    slim4_rx_sample_rate_text),
 	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(slim4_rx_bit_format_text),
 			    slim4_rx_bit_format_text),
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(ear_enable_states_text),
+				ear_enable_states_text),
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 };
 
 static const char *const btsco_rate_text[] = {"BTSCO_RATE_8KHZ",
@@ -1816,6 +1888,10 @@ static const struct snd_kcontrol_new msm_snd_controls[] = {
 	SOC_ENUM_EXT("SEC_TDM_TX_0 SampleRate", msm_snd_enum[15],
 			msm_sec_tdm_tx_0_sample_rate_get,
 			msm_sec_tdm_tx_0_sample_rate_put),
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	SOC_ENUM_EXT("MSM_Ear_Enable_States", msm_snd_enum[20],
+			msm_ear_enable_get, msm_ear_enable_put),
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 };
 
 int msm_be_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
@@ -3454,6 +3530,33 @@ static int is_us_eu_switch_gpio_support(struct platform_device *pdev,
 	return 0;
 }
 
+#ifdef CONFIG_ARCH_SONY_LOIRE
+static int is_ear_en_gpio_support(struct platform_device *pdev,
+		struct msm8952_asoc_mach_data *pdata)
+{
+	pr_debug("%s\n", __func__);
+
+	/* check if EAR-EN GPIO is supported */
+	pdata->ear_en_gpio = of_get_named_gpio(pdev->dev.of_node,
+					"qcom,ear-en-gpios", 0);
+
+	if (pdata->ear_en_gpio < 0) {
+		dev_err(&pdev->dev,
+			"property %s in node %s not found %d\n",
+			"qcom,ear-en-gpios", pdev->dev.of_node->full_name,
+			pdata->ear_en_gpio);
+	} else {
+		if (!gpio_is_valid(pdata->ear_en_gpio)) {
+			pr_err("%s: Invalid gpio: %d", __func__,
+					pdata->ear_en_gpio);
+			return -EINVAL;
+		}
+	}
+
+	return 0;
+}
+#endif /* CONFIG_ARCH_SONY_LOIRE */
+
 static int msm8952_populate_dai_link_component_of_node(
 					struct snd_soc_card *card)
 {
@@ -3736,6 +3839,20 @@ static int msm8952_asoc_machine_probe(struct platform_device *pdev)
 				__func__, ret);
 		goto err;
 	}
+
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	/* Parse EAR-EN gpio info from DT. Report no error if ear-en
+	 * entry is not found in DT file as some targets do not support
+	 * EAR-EN detection
+	 */
+	ret = is_ear_en_gpio_support(pdev, pdata);
+	if (ret < 0) {
+		pr_err("%s: failed to is_ear_en_gpio_support %d\n",
+				__func__, ret);
+		goto err;
+	}
+#endif /* CONFIG_ARCH_SONY_LOIRE */
+
 	pdata->mi2s_gpio_p[QUAT_MI2S] = of_parse_phandle(pdev->dev.of_node,
 						"qcom,quat-mi2s-gpios", 0);
 	pdata->mi2s_gpio_p[QUIN_MI2S] = of_parse_phandle(pdev->dev.of_node,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2016, 2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -174,7 +174,11 @@ static struct reg_sequence wsa881x_rev_2_0[] = {
 	{WSA881X_SPKR_BIAS_INT, 0x5F, 0x00},
 	{WSA881X_SPKR_BIAS_PSRR, 0x44, 0x00},
 	{WSA881X_BOOST_PS_CTL, 0xA0, 0x00},
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	{WSA881X_BOOST_PRESET_OUT1, 0x37, 0x00},
+#else
 	{WSA881X_BOOST_PRESET_OUT1, 0xB7, 0x00},
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 	{WSA881X_BOOST_LOOP_STABILITY, 0x8D, 0x00},
 	{WSA881X_SPKR_PROT_ATEST2, 0x02, 0x00},
 	{WSA881X_BONGO_RESRV_REG1, 0x5E, 0x00},
