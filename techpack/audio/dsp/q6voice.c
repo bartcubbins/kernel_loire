@@ -1,4 +1,4 @@
-/*  Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
+/*  Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -39,6 +39,9 @@
 #define NUM_CHANNELS_THREE 3
 #define NUM_CHANNELS_QUAD 4
 #define CVP_VERSION_2 2
+#ifdef CONFIG_ARCH_SONY_LOIRE
+#define CVP_VERSION_1 1
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 #define GAIN_Q14_FORMAT(a) (a << 14)
 
 enum {
@@ -4349,6 +4352,10 @@ static int voice_get_avcs_version_per_service(uint32_t service_id)
 	int ret = 0;
 	size_t ver_size;
 	struct avcs_fwk_ver_info *ver_info = NULL;
+
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	return CVP_VERSION_1;
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 
 	if (service_id == AVCS_SERVICE_ID_ALL) {
 		pr_err("%s: Invalid service id: %d", __func__,
