@@ -1,4 +1,4 @@
-/* Copyright (c) 2015, 2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015, 2018-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -39,12 +39,34 @@ enum {
 extern const u8 wsa881x_ana_reg_readable[WSA881X_CACHE_SIZE];
 extern struct reg_default wsa881x_ana_reg_defaults[WSA881X_CACHE_SIZE];
 extern struct regmap_config wsa881x_ana_regmap_config[2];
+void wsa881x_update_reg_defaults_2_0(void);
+void wsa881x_update_regmap_2_0(struct regmap *regmap, int flag);
+#ifdef CONFIG_SND_SOC_WSA881X_ANALOG
 int wsa881x_get_client_index(void);
 int wsa881x_get_probing_count(void);
 int wsa881x_get_presence_count(void);
 int wsa881x_set_mclk_callback(
 	int (*enable_mclk_callback)(struct snd_soc_card *, bool));
-void wsa881x_update_reg_defaults_2_0(void);
-void wsa881x_update_regmap_2_0(struct regmap *regmap, int flag);
+#else
+static inline int wsa881x_get_client_index(void)
+{
+	return 0;
+}
 
+static inline int wsa881x_get_probing_count(void)
+{
+	return 0;
+}
+
+static inline int wsa881x_get_presence_count(void)
+{
+	return 0;
+}
+
+static inline int wsa881x_set_mclk_callback(
+	int (*enable_mclk_callback)(struct snd_soc_card *, bool))
+{
+	return 0;
+}
+#endif /* CONFIG_SND_SOC_WSA881X_ANALOG */
 #endif /* _WSA881X_H */
