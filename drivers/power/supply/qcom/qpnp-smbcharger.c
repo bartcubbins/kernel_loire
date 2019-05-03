@@ -473,7 +473,8 @@ static const unsigned int smbchg_extcon_cable[] = {
 	EXTCON_NONE,
 };
 
-#ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
+#if defined(CONFIG_QPNP_SMBCHARGER_EXTENSION) && \
+	defined(CONFIG_QPNP_SMBCHARGER_EXTENSION_DEBUG)
 static int smbchg_debug_mask = PR_INTERRUPT | PR_SOMC;
 #else
 static int smbchg_debug_mask;
