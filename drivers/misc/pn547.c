@@ -360,6 +360,9 @@ static int pn547_parse_dt(struct device *dev,
 		}
 	}
 
+	pr_info("%s: irq_gpio: %d, firm_gpio: %d, ven_gpio: %d", __func__,
+			pdata->irq_gpio, pdata->firm_gpio, pdata->ven_gpio);
+
 err:
 	return ret;
 }
@@ -481,7 +484,7 @@ static int pn547_probe(struct i2c_client *client,
 	/* request irq.  the irq is set whenever the chip has data available
 	 * for reading.  it is cleared when all data has been read.
 	 */
-	pr_info("%s : requesting IRQ %d\n", __func__, client->irq);
+	pr_info("%s: requesting IRQ %d\n", __func__, client->irq);
 	pn547_dev->irq_enabled = true;
 	ret = request_irq(client->irq, pn547_dev_irq_handler,
 			  IRQF_TRIGGER_RISING, client->name, pn547_dev);
@@ -491,6 +494,8 @@ static int pn547_probe(struct i2c_client *client,
 	}
 	pn547_disable_irq(pn547_dev);
 	i2c_set_clientdata(client, pn547_dev);
+
+	pr_info("%s: probing exited successfully\n", __func__);
 
 	return 0;
 
