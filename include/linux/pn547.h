@@ -36,4 +36,10 @@ struct pn547_i2c_platform_data {
 	int gpio_fwdl_disable[4];
 };
 
+enum pn547_state {
+	PN547_STATE_UNKNOWN,
+	PN547_STATE_OFF,
+	PN547_STATE_ON,
+	PN547_STATE_FWDL,
+};
 #endif
