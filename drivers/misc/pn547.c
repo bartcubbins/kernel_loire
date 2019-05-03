@@ -112,7 +112,7 @@ static ssize_t pn547_dev_read(struct file *filp, char __user *buf,
 			if (gpio_get_value(pn547_dev->irq_gpio))
 				break;
 
-			pr_warning("%s: spurious interrupt detected\n", __func__);
+			pr_debug("%s: spurious interrupt detected\n", __func__);
 		}
 	}
 
