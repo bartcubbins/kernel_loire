@@ -319,7 +319,8 @@ static struct fg_mem_data fg_backup_regs[FG_BACKUP_MAX] = {
 	BACKUP(MAH_TO_SOC,	0x4A0,   0,      4,     -EINVAL),
 };
 
-#ifdef CONFIG_QPNP_FG_EXTENSION
+#if defined (CONFIG_QPNP_FG_EXTENSION) && \
+	defined(CONFIG_QPNP_FG_EXTENSION_DEBUG)
 static int fg_debug_mask = FG_SOMC;
 #else
 static int fg_debug_mask;
