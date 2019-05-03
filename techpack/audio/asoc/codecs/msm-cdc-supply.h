@@ -26,23 +26,60 @@ struct cdc_regulator {
 	struct regulator *regulator;
 };
 
+#ifdef CONFIG_MSM_CDC_SUPPLY
 extern int msm_cdc_get_power_supplies(struct device *dev,
-				      struct cdc_regulator **cdc_vreg,
-				      int *total_num_supplies);
+				struct cdc_regulator **cdc_vreg,
+				int *total_num_supplies);
 extern int msm_cdc_disable_static_supplies(struct device *dev,
-					struct regulator_bulk_data *supplies,
-					struct cdc_regulator *cdc_vreg,
-					int num_supplies);
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies);
 extern int msm_cdc_release_supplies(struct device *dev,
-				    struct regulator_bulk_data *supplies,
-				    struct cdc_regulator *cdc_vreg,
-				    int num_supplies);
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies);
 extern int msm_cdc_enable_static_supplies(struct device *dev,
-					  struct regulator_bulk_data *supplies,
-					  struct cdc_regulator *cdc_vreg,
-					  int num_supplies);
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies);
 extern int msm_cdc_init_supplies(struct device *dev,
-				 struct regulator_bulk_data **supplies,
-				 struct cdc_regulator *cdc_vreg,
-				 int num_supplies);
+				struct regulator_bulk_data **supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies);
+#else
+static inline extern int msm_cdc_get_power_supplies(struct device *dev,
+				struct cdc_regulator **cdc_vreg,
+				int *total_num_supplies)
+{
+	return 0;
+}
+static inline extern int msm_cdc_disable_static_supplies(struct device *dev,
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies)
+{
+	return 0;
+}
+static inline extern int msm_cdc_release_supplies(struct device *dev,
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies)
+{
+	return 0;
+}
+static inline extern int msm_cdc_enable_static_supplies(struct device *dev,
+				struct regulator_bulk_data *supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies)
+{
+	return 0;
+}
+static inline extern int msm_cdc_init_supplies(struct device *dev,
+				struct regulator_bulk_data **supplies,
+				struct cdc_regulator *cdc_vreg,
+				int num_supplies)
+{
+	return 0;
+}
+#endif
 #endif
