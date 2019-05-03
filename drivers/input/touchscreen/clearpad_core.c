@@ -1062,12 +1062,12 @@ static void clearpad_set_irq(struct clearpad_t *this, bool enable)
 {
 	if (enable && !this->irq_enabled) {
 		enable_irq(this->irq);
-		LOGI(this, "irq was enabled\n");
+		LOGD(this, "irq was enabled\n");
 	} else if (!enable && this->irq_enabled) {
 		disable_irq_nosync(this->irq);
-		LOGI(this, "irq was disabled\n");
+		LOGD(this, "irq was disabled\n");
 	} else {
-		LOGI(this, "no irq change (%s)\n",
+		LOGD(this, "no irq change (%s)\n",
 		     this->irq_enabled ? "enable" : "disable");
 	}
 	this->irq_enabled = enable;
@@ -1562,11 +1562,11 @@ static int clearpad_set_doze_holdoff_time(struct clearpad_t *this,
 	u8 current_time = 0x00;
 
 	if (!this->stamina.supported) {
-		LOGI(this, "stamina mode is not supported\n");
+		LOGD(this, "stamina mode is not supported\n");
 		goto end;
 	}
 	if (!this->stamina.doze_holdoff.supported) {
-		LOGI(this, "doze holdoff is not supported\n");
+		LOGD(this, "doze holdoff is not supported\n");
 		goto end;
 	}
 
@@ -1578,7 +1578,7 @@ static int clearpad_set_doze_holdoff_time(struct clearpad_t *this,
 		goto end;
 	}
 	if (current_time == holdoff_time) {
-		LOGI(this, "new Doze Holdoff is same as current=0x%02x\n",
+		LOGD(this, "new Doze Holdoff is same as current=0x%02x\n",
 			current_time);
 		goto end;
 	}
@@ -1602,7 +1602,7 @@ static int clearpad_set_doze_holdoff_time(struct clearpad_t *this,
 		LOGE(this, "failed to set force update\n");
 		goto end;
 	}
-	LOGI(this, "changed Doze Holdoff=0x%02x\n", holdoff_time);
+	LOGD(this, "changed Doze Holdoff=0x%02x\n", holdoff_time);
 
 end:
 	return rc;
@@ -1615,15 +1615,15 @@ static int clearpad_set_doze_holdoff(struct clearpad_t *this)
 	u8 holdoff_time = 0x00;
 
 	if (!this->stamina.supported) {
-		LOGI(this, "stamina mode is not supported\n");
+		LOGD(this, "stamina mode is not supported\n");
 		goto end;
 	}
 	if (!this->stamina.doze_holdoff.supported) {
-		LOGI(this, "doze holdoff is not supported\n");
+		LOGD(this, "doze holdoff is not supported\n");
 		goto end;
 	}
 
-	LOGI(this, "glove mode: %s, cover mode/status: %s/%s\n",
+	LOGD(this, "glove mode: %s, cover mode/status: %s/%s\n",
 		this->glove.enabled ? "enable" : "disable",
 		this->cover.enabled ? "enable" : "disable",
 		this->cover.status ? "CLOSE" : "OPEN");
@@ -1729,7 +1729,7 @@ static int clearpad_read_pdt(struct clearpad_t *this)
 					memcpy(&this->pdt[k], &fdes,
 							sizeof(*this->pdt));
 				i++;
-				HWLOGI(this, "F%02x page:0x%02x "
+				HWLOGD(this, "F%02x page:0x%02x "
 				       "base[DATA:0x%02x "
 				       "CTRL:0x%02x COMMAND:0x%02x "
 				       "QUERY:0x%02x] irq:0x%02x\n",
@@ -2529,7 +2529,7 @@ static int clearpad_prepare_f12_2d(struct clearpad_t *this)
 	for (i = 0; i < BITS_PER_BYTE; i++)
 		this->extents.n_bytes_per_object += (buf[0] & BIT(i)) >> i;
 
-	LOGI(this, "x_max=%d, y_max=%d, n_fingers=%d, n_bytes_per_object=%d\n",
+	LOGD(this, "x_max=%d, y_max=%d, n_fingers=%d, n_bytes_per_object=%d\n",
 		this->extents.x_max, this->extents.y_max,
 		this->extents.n_fingers,
 		this->extents.n_bytes_per_object);
@@ -2559,7 +2559,7 @@ static int clearpad_initialize(struct clearpad_t *this)
 	struct clearpad_device_info_t *info = &this->device_info;
 	u8 product_id[HEADER_PRODUCT_ID_SIZE];
 
-	LOGI(this, "initialize device\n");
+	LOGD(this, "initialize device\n");
 
 	/* read device product id */
 	/* F01_RMI_QUERY11: Product ID Query */
@@ -2582,7 +2582,7 @@ static int clearpad_initialize(struct clearpad_t *this)
 	if (rc)
 		goto end;
 
-	LOGI(this, "device status 0x%02x\n", device_status);
+	LOGD(this, "device status 0x%02x\n", device_status);
 
 	if (this->is_sol) {
 		/* F34_FLASH_QUERY00: Bootloader Revision */
@@ -2594,14 +2594,14 @@ static int clearpad_initialize(struct clearpad_t *this)
 
 		/* Flash memory management, Version 1         */
 		/* Bootloader Revision is stored as character */
-		LOGI(this, "bl[0]:%c\n", bl_ver[0]);
-		LOGI(this, "bl[1]:%c\n", bl_ver[1]);
+		LOGD(this, "bl[0]:%c\n", bl_ver[0]);
+		LOGD(this, "bl[1]:%c\n", bl_ver[1]);
 		if (bl_ver[1] >= 0x30 && bl_ver[1] <= 0x39) {
 			/* change character to decimal */
 			bl_ver[1] -= 0x30;
 			bl_ver[0] = 0x00;	/* minor value is 0 */
 		}
-		LOGI(this, "bootloader revision %d.%03d\n", bl_ver[1], bl_ver[0]);
+		LOGD(this, "bootloader revision %d.%03d\n", bl_ver[1], bl_ver[0]);
 	} else {
 		/* F34_FLASH_QUERY01: Bootloader Revision */
 		rc = clearpad_get_block(SYNF(this, F34_FLASH, QUERY,
@@ -2612,7 +2612,7 @@ static int clearpad_initialize(struct clearpad_t *this)
 
 		/* Flash memory management, Version 2       */
 		/* Bootloader Revision is stored as decimal */
-		LOGI(this, "bootloader revision %d.%03d\n", bl_ver[1], bl_ver[0]);
+		LOGD(this, "bootloader revision %d.%03d\n", bl_ver[1], bl_ver[0]);
 	}
 
 	switch (BIT_GET(device_status, DEVICE_STATUS_CODE)) {
@@ -2631,7 +2631,7 @@ static int clearpad_initialize(struct clearpad_t *this)
 			if (rc)
 				goto end;
 
-			LOGI(this, "FW status 0x%02x\n", fw_status);
+			LOGD(this, "FW status 0x%02x\n", fw_status);
 
 			switch (BIT_GET(fw_status, STATUS_FLASH_STATUS)) {
 			case STATUS_FLASH_STATUS_BAD_PARTITION_TABLE:
@@ -2677,14 +2677,14 @@ static int clearpad_initialize(struct clearpad_t *this)
 	clearpad_touch_config_dt_for_chip_id(this, this->chip_id);
 
 	if (this->state != SYN_STATE_RUNNING) {
-		LOGI(this, "device mid %d, prop %d, family 0x%02x, "
+		LOGD(this, "device mid %d, prop %d, family 0x%02x, "
 		     "rev 0x%02x.%02x, extra 0x%02x, aid 0x%02x\n",
 		     info->manufacturer_id, info->product_properties,
 		     info->customer_family, info->firmware_revision_major,
 		     info->firmware_revision_minor,
 		     info->firmware_revision_extra,
 		     info->analog_id);
-		LOGI(this, "product id '%s'\n",
+		LOGD(this, "product id '%s'\n",
 		     clearpad_s(info->product_id, HEADER_PRODUCT_ID_SIZE));
 	}
 
@@ -2717,7 +2717,7 @@ static int clearpad_initialize(struct clearpad_t *this)
 	this->flash_requested = false;
 
 	/* notify end of task */
-	LOGI(this, "result: %s", this->result_info);
+	LOGD(this, "result: %s", this->result_info);
 end:
 	/* inform running state */
 	this->state = SYN_STATE_RUNNING;
@@ -2742,7 +2742,7 @@ static int clearpad_initialize_if_first_event(struct clearpad_t *this,
 		goto read_interrupt;
 
 	get_monotonic_boottime(&ts);
-	HWLOGI(this, "read first event (power=%s active=%s) @ %ld.%06ld\n",
+	HWLOGD(this, "read first event (power=%s active=%s) @ %ld.%06ld\n",
 	       touchctrl_is_touch_powered(this) ? "OK" : "NG",
 	       this->dev_active ? "true" : "false",
 	       ts.tv_sec, ts.tv_nsec);
@@ -2817,7 +2817,7 @@ static int clearpad_handle_if_first_event(struct clearpad_t *this)
 
 	get_monotonic_boottime(&this->interrupt.handle_first_event_ts);
 
-	HWLOGI(this, "first event (power=%s active=%s) @ %ld.%06ld\n",
+	HWLOGD(this, "first event (power=%s active=%s) @ %ld.%06ld\n",
 	       touchctrl_is_touch_powered(this) ? "OK" : "NG",
 	       this->dev_active ? "true" : "false",
 	       this->interrupt.handle_first_event_ts.tv_sec,
@@ -2832,11 +2832,11 @@ static int clearpad_handle_if_first_event(struct clearpad_t *this)
 		goto end;
 
 	if (this->force_sleep == FSMODE_ONESHOT) {
-		LOGI(this, "clear force sleep mode\n");
+		LOGD(this, "clear force sleep mode\n");
 		this->force_sleep = FSMODE_OFF;
 	}
 	if (this->force_sleep != FSMODE_OFF) {
-		HWLOGI(this, "force sleep mode\n");
+		HWLOGD(this, "force sleep mode\n");
 		if (this->dev_active) {
 			rc = clearpad_set_suspend_mode(this);
 			if (rc)
@@ -3901,7 +3901,7 @@ static int clearpad_set_resume_mode(struct clearpad_t *this)
 	u8 interrupt;
 	u8 value;
 
-	HWLOGI(this, "set resume mode\n");
+	HWLOGD(this, "set resume mode\n");
 	WARN_ON(this->dev_active && !this->early_suspend);
 
 	if (this->post_probe.done)
@@ -3951,9 +3951,9 @@ static int clearpad_set_resume_mode(struct clearpad_t *this)
 	this->dev_active = true;
 
 	if (clearpad_set_noise_det_irq(this, true, true))
-		HWLOGI(this, "no noise_det irq change (enable)\n");
+		HWLOGD(this, "no noise_det irq change (enable)\n");
 	else
-		LOGI(this, "noise_det irq was enabled\n");
+		LOGD(this, "noise_det irq was enabled\n");
 
 	if (!this->irq_enabled) {
 		/* F01_RMI_DATA01: Interrupt Status */
@@ -3963,12 +3963,12 @@ static int clearpad_set_resume_mode(struct clearpad_t *this)
 			LOGE(this, "failed to read interrupt status\n");
 			goto end;
 		}
-		LOGI(this, "ignore interrupt 0x%02x\n", interrupt);
+		LOGD(this, "ignore interrupt 0x%02x\n", interrupt);
 		clearpad_set_irq(this, true);
 	}
 
 end:
-	LOGI(this, "set resume mode (rc=%d)\n", rc);
+	LOGD(this, "set resume mode (rc=%d)\n", rc);
 	return rc;
 }
 
@@ -4018,13 +4018,13 @@ static int clearpad_set_suspend_mode(struct clearpad_t *this)
 	int rc = 0;
 
 	if (this->dev_active)
-		HWLOGI(this, "set suspend mode\n");
+		HWLOGD(this, "set suspend mode\n");
 	else
-		HWLOGI(this, "change suspend mode\n");
+		HWLOGD(this, "change suspend mode\n");
 
 	if (this->force_sleep != FSMODE_KEEP &&
 	    this->wakeup_gesture.enabled) {
-		HWLOGI(this, "prepare for wakeup gesture mode");
+		HWLOGD(this, "prepare for wakeup gesture mode");
 		if (this->early_suspend) {
 			/* F01_RMI_CTRL01.00: Interrupt Enable 0 */
 			rc = clearpad_put(SYNF(this, F01_RMI, CTRL,
@@ -4045,7 +4045,7 @@ static int clearpad_set_suspend_mode(struct clearpad_t *this)
 		this->wakeup_gesture.time_started = jiffies - 1;
 		clearpad_set_delay(SYN_WAIT_TIME_AFTER_REGISTER_ACCESS);
 		clearpad_set_irq(this, true);
-		HWLOGI(this, "enter wakeup gesture mode\n");
+		HWLOGD(this, "enter wakeup gesture mode\n");
 	} else {
 		if (!this->early_suspend) {
 			if (this->force_sleep != FSMODE_KEEP) {
@@ -4073,18 +4073,18 @@ static int clearpad_set_suspend_mode(struct clearpad_t *this)
 				clearpad_set_delay(this->charger_only.delay_ms);
 			}
 			clearpad_set_irq(this, false);
-			HWLOGI(this, "enter sleep mode\n");
+			HWLOGD(this, "enter sleep mode\n");
 		} else {
-			HWLOGI(this, "already in sleep mode\n");
+			HWLOGD(this, "already in sleep mode\n");
 		}
 	}
 
 	this->dev_active = false;
 
 	if (clearpad_set_noise_det_irq(this, false, false))
-		HWLOGI(this, "no noise_det irq change (disable)\n");
+		HWLOGD(this, "no noise_det irq change (disable)\n");
 	else
-		LOGI(this, "noise_det irq was disabled\n");
+		LOGD(this, "noise_det irq was disabled\n");
 
 end:
 	if (rc)
@@ -4749,26 +4749,26 @@ static int clearpad_process_F01_RMI(struct clearpad_t *this, u8 device_status)
 {
 	int rc = 0;
 
-	HWLOGI(this, "device status 0x%02x (code=%d, unconfig=%d)\n",
+	HWLOGD(this, "device status 0x%02x (code=%d, unconfig=%d)\n",
 	       device_status, BIT_GET(device_status, DEVICE_STATUS_CODE),
 	       BIT_GET(device_status, DEVICE_STATUS_UNCONFIGURED));
 	if (BIT_GET(device_status, DEVICE_STATUS_CODE)
 	    == DEVICE_STATUS_CODE_RESET_OCCURRED &&
 	    BIT_GET(device_status, DEVICE_STATUS_UNCONFIGURED)) {
-		LOGI(this, "device reset\n");
+		LOGD(this, "device reset\n");
 		/* initialized already */
 		WARN_ON(this->interrupt.count != 0);
 		/* check result of flash disabling */
 		WARN_ON(BIT_GET(device_status, DEVICE_STATUS_FLASH_PROG));
-		HWLOGI(this, "clear glitch (irq_pending=%s) for reset\n",
+		HWLOGD(this, "clear glitch (irq_pending=%s) for reset\n",
 		       this->irq_pending ? "true" : "false");
 
 		if (this->force_sleep == FSMODE_ONESHOT) {
-			LOGI(this, "clear force sleep mode\n");
+			LOGD(this, "clear force sleep mode\n");
 			this->force_sleep = FSMODE_OFF;
 		}
 		if (this->force_sleep != FSMODE_OFF) {
-			HWLOGI(this, "force sleep mode\n");
+			HWLOGD(this, "force sleep mode\n");
 			if (this->dev_active) {
 				rc = clearpad_set_suspend_mode(this);
 				if (rc)
@@ -4785,7 +4785,7 @@ static int clearpad_process_F01_RMI(struct clearpad_t *this, u8 device_status)
 		   == DEVICE_STATUS_CODE_DEVICE_FAILURE) {
 		clearpad_reset(this, SYN_HWRESET, __func__);
 	} else {
-		LOGI(this, "unexpected device status=0x%02x\n", device_status);
+		LOGD(this, "unexpected device status=0x%02x\n", device_status);
 	}
 	return rc;
 }
@@ -4845,7 +4845,7 @@ static int clearpad_process_irq(struct clearpad_t *this)
 	if (this->flash.enter_bootloader_mode) {
 		clearpad_set_delay(this->reset.delay_for_powerup_ms);
 		this->flash.enter_bootloader_mode = false;
-		HWLOGI(this, "clear glitch (irq_pending=%s) "
+		HWLOGD(this, "clear glitch (irq_pending=%s) "
 		       "for entering bootloader mode\n",
 		       this->irq_pending ? "true" : "false");
 		spin_lock_irqsave(&this->slock, flags);
@@ -4876,7 +4876,7 @@ static int clearpad_process_irq(struct clearpad_t *this)
 			goto no_valid_interrupt;
 		}
 	} else {
-		LOGI(this, "no work, interrupt=[0x%02x]\n", interrupt_status);
+		LOGD(this, "no work, interrupt=[0x%02x]\n", interrupt_status);
 	}
 
 	if (this->interrupt.count == 0 && rc)
@@ -4884,7 +4884,7 @@ static int clearpad_process_irq(struct clearpad_t *this)
 
 	this->interrupt.count += 1;
 	if (this->interrupt.count == 0) {
-		LOGI(this, "rewind interrupt.count\n");
+		LOGD(this, "rewind interrupt.count\n");
 		this->interrupt.count = 1;
 	}
 
@@ -6617,7 +6617,7 @@ static void clearpad_touch_config_dt_for_chip_id(struct clearpad_t *this,
 		return;
 	}
 
-	LOGI(this, "read settings for %s\n", chip_name);
+	LOGD(this, "read settings for %s\n", chip_name);
 
 	if (of_property_read_u32(chip_node, "flash_default_timeout_ms", &value))
 		LOGW(this, "no flash_default_timeout_ms\n");
@@ -6832,7 +6832,7 @@ static void clearpad_update_chip_id(struct clearpad_t *this)
 		}
 	}
 update:
-	LOGI(this, "chip_id=0x%x\n", this->chip_id);
+	LOGD(this, "chip_id=0x%x\n", this->chip_id);
 }
 
 static void clearpad_set_is_sol(struct clearpad_t *this)
@@ -6840,7 +6840,7 @@ static void clearpad_set_is_sol(struct clearpad_t *this)
 	this->is_sol = false;
 	if (this->chip_id == SYN_CHIP_3500)
 		this->is_sol = true;
-	LOGI(this, "is_sol=%s\n", this->is_sol ? "ture" : "false");
+	LOGD(this, "is_sol=%s\n", this->is_sol ? "ture" : "false");
 }
 
 static int clearpad_input_init(struct clearpad_t *this)
@@ -6975,18 +6975,18 @@ static void clearpad_powerdown_core(struct clearpad_t *this, const char *id)
 	get_monotonic_boottime(&ts);
 	already_powerdown = this->touchctrl.will_powerdown;
 	if (already_powerdown) {
-		HWLOGI(this, "received %s again "
+		HWLOGD(this, "received %s again "
 		       "(power=%s icount=%u) @ %ld.%06ld\n",
 		       id, touchctrl_is_touch_powered(this) ? "OK" : "NG",
 		       this->interrupt.count, ts.tv_sec, ts.tv_nsec);
 		goto end;
 	}
-	HWLOGI(this, "%s (power=%s icount=%u) @ %ld.%06ld\n",
+	HWLOGD(this, "%s (power=%s icount=%u) @ %ld.%06ld\n",
 	       id, touchctrl_is_touch_powered(this) ? "OK" : "NG",
 	       this->interrupt.count, ts.tv_sec, ts.tv_nsec);
 
 	if (work_pending(&this->thread_resume.work))
-		HWLOGI(this, "flushing pending thread_resume\n");
+		HWLOGD(this, "flushing pending thread_resume\n");
 	UNLOCK(&this->lock);
 	flush_workqueue(this->thread_resume.work_queue);
 	LOCK(&this->lock);
@@ -7051,7 +7051,7 @@ static void clearpad_fb_early_unblank_handler(struct clearpad_t *this)
 
 	this->touchctrl.will_powerdown = false;
 	UNLOCK(&this->lock);
-	HWLOGI(this, "EARLY UNBLANK @ %ld.%06ld\n", ts.tv_sec, ts.tv_nsec);
+	HWLOGD(this, "EARLY UNBLANK @ %ld.%06ld\n", ts.tv_sec, ts.tv_nsec);
 }
 
 static void clearpad_fb_unblank_handler(struct clearpad_t *this)
@@ -7060,14 +7060,14 @@ static void clearpad_fb_unblank_handler(struct clearpad_t *this)
 	bool power = touchctrl_is_touch_powered(this);
 
 	get_monotonic_boottime(&ts);
-	HWLOGI(this, "UNBLANK (power=%s icount=%u active=%s) @ %ld.%06ld\n",
+	HWLOGD(this, "UNBLANK (power=%s icount=%u active=%s) @ %ld.%06ld\n",
 	       power ? "OK" : "NG",
 	       this->interrupt.count,
 	       this->dev_active ? "true" : "false",
 	       ts.tv_sec, ts.tv_nsec);
 
 	if (!power) {
-		HWLOGI(this, "ignore UNBLANK event before power on\n");
+		HWLOGD(this, "ignore UNBLANK event before power on\n");
 		return;
 	}
 
@@ -7077,18 +7077,18 @@ static void clearpad_fb_unblank_handler(struct clearpad_t *this)
 	LOCK(&this->lock);
 	this->wakeup.unblank_done = true;
 	if (!this->post_probe.done) {
-		HWLOGI(this, "ignore UNBLANK event before post probe\n");
+		HWLOGD(this, "ignore UNBLANK event before post probe\n");
 		if (this->post_probe.start) {
-			HWLOGI(this, "schedule post probe work for fail-safe\n");
+			HWLOGD(this, "schedule post probe work for fail-safe\n");
 			schedule_delayed_work(&this->post_probe.work, 0);
 		}
 		goto err_in_post_probe_done;
 	}
 
 	if (work_pending(&this->thread_resume.work))
-		HWLOGI(this, "fb_unblank was called again before flushing\n");
+		HWLOGD(this, "fb_unblank was called again before flushing\n");
 
-	HWLOGI(this, "schedule for thread resume operation\n");
+	HWLOGD(this, "schedule for thread resume operation\n");
 	queue_work(this->thread_resume.work_queue,
 		   &this->thread_resume.work);
 
@@ -7096,7 +7096,7 @@ err_in_post_probe_done:
 	UNLOCK(&this->lock);
 
 	get_monotonic_boottime(&ts);
-	HWLOGI(this, "end UNBLANK @ %ld.%06ld\n",
+	HWLOGD(this, "end UNBLANK @ %ld.%06ld\n",
 	       ts.tv_sec, ts.tv_nsec);
 }
 
@@ -7112,7 +7112,7 @@ static int clearpad_fb_notifier_callback(struct notifier_block *self,
 		if (event == FB_EARLY_EVENT_BLANK ||
 		    event == FB_EXT_EARLY_EVENT_BLANK) {
 			blank = *(int *)evdata->data;
-			HWLOGI(this, "%s: %s\n",
+			HWLOGD(this, "%s: %s\n",
 				(event == FB_EARLY_EVENT_BLANK) ? "Early" :
 					"ExtEarly",
 				(blank == FB_BLANK_POWERDOWN) ? "Powerdown" :
@@ -7131,7 +7131,7 @@ static int clearpad_fb_notifier_callback(struct notifier_block *self,
 		} else if (event == FB_EVENT_BLANK ||
 			   event == FB_EXT_EVENT_BLANK) {
 			blank = *(int *)evdata->data;
-			HWLOGI(this, "%s: %s\n",
+			HWLOGD(this, "%s: %s\n",
 				(event == FB_EVENT_BLANK) ? "Blank" :
 					"ExtBlank",
 				(blank == FB_BLANK_POWERDOWN) ? "Powerdown" :
@@ -8185,7 +8185,7 @@ static void clearpad_debug_info(struct clearpad_t *this)
 {
 	struct clearpad_touchctrl_t *touchctrl = &this->touchctrl;
 
-	HWLOGI(this, "%s, family 0x%02x, fw rev 0x%02x.%02x, "
+	HWLOGD(this, "%s, family 0x%02x, fw rev 0x%02x.%02x, "
 	       "extra 0x%02x, aid 0x%02x, state=%s, "
 	       "active=%s, type=%s, irq=%s icount=%u\n",
 	       clearpad_s(this->device_info.product_id, HEADER_PRODUCT_ID_SIZE),
@@ -8201,19 +8201,19 @@ static void clearpad_debug_info(struct clearpad_t *this)
 	       this->interrupt.count);
 
 	/* clearpad_post_probe_t */
-	HWLOGI(this, "[post_probe] done=%s retry=%d\n",
+	HWLOGD(this, "[post_probe] done=%s retry=%d\n",
 	       this->post_probe.done ? "true" : "false",
 	       this->post_probe.retry);
 
 	/* clearpad_touchctrl_t */
-	HWLOGI(this, "[power] touch=%s display=%s user=%d will_powerdown=%s\n",
+	HWLOGD(this, "[power] touch=%s display=%s user=%d will_powerdown=%s\n",
 	       touchctrl_is_touch_powered(this) ? "OK" : "NG",
 	       touchctrl_is_display_powered(this) ? "OK" : "NG",
 	       touchctrl->power_user,
 	       touchctrl->will_powerdown ? "true" : "false");
 
 	/* clearpad_interrupt_t */
-	HWLOGI(this, "[interrupt] hard_handler @ %ld.%06ld "
+	HWLOGD(this, "[interrupt] hard_handler @ %ld.%06ld "
 	       "threaded_handler @ %ld.%06ld handle_first_event @ %ld.%06ld\n",
 	       this->interrupt.hard_handler_ts.tv_sec,
 	       this->interrupt.hard_handler_ts.tv_nsec,
@@ -8221,10 +8221,10 @@ static void clearpad_debug_info(struct clearpad_t *this)
 	       this->interrupt.threaded_handler_ts.tv_nsec,
 	       this->interrupt.handle_first_event_ts.tv_sec,
 	       this->interrupt.handle_first_event_ts.tv_nsec);
-	HWLOGI(this, INDENT "dev_busy=%s irq_pending=%s\n",
+	HWLOGD(this, INDENT "dev_busy=%s irq_pending=%s\n",
 	       this->dev_busy ? "true" : "false",
 	       this->irq_pending ? "true" : "false");
-	HWLOGI(this, INDENT "reset(use=%s done=%s) "
+	HWLOGD(this, INDENT "reset(use=%s done=%s) "
 	       "F34(use=%s done=%s) F54(use=%s done=%s)\n",
 	       this->interrupt.for_reset.use ? "true" : "false",
 	       atomic_read(&this->interrupt.for_reset.done) ? "true" : "false",
@@ -8234,16 +8234,16 @@ static void clearpad_debug_info(struct clearpad_t *this)
 	       atomic_read(&this->interrupt.for_F54.done) ? "true" : "false");
 
 	/* clearpad_noise_detect_t */
-	HWLOGI(this, "[noise_detect] supported=%s 1st_irq=%s"
+	HWLOGD(this, "[noise_detect] supported=%s 1st_irq=%s"
 	       " retry_time_ms=%d\n",
 	       this->noise_det.supported ? "true" : "false",
 	       this->noise_det.first_irq ? "true" : "false",
 	       this->noise_det.retry_time_ms);
-	HWLOGI(this, INDENT "enabled=%s hard_irq_c=%u threaded_irq_c=%u\n",
+	HWLOGD(this, INDENT "enabled=%s hard_irq_c=%u threaded_irq_c=%u\n",
 	       this->noise_det.enabled ? "true" : "false",
 	       this->noise_det.hard_handler_count,
 	       this->noise_det.threaded_handler_count);
-	HWLOGI(this, INDENT "hard_handler @ %ld.%06ld "
+	HWLOGD(this, INDENT "hard_handler @ %ld.%06ld "
 	       "threaded_handler @ %ld.%06ld\n",
 	       this->noise_det.hard_handler_ts.tv_sec,
 	       this->noise_det.hard_handler_ts.tv_nsec,
@@ -8251,63 +8251,63 @@ static void clearpad_debug_info(struct clearpad_t *this)
 	       this->noise_det.threaded_handler_ts.tv_nsec);
 
 	/* locks */
-	HWLOGI(this, "[lock] this->lock: %s owner(%s:%d @ %ld.%06ld)\n",
+	HWLOGD(this, "[lock] this->lock: %s owner(%s:%d @ %ld.%06ld)\n",
 	       IS_LOCKED(&this->lock) ? "LOCKED" : "UNLOCKED",
 	       this->lock.owner_func, this->lock.owner_line,
 	       this->lock.ts.tv_sec, this->lock.ts.tv_nsec);
-	HWLOGI(this, INDENT "session_lock: %s <%s> owner(%s:%d @ %ld.%06ld)\n",
+	HWLOGD(this, INDENT "session_lock: %s <%s> owner(%s:%d @ %ld.%06ld)\n",
 	       IS_LOCKED(&touchctrl->session_lock)
 	       ? "LOCKED" : "UNLOCKED", touchctrl->session,
 	       touchctrl->session_lock.owner_func,
 	       touchctrl->session_lock.owner_line,
 	       touchctrl->session_lock.ts.tv_sec,
 	       touchctrl->session_lock.ts.tv_nsec);
-	HWLOGI(this, INDENT "hwtest.lock: %s owner(%s:%d @ %ld.%06ld)\n",
+	HWLOGD(this, INDENT "hwtest.lock: %s owner(%s:%d @ %ld.%06ld)\n",
 	       IS_LOCKED(&this->hwtest.lock) ? "LOCKED" : "UNLOCKED",
 	       this->hwtest.lock.owner_func, this->hwtest.lock.owner_line,
 	       this->hwtest.lock.ts.tv_sec, this->hwtest.lock.ts.tv_nsec);
 
 	/* feature flags */
-	HWLOGI(this, "[force_sleep] mode=%d\n", this->force_sleep);
-	HWLOGI(this, "[charger] supported=%s status=%s\n",
+	HWLOGD(this, "[force_sleep] mode=%d\n", this->force_sleep);
+	HWLOGD(this, "[charger] supported=%s status=%s\n",
 	       this->charger.supported ? "true" : "false",
 	       this->charger.status ? "true" : "false");
-	HWLOGI(this, "[charger only] delay_ms=%lu\n",
+	HWLOGD(this, "[charger only] delay_ms=%lu\n",
 	       this->charger_only.delay_ms);
-	HWLOGI(this, "[stylus] supported=%s enabled=%s\n",
+	HWLOGD(this, "[stylus] supported=%s enabled=%s\n",
 	       this->pen.supported ? "true" : "false",
 	       this->pen.enabled ? "true" : "false");
-	HWLOGI(this, "[glove] supported=%s enabled=%s\n",
+	HWLOGD(this, "[glove] supported=%s enabled=%s\n",
 	       this->glove.supported ? "true" : "false",
 	       this->glove.enabled ? "true" : "false");
-	HWLOGI(this, "[cover] supported=%s status=%s enabled=%s\n",
+	HWLOGD(this, "[cover] supported=%s status=%s enabled=%s\n",
 	       this->cover.supported ? "true" : "false",
 	       this->cover.status ? "true" : "false",
 	       this->cover.enabled ? "true" : "false");
-	HWLOGI(this, INDENT "win top=%d bottom=%d right=%d left=%d\n",
+	HWLOGD(this, INDENT "win top=%d bottom=%d right=%d left=%d\n",
 	       this->cover.win_top, this->cover.win_bottom,
 	       this->cover.win_right, this->cover.win_left);
-	HWLOGI(this, INDENT "tag x_max=%u y_max=%u convert_window_size=%u\n",
+	HWLOGD(this, INDENT "tag x_max=%u y_max=%u convert_window_size=%u\n",
 	       this->cover.tag_x_max, this->cover.tag_y_max,
 	       this->cover.convert_window_size);
-	HWLOGI(this, "[wakeup_gesture] supported=%s enabled=%s\n",
+	HWLOGD(this, "[wakeup_gesture] supported=%s enabled=%s\n",
 	       this->wakeup_gesture.supported ? "true" : "false",
 	       this->wakeup_gesture.enabled ? "true" : "false");
-	HWLOGI(this, "[watchdog] enabled=%s delay=%d\n",
+	HWLOGD(this, "[watchdog] enabled=%s delay=%d\n",
 	       this->watchdog.enabled ? "true" : "false", this->watchdog.delay);
-	HWLOGI(this, "[stamina_mode] supported=%s enabled=%s\n",
+	HWLOGD(this, "[stamina_mode] supported=%s enabled=%s\n",
 	       this->stamina.supported ? "true" : "false",
 	       this->stamina.enabled ? "true" : "false");
-	HWLOGI(this, INDENT "[change_reportrate] supported=%s mode=%d\n",
+	HWLOGD(this, INDENT "[change_reportrate] supported=%s mode=%d\n",
 	       this->stamina.change_reportrate.supported ? "true" : "false",
 	       this->stamina.change_reportrate.mode);
-	HWLOGI(this, INDENT "[doze holdoff] supported=%s default_time=%u "
+	HWLOGD(this, INDENT "[doze holdoff] supported=%s default_time=%u "
 		"glove_mode_time=%u cover_mode_time=%u\n",
 	       this->stamina.doze_holdoff.supported ? "true" : "false",
 	       this->stamina.doze_holdoff.default_time,
 	       this->stamina.doze_holdoff.glove_mode_time,
 	       this->stamina.doze_holdoff.cover_mode_time);
-	HWLOGI(this, "[early unblank] done=%s early_done=%s\n",
+	HWLOGD(this, "[early unblank] done=%s early_done=%s\n",
 	       this->wakeup.unblank_done ? "true" : "false",
 	       this->wakeup.unblank_early_done ? "true" : "false");
 }
@@ -9526,14 +9526,14 @@ static void clearpad_thread_resume_work(struct work_struct *work)
 	}
 
 	if (this->touchctrl.will_powerdown) {
-		HWLOGI(this, "not necessary to do thread_resume "
+		HWLOGD(this, "not necessary to do thread_resume "
 		       "(power=%s icount=%u) @ %ld.%06ld\n",
 		       touchctrl_is_touch_powered(this) ? "OK" : "NG",
 		       this->interrupt.count, ts.tv_sec, ts.tv_nsec);
 		goto will_powerdown;
 	}
 
-	HWLOGI(this, "start thread_resume @ %ld.%06ld\n",
+	HWLOGD(this, "start thread_resume @ %ld.%06ld\n",
 	       ts.tv_sec, ts.tv_nsec);
 
 	locked = touchctrl_lock_power(this, "fb_unblank", true, false);
@@ -9566,7 +9566,7 @@ static void clearpad_thread_resume_work(struct work_struct *work)
 	touchctrl_unlock_power(this, "fb_unblank");
 
 	get_monotonic_boottime(&ts);
-	HWLOGI(this, "end thread_resume @ %ld.%06ld\n",
+	HWLOGD(this, "end thread_resume @ %ld.%06ld\n",
 	       ts.tv_sec, ts.tv_nsec);
 	goto end;
 
