@@ -44,6 +44,8 @@ struct pn547_dev {
 	struct mutex		read_mutex;
 	struct i2c_client	*client;
 	struct miscdevice	pn547_device;
+	struct pinctrl		*pinctrl;
+	enum pn547_state	state;
 	unsigned int 		ven_gpio;
 	unsigned int 		firm_gpio;
 	unsigned int		irq_gpio;
@@ -188,10 +190,46 @@ static int pn547_dev_open(struct inode *inode, struct file *filp)
 	return 0;
 }
 
+static int pn547_pinctrl_config(struct pn547_dev *dev, uint8_t active)
+{
+	struct pinctrl_state *state;
+	const char *name = active ? "pn547-active" : "pn547-inactive";
+
+	state = pinctrl_lookup_state(dev->pinctrl, name);
+	if (IS_ERR(state)) {
+		pr_err("%s: pinctrol lookup state failed\n",
+				__func__);
+		return PTR_ERR(state);
+	}
+
+	return pinctrl_select_state(dev->pinctrl, state);
+}
+
+static void pn547_pinctrl_destroy(struct pn547_dev *dev)
+{
+	int ret = 0;
+
+	ret = pn547_pinctrl_config(dev, 0);
+	if (ret)
+		pr_err("%s: pinctrol failed on destroy %d\n",
+			__func__, ret);
+
+	devm_pinctrl_put(dev->pinctrl);
+}
+
 static long  pn547_dev_ioctl(struct file *filp, unsigned int cmd,
 				unsigned long arg)
 {
 	struct pn547_dev *pn547_dev = filp->private_data;
+	int ret, state;
+
+	/* Activate pinctrol before bit banging. */
+	ret = pn547_pinctrl_config(pn547_dev, 1);
+	if (ret) {
+		pr_err("%s: pinctrol failed on chip configuration %d\n",
+				__func__, ret);
+		return ret;
+	}
 
 	switch (cmd) {
 	case PN547_SET_PWR:
@@ -208,6 +246,8 @@ static long  pn547_dev_ioctl(struct file *filp, unsigned int cmd,
 			msleep(100);
 			gpio_set_value(pn547_dev->ven_gpio, 1);
 			msleep(20);
+			state = PN547_STATE_FWDL;
+			msleep(10);
 		} else if (arg == 1) {
 			/* power on */
 			pr_info("%s power on\n", __func__);
@@ -215,6 +255,8 @@ static long  pn547_dev_ioctl(struct file *filp, unsigned int cmd,
 				gpio_set_value(pn547_dev->firm_gpio, 0);
 			gpio_set_value(pn547_dev->ven_gpio, 1);
 			msleep(100);
+			state = PN547_STATE_ON;
+			msleep(10);
 		} else  if (arg == 0) {
 			/* power off */
 			pr_info("%s power off\n", __func__);
@@ -222,12 +264,22 @@ static long  pn547_dev_ioctl(struct file *filp, unsigned int cmd,
 				gpio_set_value(pn547_dev->firm_gpio, 0);
 			gpio_set_value(pn547_dev->ven_gpio, 0);
 			msleep(100);
+			/* Suspend pinctrol when PN547 is turned off. */
+			state = PN547_STATE_OFF;
+			ret = pn547_pinctrl_config(pn547_dev, 0);
+			if (ret) {
+				pr_err("%s: pinctrol failed on PN547_STATE_OFF %d\n",
+						__func__, ret);
+				return ret;
+			}
+			msleep(60);
 		} else {
 			pr_err("%s bad arg %lu\n", __func__, arg);
 			return -EINVAL;
 		}
 		break;
 	default:
+		state = PN547_STATE_UNKNOWN;
 		pr_err("%s bad ioctl %u\n", __func__, cmd);
 		return -EINVAL;
 	}
@@ -319,6 +371,7 @@ static int pn547_probe(struct i2c_client *client,
 	struct pn547_i2c_platform_data *platform_data;
 	struct pn547_dev *pn547_dev;
 	struct clk *clk_rf = NULL;
+	struct pinctrl *pinctrl;
 
 	pr_info("Probe pn547 driver\n");
 
@@ -332,6 +385,12 @@ static int pn547_probe(struct i2c_client *client,
 	if (platform_data == NULL) {
 		pr_err("%s : nfc probe fail\n", __func__);
 		return  -ENODEV;
+	}
+
+	pinctrl = devm_pinctrl_get(&client->dev);
+	if (IS_ERR(pinctrl)) {
+		dev_err(&client->dev, "pinctrl get failed\n");
+		return PTR_ERR(pinctrl);
 	}
 
 	ret = pn547_parse_dt(&client->dev, platform_data);
@@ -369,6 +428,7 @@ static int pn547_probe(struct i2c_client *client,
 	pn547_dev->ven_gpio  = platform_data->ven_gpio;
 	pn547_dev->firm_gpio  = platform_data->firm_gpio;
 	pn547_dev->client   = client;
+	pn547_dev->pinctrl = pinctrl;
 
 	pr_debug("dev name:%s", dev_name(&client->dev));
 
@@ -461,6 +521,7 @@ static int pn547_remove(struct i2c_client *client)
 	gpio_free(pn547_dev->ven_gpio);
 	if (pn547_dev->firm_gpio)
 		gpio_free(pn547_dev->firm_gpio);
+	pn547_pinctrl_destroy(pn547_dev);
 	kfree(pn547_dev);
 
 	return 0;
