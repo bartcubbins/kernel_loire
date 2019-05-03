@@ -1618,24 +1618,6 @@ config MFD_STW481X
 	  in various ST Microelectronics and ST-Ericsson embedded
 	  Nomadik series.
 
-config MSM_CDC_PINCTRL
-	tristate "MSM Codec Pinctrl"
-	select MFD_CORE
-	help
-	  Enables msm codec pinctrl driver. The pinctrl driver
-	  provides support for handling WCD and WSA MSM gpios. This
-	  pinctrl driver will handle WCD and WSA gpios pinctrl states.
-	  This driver acts as interface between codec and pinctrl
-	  framework.
-
-config MSM_CDC_SUPPLY
-	tristate "MSM Codec Power Supply"
-	help
-	  Enables msm codec power supply driver. The power supply
-	  driver provides API support for handling WCD and WSA codec
-	  power supply enable or disable. This driver acts as interface
-	  between codec and regulator framework.
-
 menu "Multimedia Capabilities Port drivers"
 	depends on ARCH_SA1100
 

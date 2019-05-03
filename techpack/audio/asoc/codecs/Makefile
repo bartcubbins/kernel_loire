@@ -1,8 +1,7 @@
 snd-soc-wcd9xxx-codec-core-objs := wcd9xxx-rst.o wcd9xxx-core-init.o \
 				   wcd9xxx-core.o wcd9xxx-irq.o \
 				   wcd9xxx-slimslave.o wcd9xxx-utils.o \
-				   wcd9335-regmap.o wcd9335-tables.o \
-				   msm-cdc-pinctrl.o msm-cdc-supply.o
+				   wcd9335-regmap.o wcd9335-tables.o
 snd-soc-wcd9xxx-codec-core-objs += wcd934x/wcd934x-regmap.o
 snd-soc-wcd9xxx-codec-core-objs += wcd934x/wcd934x-tables.o
 snd-soc-wcd9xxx-v2-objs := wcd9xxx-common-v2.o wcd9xxx-resmgr-v2.o \
@@ -32,6 +31,9 @@ obj-$(CONFIG_SND_SOC_WCD_SPI)		+= wcd-spi.o
 
 obj-$(CONFIG_SND_SOC_MSM_STUB)		+= msm_stub.o
 obj-$(CONFIG_SND_SOC_MSM_HDMI_CODEC_RX)	+= msm_hdmi_codec_rx.o
+
+obj-$(CONFIG_MSM_CDC_PINCTRL)		+= msm-cdc-pinctrl.o
+obj-$(CONFIG_MSM_CDC_SUPPLY)		+= msm-cdc-supply.o
 
 ifeq ($(CONFIG_COMMON_CLK_MSM), y)
 	obj-$(CONFIG_AUDIO_EXT_CLK)	+= audio-ext-clk.o
