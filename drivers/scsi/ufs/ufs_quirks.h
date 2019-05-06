@@ -19,8 +19,14 @@
 
 #define UFS_ANY_VENDOR -1
 #define UFS_ANY_MODEL  "ANY_MODEL"
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+#define UFS_ANY_VER    "ANY_VER"
+#endif
 
 #define MAX_MODEL_LEN 16
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+#define MAX_REVISION_LEN 8
+#endif
 
 #define UFS_VENDOR_TOSHIBA     0x198
 #define UFS_VENDOR_SAMSUNG     0x1CE
@@ -30,6 +36,19 @@
 #define UFS_MODEL_TOSHIBA_32GB "THGLF2G8D4KBADR"
 #define UFS_MODEL_TOSHIBA_64GB "THGLF2G9D8KBADG"
 
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+/* UFS SAMSUNG MODELS */
+#define UFS_MODEL_SAMSUNG_64GB "KLUCG4J1"
+#define UFS_REVISION_SAMSUNG   "0101"
+
+/* UFS SK HYNIX MODELS */
+#define UFS_MODEL_HYNIX_32GB   "hB8aL1"
+#define UFS_MODEL_HYNIX_64GB   "hC8aL1"
+#define UFS_REVISION_HYNIX     "D001"
+
+#define UFS_PURGE_SPEC_VER     0x210
+#endif
+
 /**
  * ufs_card_fix - ufs device quirk info
  * @card: ufs card details
@@ -38,11 +57,32 @@
 struct ufs_card_fix {
 	u16 w_manufacturer_id;
 	char *model;
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	char *revision;
+#endif
 	unsigned int quirk;
 };
 
 #define END_FIX { 0 }
 
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+/* add specific device quirk */
+#define UFS_FIX(_vendor, _model, _quirk) \
+		{						  \
+				.w_manufacturer_id = (_vendor),\
+				.model = (_model),		  \
+				.revision = (UFS_ANY_VER),	  \
+				.quirk = (_quirk),		  \
+		}
+
+#define UFS_FIX_REVISION(_vendor, _model, _revision, _quirk) \
+		{						  \
+				.w_manufacturer_id = (_vendor),\
+				.model = (_model),		  \
+				.revision = (_revision),	  \
+				.quirk = (_quirk),		  \
+		}
+#else
 /* add specific device quirk */
 #define UFS_FIX(_vendor, _model, _quirk) \
 		{						  \
@@ -50,6 +90,7 @@ struct ufs_card_fix {
 				.model = (_model),		  \
 				.quirk = (_quirk),		  \
 		}
+#endif
 
 /*
  * If UFS device is having issue in processing LCC (Line Control
@@ -145,6 +186,12 @@ struct ufs_card_fix {
  * instead of the default delay.
  */
 #define UFS_DEVICE_QUIRK_WAIT_AFTER_REF_CLK_UNGATE	(1 << 9)
+
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+#define UFS_DEVICE_QUIRK_EXTEND_SYNC_LENGTH	(1 << 23)
+
+#define UFS_DEVICE_QUIRK_NO_PURGE	(1 << 24)
+#endif
 
 struct ufs_hba;
 void ufs_advertise_fixup_device(struct ufs_hba *hba);

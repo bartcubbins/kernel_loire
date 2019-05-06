@@ -8,6 +8,9 @@
  *  SCSI_IOCTL_GET_PCI
  */
 #define UFS_IOCTL_QUERY			0x5388
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+#define UFS_IOCTL_WRITE_BUFFER	0x53EF
+#endif
 
 /**
  * struct ufs_ioctl_query_data - used to transfer data to and from user via ioctl
@@ -53,5 +56,12 @@ struct ufs_ioctl_query_data {
 	 */
 	__u8 buffer[0];
 };
+
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+struct ufs_ioctl_write_buffer_data {
+	__u32 buf_size;
+	__u8 buffer[0];
+};
+#endif
 
 #endif /* UAPI_UFS_IOCTL_H_ */

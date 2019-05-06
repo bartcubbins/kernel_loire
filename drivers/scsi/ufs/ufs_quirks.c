@@ -44,6 +44,16 @@ static struct ufs_card_fix ufs_fixups[] = {
 		UFS_DEVICE_QUIRK_HS_G1_TO_HS_G3_SWITCH),
 	UFS_FIX(UFS_VENDOR_SKHYNIX, "hC8HL1",
 		UFS_DEVICE_QUIRK_HS_G1_TO_HS_G3_SWITCH),
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	UFS_FIX(UFS_VENDOR_SKHYNIX, UFS_ANY_MODEL,
+		UFS_DEVICE_QUIRK_EXTEND_SYNC_LENGTH),
+	UFS_FIX_REVISION(UFS_VENDOR_SKHYNIX, UFS_MODEL_HYNIX_32GB,
+		UFS_REVISION_HYNIX, UFS_DEVICE_QUIRK_NO_PURGE),
+	UFS_FIX_REVISION(UFS_VENDOR_SKHYNIX, UFS_MODEL_HYNIX_64GB,
+		UFS_REVISION_HYNIX, UFS_DEVICE_QUIRK_NO_PURGE),
+	UFS_FIX_REVISION(UFS_VENDOR_SAMSUNG, UFS_MODEL_SAMSUNG_64GB,
+		UFS_REVISION_SAMSUNG, UFS_DEVICE_QUIRK_NO_PURGE),
+#endif
 
 	END_FIX
 };
@@ -53,11 +63,20 @@ void ufs_advertise_fixup_device(struct ufs_hba *hba)
 	int err;
 	u8 str_desc_buf[QUERY_DESC_MAX_SIZE + 1];
 	char *model;
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	char *revision = NULL;
+#endif
 	struct ufs_card_fix *f;
 
 	model = kmalloc(MAX_MODEL_LEN + 1, GFP_KERNEL);
 	if (!model)
 		goto out;
+
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	revision = kmalloc(MAX_REVISION_LEN + 1, GFP_KERNEL);
+	if (!revision)
+		goto out;
+#endif
 
 	memset(str_desc_buf, 0, QUERY_DESC_MAX_SIZE);
 	err = ufshcd_read_string_desc(hba, hba->dev_info.i_product_name,
@@ -72,6 +91,29 @@ void ufs_advertise_fixup_device(struct ufs_hba *hba)
 	/* Null terminate the model string */
 	model[MAX_MODEL_LEN] = '\0';
 
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	memset(str_desc_buf, 0, QUERY_DESC_MAX_SIZE);
+	err = ufshcd_read_string_desc(hba, hba->dev_info.revision,
+			str_desc_buf, QUERY_DESC_MAX_SIZE, ASCII_STD);
+
+	if (err)
+		goto out;
+
+	str_desc_buf[QUERY_DESC_MAX_SIZE] = '\0';
+	strlcpy(revision, (str_desc_buf + QUERY_DESC_HDR_SIZE),
+		min_t(u8, str_desc_buf[QUERY_DESC_LENGTH_OFFSET],
+		      MAX_REVISION_LEN));
+	/* Null terminate the revision string */
+	revision[MAX_REVISION_LEN] = '\0';
+
+	dev_info(hba->dev, "%s : vid=%04x, model=%s, spec ver=%04x , "
+		"fw ver=%s\n", __func__, hba->dev_info.w_manufacturer_id,
+		 model, hba->dev_info.w_spec_version, revision);
+
+	if (hba->dev_info.w_spec_version < UFS_PURGE_SPEC_VER)
+	    hba->dev_info.quirks |= UFS_DEVICE_QUIRK_NO_PURGE;
+#endif
+
 	for (f = ufs_fixups; f->quirk; f++) {
 		/* if same wmanufacturerid */
 		if (((f->w_manufacturer_id ==
@@ -79,10 +121,23 @@ void ufs_advertise_fixup_device(struct ufs_hba *hba)
 		     (f->w_manufacturer_id == UFS_ANY_VENDOR)) &&
 		    /* and same model */
 		    (STR_PRFX_EQUAL(f->model, model) ||
+#ifndef CONFIG_ARCH_SONY_YOSHINO
 		     !strcmp(f->model, UFS_ANY_MODEL)))
 			/* update quirks */
 			hba->dev_info.quirks |= f->quirk;
+#else
+			!strncmp(f->model, UFS_ANY_MODEL, strlen(UFS_ANY_MODEL)))  &&
+		    /* and same fw revision*/
+		    (STR_PRFX_EQUAL(f->revision, revision) ||
+		     !strncmp(f->revision, UFS_ANY_VER, strlen(UFS_ANY_VER)))) {
+			/* update quirks */
+			hba->dev_info.quirks |= f->quirk;
+		}
+#endif
 	}
 out:
 	kfree(model);
+#ifdef CONFIG_ARCH_SONY_YOSHINO
+	kfree(revision);
+#endif
 }
