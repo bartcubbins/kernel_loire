@@ -12,6 +12,7 @@
  */
 
 #include "msm8998-wsa881x.dtsi"
+#include <dt-bindings/clock/qcom,audio-ext-clk.h>
 
 &msm_audio_ion {
 	qcom,smmu-version = <2>;
