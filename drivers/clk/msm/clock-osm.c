@@ -704,7 +704,7 @@ static enum handoff clk_osm_handoff(struct clk *c)
 	return HANDOFF_DISABLED_CLK;
 }
 
-static long clk_osm_list_rate(struct clk *c, unsigned n)
+static long clk_osm_list_rate(struct clk *c, unsigned long n)
 {
 	if (n >= c->num_fmax)
 		return -ENXIO;
