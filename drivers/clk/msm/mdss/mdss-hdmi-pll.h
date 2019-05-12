@@ -33,6 +33,11 @@ struct hdmi_pll_vco_clk {
 	struct clk	c;
 };
 
+static inline struct hdmi_pll_vco_clk *to_hdmi_vco_clk(struct clk *clk)
+{
+	return container_of(clk, struct hdmi_pll_vco_clk, c);
+}
+
 int hdmi_pll_clock_register(struct platform_device *pdev,
 				struct mdss_pll_resources *pll_res);
 
@@ -50,4 +55,10 @@ int hdmi_8996_v3_pll_clock_register(struct platform_device *pdev,
 
 int hdmi_8996_v3_1p8_pll_clock_register(struct platform_device *pdev,
 				 struct mdss_pll_resources *pll_res);
+
+int hdmi_8998_3p3_pll_clock_register(struct platform_device *pdev,
+				struct mdss_pll_resources *pll_res);
+
+int hdmi_8998_1p8_pll_clock_register(struct platform_device *pdev,
+				struct mdss_pll_resources *pll_res);
 #endif
