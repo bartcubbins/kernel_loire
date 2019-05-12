@@ -634,6 +634,11 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 dtb-$(CONFIG_MACH_SONY_SUZU) += msm8956-v1.1-loire-suzu_generic.dtb
 dtb-$(CONFIG_MACH_SONY_KUGO) += msm8956-v1.1-loire-kugo_generic.dtb
 
+# MSM8998
+dtb-$(CONFIG_MACH_SONY_MAPLE) += msm8998-yoshino-maple_generic.dtb \
+	msm8998-v2-yoshino-maple_generic.dtb \
+	msm8998-v2.1-yoshino-maple_generic.dtb
+
 endif
 
 always		:= $(dtb-y)
