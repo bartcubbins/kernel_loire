@@ -51,6 +51,14 @@
 
 /* LAB register offset definitions */
 #define REG_LAB_STATUS1			0x08
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+#define REG_LAB_INT_SET_TYPE		0x11
+#define REG_LAB_INT_POLARITY_HIGH	0x12
+#define REG_LAB_INT_POLARITY_LOW	0x13
+#define REG_LAB_INT_LATCHED_CLR		0x14
+#define REG_LAB_INT_EN_SET		0x15
+#define REG_LAB_INT_EN_CLR		0x16
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 #define REG_LAB_SWIRE_PGM_CTL		0x40
 #define REG_LAB_VOLTAGE			0x41
 #define REG_LAB_RING_SUPPRESSION_CTL	0x42
@@ -81,6 +89,33 @@
 /* REG_LAB_STATUS1 */
 #define LAB_STATUS1_VREG_OK_BIT		BIT(7)
 #define LAB_STATUS1_SC_DETECT_BIT	BIT(6)
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+/* REG_LAB_INT_SET_TYPE */
+#define LAB_INT_SET_TYPE_VREG_OK_MASK	BIT(0)
+#define LAB_INT_SET_TYPE_VREG_OK_LEVEL	0
+#define LAB_INT_SET_TYPE_VREG_OK_EDGE	1
+
+/* REG_LAB_INT_POLARITY_HIGH */
+#define LAB_INT_PRY_HIGH_VREG_OK_MASK	BIT(0)
+#define LAB_INT_PRY_HIGH_VREG_OK	0
+
+/* REG_LAB_INT_POLARITY_LOW */
+#define LAB_INT_PRY_LOW_VREG_OK_MASK	BIT(0)
+#define LAB_INT_PRY_LOW_VREG_OK		1
+
+/* REG_LAB_INT_LATCHED_CLR */
+#define LAB_INT_LATCHED_CLR_VREG_MASK	BIT(0)
+#define LAB_INT_LATCHED_CLR_VREG	1
+
+/* REG_LAB_INT_EN_SET */
+#define LAB_INT_EN_SET_VREG_OK_MASK	BIT(0)
+#define LAB_INT_EN_SET_VREG_OK		1
+
+/* REG_LAB_INT_EN_CLR */
+#define LAB_INT_EN_CLR_VREG_OK_MASK	BIT(0)
+#define LAB_INT_EN_CLR_VREG_OK		1
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 /* REG_LAB_SWIRE_PGM_CTL */
 #define LAB_EN_SWIRE_PGM_VOUT		BIT(7)
@@ -162,6 +197,14 @@
 /* IBB register offset definitions */
 #define REG_IBB_REVISION4		0x03
 #define REG_IBB_STATUS1			0x08
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+#define REG_IBB_INT_SET_TYPE		0x11
+#define REG_IBB_INT_POLARITY_HIGH	0x12
+#define REG_IBB_INT_POLARITY_LOW	0x13
+#define REG_IBB_INT_LATCHED_CLR		0x14
+#define REG_IBB_INT_EN_SET		0x15
+#define REG_IBB_INT_EN_CLR		0x16
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 #define REG_IBB_VOLTAGE			0x41
 #define REG_IBB_RING_SUPPRESSION_CTL	0x42
 #define REG_IBB_LCD_AMOLED_SEL		0x44
@@ -196,6 +239,33 @@
 /* REG_IBB_STATUS1 */
 #define IBB_STATUS1_VREG_OK_BIT		BIT(7)
 #define IBB_STATUS1_SC_DETECT_BIT	BIT(6)
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+/* REG_IBB_INT_SET_TYPE */
+#define IBB_INT_SET_TYPE_VREG_OK_MASK	BIT(0)
+#define IBB_INT_SET_TYPE_VREG_OK_LEVEL	0
+#define IBB_INT_SET_TYPE_VREG_OK_EDGE	1
+
+/* REG_IBB_INT_POLARITY_HIGH */
+#define IBB_INT_PRY_HIGH_VREG_OK_MASK	BIT(0)
+#define IBB_INT_PRY_HIGH_VREG_OK	1
+
+/* REG_IBB_INT_POLARITY_LOW */
+#define IBB_INT_PRY_LOW_VREG_OK_MASK	BIT(0)
+#define IBB_INT_PRY_LOW_VREG_OK		0
+
+/* REG_IBB_INT_LATCHED_CLR */
+#define IBB_INT_LATCHED_CLR_VREG_MASK	BIT(0)
+#define IBB_INT_LATCHED_CLR_VREG	1
+
+/* REG_IBB_INT_EN_SET */
+#define IBB_INT_EN_SET_VREG_OK_MASK	BIT(0)
+#define IBB_INT_EN_SET_VREG_OK		1
+
+/* REG_IBB_INT_EN_CLR */
+#define IBB_INT_EN_CLR_VREG_OK_MASK	BIT(0)
+#define IBB_INT_EN_CLR_VREG_OK		1
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 /* REG_IBB_VOLTAGE */
 #define IBB_VOLTAGE_OVERRIDE_EN		BIT(7)
@@ -318,6 +388,51 @@
 #define IBB_DIS_DLY_MASK		GENMASK(1, 0)
 #define IBB_WAIT_MBG_OK			BIT(2)
 
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+/* enable_irq */
+#define ENABLE_IRQ(irq_num)						\
+do {									\
+	pr_debug("ENABLE_IRQ: %s\n", __func__);				\
+	enable_irq(irq_num);						\
+} while (0)
+
+/* disable_irq */
+#define DISABLE_IRQ(irq_num)						\
+do {									\
+	pr_debug("DISABLE_IRQ_NOSYNC: %s\n", __func__);			\
+	disable_irq_nosync(irq_num);					\
+} while (0)
+
+#define IRQF_LAB_FLAGS	(IRQF_ONESHOT | IRQF_TRIGGER_LOW)
+#define IRQF_IBB_FLAGS	(IRQF_ONESHOT | IRQF_TRIGGER_HIGH)
+
+#define CHATTER_CNT_START		1
+#define DEFAULT_TARGET_CHATTER_CNT	3
+#define DEFAULT_TARGET_CHATTER_INTERVAL	500
+#define POWER_OFF_RETRY_INTERVAL	500
+
+#define VREG_WORKER_ACTIVE		true
+#define VREG_WORKER_PASSIVE		false
+
+static irqreturn_t ibb_vreg_handler(int irq, void *_chip);
+static irqreturn_t lab_vreg_handler(int irq, void *_chip);
+
+static struct labibb_vreg_status_ctrl {
+	struct delayed_work vreg_check_work;
+	struct qpnp_labibb *labibb;
+	int current_chatter_cnt;
+	int target_chatter_cnt;
+	int target_chatter_check_interval;
+	bool vreg_check_working;
+	bool ocp_lab_detected;
+	bool ocp_ibb_detected;
+} labibb_vreg_check;
+
+static int qpnp_ibb_register_irq(struct device_node *child,
+				struct qpnp_labibb *labibb);
+
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
+
 /* Constants */
 #define SWIRE_DEFAULT_2ND_CMD_DLY_MS		20
 #define SWIRE_DEFAULT_IBB_PS_ENABLE_DLY_MS	200
@@ -333,6 +448,9 @@
  * supported by qpnp_labibb_regulator
  */
 enum qpnp_labibb_mode {
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	QPNP_LABIBB_STANDALONE_MODE = 1,
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	QPNP_LABIBB_LCD_MODE,
 	QPNP_LABIBB_AMOLED_MODE,
 	QPNP_LABIBB_MAX_MODE,
@@ -621,6 +739,10 @@ struct qpnp_labibb {
 	struct delayed_work		sc_err_recovery_work;
 	struct hrtimer			sc_err_check_timer;
 	int				sc_err_count;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	int				lab_vreg_irq;
+	int				ibb_vreg_irq;
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	bool				standalone;
 	bool				ttw_en;
 	bool				in_ttw_mode;
@@ -1429,6 +1551,299 @@ static int qpnp_labibb_get_matching_idx(const char *val)
 
 	return -EINVAL;
 }
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+static int qpnp_lab_interrupt_enable_ctl(struct qpnp_labibb *labibb,
+	bool inWork)
+{
+	int rc = 0;
+
+	if (labibb_vreg_check.vreg_check_working && !inWork) {
+		pr_debug("%s: vreg_check_worker is already being processed.\n",
+								__func__);
+		goto exit;
+	}
+
+	/* lab int latched clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_LATCHED_CLR,
+		LAB_INT_LATCHED_CLR_VREG_MASK,
+		LAB_INT_LATCHED_CLR_VREG);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_LAB_INT_LATCHED_CLR, rc);
+		goto exit;
+	}
+	/* lab int en set */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_EN_SET,
+		LAB_INT_EN_SET_VREG_OK_MASK,
+		LAB_INT_EN_SET_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_LAB_INT_EN_SET, rc);
+		goto exit;
+	}
+	ENABLE_IRQ(labibb->lab_vreg_irq);
+exit:
+	return rc;
+}
+
+static int qpnp_lab_interrupt_disable_ctl(struct qpnp_labibb *labibb)
+{
+	int rc = 0;
+
+	if (labibb_vreg_check.vreg_check_working) {
+		pr_err("%s: vreg_check_worker is already being processed.\n",
+								__func__);
+	}
+
+	DISABLE_IRQ(labibb->lab_vreg_irq);
+	/* lab int en clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_EN_CLR,
+		LAB_INT_EN_CLR_VREG_OK_MASK,
+		LAB_INT_EN_CLR_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_LAB_INT_EN_CLR, rc);
+		goto exit;
+	}
+exit:
+	return rc;
+}
+
+static int qpnp_ibb_interrupt_enable_ctl(struct qpnp_labibb *labibb,
+	bool inWork)
+{
+	int rc = 0;
+
+	if (labibb_vreg_check.vreg_check_working && !inWork) {
+		pr_debug("%s: vreg_check_worker is already being processed.\n",
+								__func__);
+		goto exit;
+	}
+
+	/* ibb int latched clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_LATCHED_CLR,
+		IBB_INT_LATCHED_CLR_VREG_MASK,
+		IBB_INT_LATCHED_CLR_VREG);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_IBB_INT_LATCHED_CLR, rc);
+		goto exit;
+	}
+	/* ibb int en set */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_EN_SET,
+		IBB_INT_EN_SET_VREG_OK_MASK,
+		IBB_INT_EN_SET_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_IBB_INT_EN_SET, rc);
+		goto exit;
+	}
+	ENABLE_IRQ(labibb->ibb_vreg_irq);
+exit:
+	return rc;
+}
+
+static int qpnp_ibb_interrupt_disable_ctl(struct qpnp_labibb *labibb)
+{
+	int rc = 0;
+
+	if (labibb_vreg_check.vreg_check_working) {
+		pr_err("%s: vreg_check_worker is already being processed.\n",
+								__func__);
+	}
+
+	DISABLE_IRQ(labibb->ibb_vreg_irq);
+	/* ibb int en clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_EN_CLR,
+		IBB_INT_EN_CLR_VREG_OK_MASK,
+		IBB_INT_EN_CLR_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_IBB_INT_EN_CLR, rc);
+		goto exit;
+	}
+exit:
+	return rc;
+}
+
+static int qpnp_labibb_interrupt_enable_ctl(struct qpnp_labibb *labibb,
+	bool inWork)
+{
+	int rc;
+
+	rc = qpnp_lab_interrupt_enable_ctl(labibb, inWork);
+	if (rc) {
+		pr_err("%s: qpnp_lab_interrupt_enable_ctl failed rc = %d\n",
+				__func__, rc);
+		goto exit;
+	}
+
+	rc = qpnp_ibb_interrupt_enable_ctl(labibb, inWork);
+	if (rc) {
+		pr_err("%s: qpnp_ibb_interrupt_enable_ctl failed rc = %d\n",
+				__func__, rc);
+		goto exit;
+	}
+
+exit:
+	return rc;
+}
+
+static int qpnp_labibb_interrupt_disable_ctl(struct qpnp_labibb *labibb)
+{
+	int rc;
+
+	rc = qpnp_lab_interrupt_disable_ctl(labibb);
+	if (rc) {
+		pr_err("%s: qpnp_lab_interrupt_disable_ctl failed rc = %d\n",
+				__func__, rc);
+		goto exit;
+	}
+
+	rc = qpnp_ibb_interrupt_disable_ctl(labibb);
+	if (rc) {
+		pr_err("%s: qpnp_ibb_interrupt_disable_ctl failed rc = %d\n",
+				__func__, rc);
+		goto exit;
+	}
+
+exit:
+	return rc;
+}
+
+static int qpnp_lab_request_interrupt(struct qpnp_labibb *labibb)
+{
+	int rc = 0;
+
+	/* lab int set type */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_SET_TYPE,
+		LAB_INT_SET_TYPE_VREG_OK_MASK,
+		LAB_INT_SET_TYPE_VREG_OK_LEVEL);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_LAB_INT_SET_TYPE, rc);
+		goto exit;
+	}
+
+	/* lab int polarity high */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_POLARITY_HIGH,
+		LAB_INT_PRY_HIGH_VREG_OK_MASK,
+		LAB_INT_PRY_HIGH_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_LAB_INT_POLARITY_HIGH, rc);
+		goto exit;
+	}
+
+	/* lab int polarity low */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_POLARITY_LOW,
+		LAB_INT_PRY_LOW_VREG_OK_MASK,
+		LAB_INT_PRY_LOW_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_LAB_INT_POLARITY_LOW, rc);
+		goto exit;
+	}
+
+	/* lab int en set */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_EN_SET,
+		LAB_INT_EN_SET_VREG_OK_MASK,
+		LAB_INT_EN_SET_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_LAB_INT_EN_SET, rc);
+		goto exit;
+	}
+
+	/* lab int latched clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->lab_base +
+		REG_LAB_INT_LATCHED_CLR,
+		LAB_INT_LATCHED_CLR_VREG_MASK,
+		LAB_INT_LATCHED_CLR_VREG);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_LAB_INT_LATCHED_CLR, rc);
+		goto exit;
+	}
+
+exit:
+	return rc;
+}
+
+static int qpnp_ibb_request_interrupt(struct qpnp_labibb *labibb)
+{
+	int rc = 0;
+
+	/* ibb int set type */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_SET_TYPE,
+		IBB_INT_SET_TYPE_VREG_OK_MASK,
+		IBB_INT_SET_TYPE_VREG_OK_LEVEL);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_IBB_INT_SET_TYPE, rc);
+		goto exit;
+	}
+
+	/* ibb int polarity high */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_POLARITY_HIGH,
+		IBB_INT_PRY_HIGH_VREG_OK_MASK,
+		IBB_INT_PRY_HIGH_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_IBB_INT_POLARITY_HIGH, rc);
+		goto exit;
+	}
+
+	/* IBB int polarity low */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_POLARITY_LOW,
+		IBB_INT_PRY_LOW_VREG_OK_MASK,
+		IBB_INT_PRY_LOW_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_IBB_INT_POLARITY_LOW, rc);
+		goto exit;
+	}
+
+	/* ibb int en set */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_EN_SET,
+		IBB_INT_EN_SET_VREG_OK_MASK,
+		IBB_INT_EN_SET_VREG_OK);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_IBB_INT_EN_SET, rc);
+		goto exit;
+	}
+
+	/* ibb int latched clr */
+	rc = qpnp_labibb_masked_write(labibb, labibb->ibb_base +
+		REG_IBB_INT_LATCHED_CLR,
+		IBB_INT_LATCHED_CLR_VREG_MASK,
+		IBB_INT_LATCHED_CLR_VREG);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+				__func__, REG_IBB_INT_LATCHED_CLR, rc);
+		goto exit;
+	}
+
+exit:
+	return rc;
+}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 static int qpnp_ibb_set_mode(struct qpnp_labibb *labibb, enum ibb_mode mode)
 {
@@ -2389,6 +2804,9 @@ static int qpnp_labibb_regulator_enable(struct qpnp_labibb *labibb)
 
 	labibb->lab_vreg.vreg_enabled = 1;
 	labibb->ibb_vreg.vreg_enabled = 1;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	qpnp_labibb_interrupt_enable_ctl(labibb, VREG_WORKER_PASSIVE);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	return 0;
 err_out:
@@ -2503,6 +2921,9 @@ static int qpnp_lab_regulator_enable(struct regulator_dev *rdev)
 			return rc;
 		}
 		labibb->lab_vreg.vreg_enabled = 1;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+		qpnp_lab_interrupt_enable_ctl(labibb, VREG_WORKER_PASSIVE);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	}
 
 	if (labibb->notify_lab_vreg_ok_sts || labibb->detect_lab_sc)
@@ -2519,6 +2940,10 @@ static int qpnp_lab_regulator_disable(struct regulator_dev *rdev)
 
 	if (labibb->secure_mode)
 		return 0;
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	qpnp_lab_interrupt_disable_ctl(labibb);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	if (labibb->lab_vreg.vreg_enabled && !labibb->swire_control) {
 
@@ -3089,6 +3514,26 @@ static int register_qpnp_lab_regulator(struct qpnp_labibb *labibb,
 		}
 
 		labibb->lab_vreg.vreg_enabled = 1;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+		/* request interrupt */
+		rc = qpnp_lab_request_interrupt(labibb);
+		if (rc) {
+			pr_err("lab request interrupt failed rc=%d\n",
+								rc);
+			return rc;
+		}
+
+		rc = devm_request_threaded_irq(labibb->dev,
+				labibb->lab_vreg_irq, NULL,
+				lab_vreg_handler,
+				IRQF_LAB_FLAGS,
+				"lab_vreg_not_ok_interrupt", labibb);
+		if (rc) {
+			pr_err("Failed to register 'lab_vreg_not_ok_interrupt' irq rc=%d\n",
+						rc);
+			return rc;
+		}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	}
 
 	if (is_lab_vreg_ok_irq_available(labibb)) {
@@ -3176,6 +3621,122 @@ static int register_qpnp_lab_regulator(struct qpnp_labibb *labibb,
 
 	return 0;
 }
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+static void force_labibb_regulator_disable(struct qpnp_labibb *labibb)
+{
+	int rc;
+	u8 val;
+
+	val = 0;
+	rc = qpnp_labibb_write(labibb,
+			labibb->ibb_base + REG_IBB_ENABLE_CTL, &val, 1);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_IBB_ENABLE_CTL, rc);
+		goto exit;
+	}
+
+	if (labibb->mode != QPNP_LABIBB_STANDALONE_MODE)
+		goto exit;
+
+	val = 0;
+	rc = qpnp_labibb_write(labibb,
+			labibb->lab_base + REG_LAB_ENABLE_CTL, &val, 1);
+	if (rc) {
+		pr_err("%s: write register %x failed rc = %d\n",
+			__func__, REG_LAB_ENABLE_CTL, rc);
+		goto exit;
+	}
+exit:
+	return;
+}
+
+static void vreg_check_worker(struct work_struct *work)
+{
+	u8 val;
+	int rc;
+	struct qpnp_labibb *labibb = labibb_vreg_check.labibb;
+
+	if ((!labibb->lab_vreg.vreg_enabled) ||
+	    (!labibb->ibb_vreg.vreg_enabled)) {
+		pr_debug("%s: false detection display is off\n", __func__);
+		goto exit;
+	}
+
+	/* lab vreg status check */
+	rc = qpnp_labibb_read(labibb,
+			labibb->lab_base + REG_LAB_STATUS1,
+			&val,
+			1);
+	if (rc) {
+		pr_err("%s: read register %x failed rc = %d\n",
+				__func__, REG_LAB_STATUS1, rc);
+		goto read_error;
+	}
+
+	if (!(val & LAB_STATUS1_VREG_OK_BIT))
+		goto status_error;
+
+	/* ibb vreg status check */
+	rc = qpnp_labibb_read(labibb,
+			labibb->ibb_base + REG_IBB_STATUS1,
+			&val,
+			1);
+	if (rc) {
+		pr_err("%s: read register %x failed rc = %d\n",
+				__func__, REG_IBB_STATUS1, rc);
+		goto read_error;
+	}
+
+	if (!(val & IBB_STATUS1_VREG_OK_BIT))
+		goto status_error;
+
+	rc = qpnp_labibb_interrupt_enable_ctl(labibb, VREG_WORKER_ACTIVE);
+	if (rc) {
+		pr_err("%s: qpnp_labibb_interrupt_enable_ctl error\n",
+							__func__);
+		goto write_error;
+	}
+
+	pr_debug("%s: vreg_check_worker done.\n", __func__);
+	goto exit;
+
+status_error:
+	labibb_vreg_check.current_chatter_cnt++;
+	pr_err("%s: VREG_NG Detection [%d]\n",
+			__func__, labibb_vreg_check.current_chatter_cnt);
+	if (labibb_vreg_check.current_chatter_cnt >=
+			labibb_vreg_check.target_chatter_cnt) {
+		pr_err("%s: execute shutdown.\n", __func__);
+
+		/* disable vreg */
+		force_labibb_regulator_disable(labibb);
+		/* shutdown */
+		do {
+			pm_power_off();
+			msleep(POWER_OFF_RETRY_INTERVAL);
+		} while (1);
+		goto exit;
+	}
+
+read_error:
+write_error:
+	schedule_delayed_work(&labibb_vreg_check.vreg_check_work,
+		msecs_to_jiffies(
+			labibb_vreg_check.target_chatter_check_interval));
+	return;
+
+exit:
+	/* initialize */
+	labibb_vreg_check.current_chatter_cnt = 0;
+	labibb_vreg_check.vreg_check_working = false;
+	labibb_vreg_check.ocp_lab_detected = false;
+	labibb_vreg_check.ocp_ibb_detected = false;
+
+	return;
+}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 static int qpnp_ibb_pfm_mode_enable(struct qpnp_labibb *labibb,
 			struct device_node *of_node)
@@ -3857,6 +4418,9 @@ static int qpnp_ibb_regulator_enable(struct regulator_dev *rdev)
 			return rc;
 		}
 		labibb->ibb_vreg.vreg_enabled = 1;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+		qpnp_ibb_interrupt_enable_ctl(labibb, VREG_WORKER_PASSIVE);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	}
 
 	return 0;
@@ -3869,6 +4433,10 @@ static int qpnp_ibb_regulator_disable(struct regulator_dev *rdev)
 
 	if (labibb->secure_mode)
 		return 0;
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	qpnp_ibb_interrupt_disable_ctl(labibb);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	if (labibb->ibb_vreg.vreg_enabled && !labibb->swire_control) {
 
@@ -4072,6 +4640,26 @@ static int register_qpnp_ibb_regulator(struct qpnp_labibb *labibb,
 		labibb->ibb_vreg.pwrdn_dly =  ibb_pwrdn_dly_table[index];
 
 		labibb->ibb_vreg.vreg_enabled = 1;
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+		/* request interrupt */
+		rc = qpnp_ibb_request_interrupt(labibb);
+		if (rc) {
+			pr_err("ibb request interrupt failed rc=%d\n",
+								rc);
+			return rc;
+		}
+
+		rc = devm_request_threaded_irq(labibb->dev,
+				labibb->ibb_vreg_irq, NULL,
+				ibb_vreg_handler,
+				IRQF_IBB_FLAGS,
+				"ibb_vreg_not_ok_interrupt", labibb);
+		if (rc) {
+			pr_err("Failed to register 'ibb_vreg_not_ok_interrupt' irq rc=%d\n",
+						rc);
+			return rc;
+		}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	} else {
 		/* SWIRE_RDY and IBB_MODULE_EN not enabled */
 		rc = qpnp_ibb_dt_init(labibb, of_node);
@@ -4237,6 +4825,15 @@ static int qpnp_lab_register_irq(struct device_node *child,
 	else
 		labibb->lab_vreg.lab_sc_irq = rc;
 
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	labibb->lab_vreg_irq =
+			of_irq_get_byname(child, "lab_vreg_not_ok_interrupt");
+	if (!labibb->lab_vreg_irq) {
+		pr_err("Invalid lab_vreg_not_ok_interrupt irq\n");
+		return -EINVAL;
+	}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
+
 	return 0;
 }
 
@@ -4251,6 +4848,15 @@ static int qpnp_ibb_register_irq(struct device_node *child,
 		pr_debug("Unable to get ibb-sc-err, rc = %d\n", rc);
 	else
 		labibb->ibb_vreg.ibb_sc_irq = rc;
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	labibb->ibb_vreg_irq =
+			of_irq_get_byname(child, "ibb_vreg_not_ok_interrupt");
+	if (!labibb->ibb_vreg_irq) {
+		pr_err("Invalid ibb_vreg_not_ok_interrupt irq\n");
+		return -EINVAL;
+	}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	return 0;
 }
@@ -4332,6 +4938,122 @@ static ssize_t qpnp_labibb_irq_control(struct class *c,
 	return count;
 }
 
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+static irqreturn_t lab_vreg_handler(int irq, void *_chip)
+{
+	u8 val;
+	int rc;
+	struct qpnp_labibb *labibb = _chip;
+
+	labibb_vreg_check.ocp_lab_detected = true;
+
+	pr_err("%s: LAB VREG_NG interrupt!\n", __func__);
+	qpnp_labibb_interrupt_disable_ctl(labibb);
+
+	if (!labibb->lab_vreg.vreg_enabled) {
+		pr_err("%s: false detection display is off\n", __func__);
+		goto exit;
+	}
+
+	/* lab status1 */
+	rc = qpnp_labibb_read(labibb,
+			labibb->lab_base + REG_LAB_STATUS1,
+			&val,
+			1);
+	if (rc) {
+		pr_err("%s: read register %x failed rc = %d\n",
+				__func__, REG_LAB_STATUS1, rc);
+		goto exit;
+	}
+
+	if (!(val & LAB_STATUS1_VREG_OK_BIT))
+		pr_err("%s: LAB VREG NG!!!\n", __func__);
+	else {
+		labibb_vreg_check.ocp_lab_detected = false;
+		goto false_detection;
+	}
+
+	/* start vreg check */
+	if (labibb_vreg_check.vreg_check_working)
+		goto exit;
+
+	labibb_vreg_check.vreg_check_working = true;
+	labibb_vreg_check.current_chatter_cnt = CHATTER_CNT_START;
+	schedule_delayed_work(&labibb_vreg_check.vreg_check_work,
+		msecs_to_jiffies(
+			labibb_vreg_check.target_chatter_check_interval));
+	goto exit;
+
+false_detection:
+	rc = qpnp_labibb_interrupt_enable_ctl(labibb, VREG_WORKER_PASSIVE);
+	if (rc)
+		pr_err("%s: qpnp_labibb_interrupt_enable_ctl error\n",
+							__func__);
+exit:
+	return IRQ_HANDLED;
+}
+
+static irqreturn_t ibb_vreg_handler(int irq, void *_chip)
+{
+	u8 val;
+	int rc;
+	struct qpnp_labibb *labibb = _chip;
+
+	labibb_vreg_check.ocp_ibb_detected = true;
+
+	pr_err("%s: IBB VREG_NG interrupt!\n", __func__);
+	qpnp_labibb_interrupt_disable_ctl(labibb);
+
+	if (!labibb->ibb_vreg.vreg_enabled) {
+		pr_err("%s: false detection display is off\n", __func__);
+		goto exit;
+	}
+
+	/* ibb status1 */
+	rc = qpnp_labibb_read(labibb,
+			labibb->ibb_base + REG_IBB_STATUS1,
+			&val,
+			1);
+	if (rc) {
+		pr_err("%s: read register %x failed rc = %d\n",
+				__func__, REG_IBB_STATUS1, rc);
+		goto exit;
+	}
+
+	if (!(val & IBB_STATUS1_VREG_OK_BIT))
+		pr_err("%s: IBB VREG NG!!!\n", __func__);
+	else {
+		labibb_vreg_check.ocp_ibb_detected = false;
+		goto false_detection;
+	}
+
+	/* start vreg check */
+	if (labibb_vreg_check.vreg_check_working)
+		goto exit;
+
+	labibb_vreg_check.vreg_check_working = true;
+	labibb_vreg_check.current_chatter_cnt = CHATTER_CNT_START;
+	schedule_delayed_work(&labibb_vreg_check.vreg_check_work,
+		msecs_to_jiffies(
+			labibb_vreg_check.target_chatter_check_interval));
+	goto exit;
+
+false_detection:
+	rc = qpnp_labibb_interrupt_enable_ctl(labibb, VREG_WORKER_PASSIVE);
+	if (rc)
+		pr_err("%s: qpnp_labibb_interrupt_enable_ctl error\n",
+							__func__);
+
+exit:
+	return IRQ_HANDLED;
+}
+
+bool qpnp_labibb_ocp_check(void)
+{
+	return (labibb_vreg_check.ocp_lab_detected || labibb_vreg_check.ocp_ibb_detected);
+}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
+
 static struct class_attribute labibb_attributes[] = {
 	[0] = __ATTR(secure_mode, 0664, NULL,
 			 qpnp_labibb_irq_control),
@@ -4410,6 +5132,31 @@ static int qpnp_labibb_regulator_probe(struct platform_device *pdev)
 			return rc;
 		}
 	}
+
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	/* initialize labibb_vreg_status_ctrl */
+	labibb_vreg_check.labibb = labibb;
+	labibb_vreg_check.current_chatter_cnt = 0;
+	labibb_vreg_check.vreg_check_working = false;
+	labibb_vreg_check.target_chatter_cnt = DEFAULT_TARGET_CHATTER_CNT;
+	rc = of_property_read_u32(labibb->dev->of_node,
+		"somc,vreg-target-chatter-cnt",
+		&(labibb_vreg_check.target_chatter_cnt));
+	if (rc)
+		pr_info("qpnp_labibb: Target chatter count sets default.\n");
+
+	labibb_vreg_check.target_chatter_check_interval
+					= DEFAULT_TARGET_CHATTER_INTERVAL;
+	rc = of_property_read_u32(labibb->dev->of_node,
+		"somc,vreg-target-chatter-interval",
+		&(labibb_vreg_check.target_chatter_check_interval));
+	if (rc)
+		pr_info("qpnp_labibb: Target chatter interval sets default.\n");
+
+	/* initialize vreg_check_worker */
+	INIT_DELAYED_WORK(&labibb_vreg_check.vreg_check_work,
+				vreg_check_worker);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	labibb->standalone = of_property_read_bool(labibb->dev->of_node,
 				"qcom,labibb-standalone");
@@ -4501,6 +5248,14 @@ static int qpnp_labibb_regulator_probe(struct platform_device *pdev)
 			labibb->ibb_base = base;
 			labibb->ibb_dig_major = revision;
 			qpnp_ibb_register_irq(child, labibb);
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+			rc = qpnp_ibb_register_irq(child, labibb);
+			if (rc) {
+				pr_err("Failed to register IBB IRQ rc=%d\n",
+							rc);
+				goto fail_registration;
+			}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 			rc = register_qpnp_ibb_regulator(labibb, child);
 			if (rc < 0)
 				goto fail_registration;
@@ -4553,6 +5308,12 @@ fail_registration:
 		regulator_unregister(labibb->lab_vreg.rdev);
 	if (labibb->ibb_vreg.rdev)
 		regulator_unregister(labibb->ibb_vreg.rdev);
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+	if (labibb->lab_vreg_irq)
+		free_irq(labibb->lab_vreg_irq, labibb);
+	if (labibb->ibb_vreg_irq)
+		free_irq(labibb->ibb_vreg_irq, labibb);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 
 	return rc;
 }
@@ -4580,6 +5341,13 @@ static int qpnp_labibb_regulator_remove(struct platform_device *pdev)
 			regulator_unregister(labibb->ibb_vreg.rdev);
 
 		cancel_work_sync(&labibb->lab_vreg_ok_work);
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+		if (labibb->lab_vreg_irq)
+			free_irq(labibb->lab_vreg_irq, labibb);
+		if (labibb->ibb_vreg_irq)
+			free_irq(labibb->ibb_vreg_irq, labibb);
+		cancel_delayed_work_sync(&labibb_vreg_check.vreg_check_work);
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
 	}
 	return 0;
 }

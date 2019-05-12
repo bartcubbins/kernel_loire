@@ -21,6 +21,15 @@ enum labibb_notify_event {
 int qpnp_labibb_notifier_register(struct notifier_block *nb);
 int qpnp_labibb_notifier_unregister(struct notifier_block *nb);
 
+#ifdef CONFIG_SOMC_LCD_OCP_ENABLED
+bool qpnp_labibb_ocp_check(void);
+#else
+static inline bool qpnp_labibb_ocp_check(void)
+{
+	return false;
+}
+#endif /* CONFIG_SOMC_LCD_OCP_ENABLED */
+
 #ifdef CONFIG_REGULATOR_QPNP_LABIBB_SOMC
 /** This API is used to set precharge of LAB regulator
  * regulator: the reglator device

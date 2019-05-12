@@ -1025,6 +1025,11 @@ config REGULATOR_QPNP_LABIBB_SOMC
 	  Select this to enable SoMC extensions to QTI QPNP LAB/IBB
 	  regulator driver.
 
+config SOMC_LCD_OCP_ENABLED
+	bool "Enable SoMC LCD Over current protection function"
+	help
+	  Select this to enable SoMC LCD Over current protection function.
+
 config REGULATOR_QPNP_LCDB
 	tristate "Qualcomm Technologies, Inc. QPNP LCDB support"
 	depends on SPMI
