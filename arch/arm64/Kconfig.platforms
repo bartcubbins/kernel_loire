@@ -147,6 +147,15 @@ config ARCH_SDM670
 	  This enables support for the SDM670 chipset. If you do not
 	  wish to build a kernel that runs on this chipset, say 'N' here.
 
+config ARCH_MSM8998
+	bool "Enable Support for Qualcomm Technologies Inc. MSM8998"
+	depends on ARCH_QCOM
+	select CPU_FREQ_QCOM
+	select COMMON_CLK_MSM
+	help
+	  This enables support for the MSM8998 chipset. If you do not
+	  wish to build a kernel that runs on this chipset, say 'N' here.
+
 config ARCH_MSM8916
 	bool "Enable Support for Qualcomm Technologies Inc. MSM8916"
 	depends on ARCH_QCOM
