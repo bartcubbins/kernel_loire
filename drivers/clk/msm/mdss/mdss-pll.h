@@ -32,6 +32,7 @@ enum {
 	MDSS_DSI_PLL_LPM,
 	MDSS_DSI_PLL_HPM,
 	MDSS_DSI_PLL_8996,
+	MDSS_DSI_PLL_8998,
 	MDSS_DSI_PLL_12NM,
 	MDSS_HDMI_PLL_8996,
 	MDSS_HDMI_PLL_8996_V2,
@@ -183,6 +184,23 @@ static inline bool is_gdsc_disabled(struct mdss_pll_resources *pll_res)
 
 	return ((readl_relaxed(pll_res->gdsc_base + 0x4) & BIT(31)) &&
 		(!(readl_relaxed(pll_res->gdsc_base) & BIT(0)))) ? false : true;
+}
+
+static inline int mdss_pll_div_prepare(struct clk *c)
+{
+	struct div_clk *div = to_div_clk(c);
+	/* Restore the divider's value */
+	return div->ops->set_div(div, div->data.div);
+}
+
+static inline int mdss_set_mux_sel(struct mux_clk *clk, int sel)
+{
+	return 0;
+}
+
+static inline int mdss_get_mux_sel(struct mux_clk *clk)
+{
+	return 0;
 }
 
 int mdss_pll_resource_enable(struct mdss_pll_resources *pll_res, bool enable);

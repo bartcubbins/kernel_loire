@@ -83,6 +83,8 @@ int dsi_pll_clock_register_lpm(struct platform_device *pdev,
 				struct mdss_pll_resources *pll_res);
 int dsi_pll_clock_register_8996(struct platform_device *pdev,
 				struct mdss_pll_resources *pll_res);
+int dsi_pll_clock_register_8998(struct platform_device *pdev,
+				struct mdss_pll_resources *pll_res);
 int dsi_pll_clock_register_12nm(struct platform_device *pdev,
 				struct mdss_pll_resources *pll_res);
 

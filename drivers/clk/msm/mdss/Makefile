@@ -10,3 +10,6 @@ obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-12nm-util.o
 
 # MSM8956/76
 obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-28hpm.o
+
+# MSM8998
+obj-$(CONFIG_MSM_MDSS_PLL) += mdss-dsi-pll-8998.o
