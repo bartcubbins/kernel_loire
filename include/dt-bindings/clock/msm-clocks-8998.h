@@ -13,8 +13,6 @@
 #ifndef __MSM_CLOCKS_8998_H
 #define __MSM_CLOCKS_8998_H
 
-#include "audio-ext-clk.h"
-
 /* clock_rpm controlled clocks */
 #define clk_ce1_clk				0x42229c55
 #define clk_ce1_a_clk				0x44a833fe
