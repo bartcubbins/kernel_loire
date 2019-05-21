@@ -150,8 +150,9 @@ config ARCH_SDM670
 config ARCH_MSM8916
 	bool "Enable Support for Qualcomm Technologies Inc. MSM8916"
 	depends on ARCH_QCOM
-	select CPU_FREQ_QCOM
-	select COMMON_CLK_MSM
+	select COMMON_CLK
+	select COMMON_CLK_QCOM
+	select QCOM_GDSC
 	help
 	  This enables support for the MSM8916 chipset. If you do not
 	  wish to build a kernel that runs on this chipset, say 'N' here.
