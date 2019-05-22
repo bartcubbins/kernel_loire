@@ -1,0 +1,145 @@
+Qualcomm Technologies, Inc. MSM8976 CPU clock driver
+---------------------------------------------------
+
+It is the clock controller driver which provides higher frequency
+clocks and allows CPU frequency scaling on msm8956/76 based platforms.
+
+Required properties:
+- compatible:		Shall contain following:
+			"qcom,cpu-msm8976"
+
+- reg:			Shall contain base register offset and size.
+- reg-names:		Names of the bases for the above registers. Expected
+			bases are:
+			"rcgwr-c0-base" (optional), "rcgwr-c1-base" (optional),
+			"c0-pll", "c1-pll", "cci-pll",
+			"c0-mux", "c1-mux", "cci-mux",
+			"efuse", "spm_c0_base",
+			"spm_c1_base", "spm_cci_base".
+
+- clocks:		The clocks sources used by the cluster/cci mux.
+- clock-names:		Names of the used clocks. Shall contain following:
+			"xo_a", "aux_clk_2", "aux_clk_3".
+
+- vdd_mx-supply:	The regulator powering all the PLLs of cluster-0,
+			cluster-1, cci.
+- vdd_a72-supply:	The regulator powering the big cluster
+- vdd_a53-supply:	The regulator powering the little cluster
+- vdd_cci-supply:	The regulator powering the CCI cluster
+
+- qcom,speedX-bin-vY-ZZZ:
+			A table of CPU frequency (Hz) to voltage (corner)
+			mapping that represents the max frequency possible
+			for each supported voltage level for a CPU. 'X' is
+			the speed bin into which the device falls into - a
+			bin will have unique frequency-voltage relationships.
+			'Y' is the characterization version, implying that
+			characterization (deciding what speed bin a device
+			falls into) methods and/or encoding may change. The
+			values 'X' and 'Y' are read from efuse registers, and
+			the right table is picked from multiple possible tables.
+			'ZZZ' can be c1, c0 or cci depending on whether the table
+			is for the big cluster, little cluster or cci.
+
+- #clock-cells:		Shall contain 1.
+
+Optional properties:
+- qcom,num-clusters:	Number of clusters which support RCGwR.
+- qcom,lmh-sid-cX:	List of LMH SID offset and value to be programmed for
+			each cluster (X: 0 or 1)
+- qcom,link-sid-cX:	List of Link SID offset and value to be programmed for
+			each cluster (X: 0 or 1)
+- qcom,dfs-sid-cX:	List of DFS SID offset and value to be programmed for
+			each cluster (X: 0 or 1)
+- qcom,ramp-dis-cX:	Boolean property to disable ramp down for each cluster
+			(X: 0 or 1)
+
+Example:
+	clock_cpu: cpu-clock-controller@b016000 {
+		compatible = "qcom,cpu-msm8976";
+
+		reg =   <0xb114000  0x68>,
+			<0xb014000  0x68>,
+			<0xb116000  0x40>,
+			<0xb016000  0x40>,
+			<0xb1d0000  0x40>,
+			<0xb111050  0x08>,
+			<0xb011050  0x08>,
+			<0xb1d1050  0x08>,
+			<0x00a412c  0x08>,
+			<0xb111200 0x100>,
+		        <0xb011200 0x100>,
+			<0xb1d4000 0x100>;
+		reg-names = "rcgwr-c0-base", "rcgwr-c1-base",
+			    "c0-pll", "c1-pll", "cci-pll",
+			    "c0-mux", "c1-mux", "cci-mux",
+			    "efuse", "spm_c0_base",
+			    "spm_c1_base", "spm_cci_base";
+
+		/* RCGwR settings */
+		qcom,num-clusters = <2>;
+		qcom,lmh-sid-c0  = < 0x30 0x077706db>,
+				   < 0x34 0x05550249>,
+				   < 0x38 0x00000111>;
+		qcom,link-sid-c0 = < 0x40 0x000fc987>;
+		qcom,dfs-sid-c0  = < 0x10 0xfefebff7>,
+				   < 0x14 0xfdff7fef>,
+				   < 0x18 0xfbffdefb>,
+				   < 0x1c 0xb69b5555>,
+				   < 0x20 0x24929249>,
+				   < 0x24 0x49241112>,
+				   < 0x28 0x11112111>,
+				   < 0x2c 0x00008102>;
+		qcom,lmh-sid-c1  = < 0x30 0x077706db>,
+				   < 0x34 0x05550249>,
+				   < 0x38 0x00000111>;
+		qcom,link-sid-c1 = < 0x40 0x000fc987>;
+		qcom,dfs-sid-c1  = < 0x10 0xfefebff7>,
+				   < 0x14 0xfdff7fef>,
+				   < 0x18 0xfbffdefb>,
+				   < 0x1c 0xb69b5555>,
+				   < 0x20 0x24929249>,
+				   < 0x24 0x49241112>,
+				   < 0x28 0x11112111>,
+				   < 0x2c 0x00008102>;
+
+		vdd_mx_hf-supply = <&pm8950_s6_level_ao>;
+		vdd_hf_pll-supply = <&pm8950_l7_ao>;
+		vdd_mx_sr-supply = <&pm8950_s6_level_ao>;
+		vdd_a72-supply = <&apc1_vreg_corner>;
+		vdd_a53-supply = <&apc0_vreg_corner>;
+		vdd_cci-supply = <&apc0_vreg_corner>;
+
+		clocks = <&clock_rpmcc RPM_XO_A_CLK_SRC>,
+			 <&clock_gcc GPLL4_OUT_MAIN>,
+			 <&clock_gcc GPLL0_AO_OUT_MAIN>;
+		clock-names = "xo_a", "aux_clk_2", "aux_clk_3";
+
+		qcom,speed0-bin-v0-c0 =
+			<          0 0>,
+			<  400000000 1>,
+			<  691200000 2>,
+			<  806400000 3>,
+			< 1017600000 4>,
+			< 1190400000 5>,
+			< 1305600000 6>,
+			< 1382400000 7>,
+			< 1401600000 8>;
+		qcom,speed0-bin-v0-c1 =
+			<          0 0>,
+			<  400000000 1>,
+			<  883200000 2>,
+			< 1190400000 3>,
+			< 1382400000 4>,
+			< 1612800000 5>,
+			< 1747200000 6>,
+			< 1804800000 7>;
+		qcom,speed0-bin-v0-cci =
+			<          0 0>,
+			<  307200000 1>,
+			<  403200000 3>,
+			<  441600000 4>,
+			<  556800000 5>,
+			<  614400000 6>;
+		#clock-cells = <1>;
+	};

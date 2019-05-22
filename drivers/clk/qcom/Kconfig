@@ -234,6 +234,15 @@ config MSM_CLK_RPMH
 	  Say Y to support the clocks managed by RPMh VRM/ARC on platforms
 	  such as sdm845.
 
+config CLOCK_CPU_MSM8976
+	bool "CPU MSM8976 Clock Controller"
+	depends on COMMON_CLK_QCOM
+	help
+	 Support for the cpu clock controller on msm8956/76
+	 based devices.
+	 Say Y if you want to support CPU clock scaling using
+	 CPUfreq drivers for dynamic power management.
+
 config CLOCK_CPU_OSM
 	tristate "OSM CPU Clock Controller"
 	depends on COMMON_CLK_QCOM
