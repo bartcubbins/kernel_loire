@@ -35,6 +35,7 @@ obj-$(CONFIG_MSM_GCC_8660) += gcc-msm8660.o
 obj-$(CONFIG_MSM_GCC_8916) += gcc-msm8916.o
 obj-$(CONFIG_MSM_GCC_8960) += gcc-msm8960.o
 obj-$(CONFIG_MSM_GCC_8974) += gcc-msm8974.o
+obj-$(CONFIG_MSM_GCC_8976) += gcc-msm8976.o
 obj-$(CONFIG_MSM_GCC_8996) += gcc-msm8996.o
 obj-$(CONFIG_MSM_GCC_SDM845) += gcc-sdm845.o debugcc-sdm845.o
 obj-$(CONFIG_MSM_GPUCC_SDM845) += gpucc-sdm845.o
