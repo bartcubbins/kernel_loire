@@ -615,8 +615,8 @@
 		compatible = "qcom,cpr2-gfx-regulator";
 		reg = <0x98000 0x1000>, <0xa4000 0x1000>;
 		reg-names = "rbcpr", "efuse_addr";
-		clocks = <&clock_gcc clk_gcc_rbcpr_gfx_clk>,
-			<&clock_gcc clk_gcc_rbcpr_gfx_ahb_clk>;
+		clocks = <&clock_gcc GCC_RBCPR_GFX_CLK>,
+			<&clock_gcc GCC_RBCPR_GFX_AHB_CLK>;
 		clock-names = "core_clk", "iface_clk";
 		interrupts = <0 314 0>;
 

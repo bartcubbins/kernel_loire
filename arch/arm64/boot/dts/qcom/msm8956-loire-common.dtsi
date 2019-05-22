@@ -163,25 +163,25 @@
 		pinctrl-1 = <&msm_gpio_19_def>;
 	};
 
-        /*I2C : BLSP2 */
-        i2c@7af6000 {
-                nfc@28 {
-                        compatible = "nxp,pn547";
-                        reg = <0x28>;
-                        interrupt-parent = <&msm_gpio>;
-                        interrupts = <33 0x1>;
-                        nxp,irq_gpio = <&msm_gpio 33 0x00>;
-                        nxp,dwld_en = <&msm_gpio 16 0x00>;
-                        nxp,ven = <&msm_gpio 34 0x01>;
-                        qcom,clk-src = "BBCLK2";
-                        qcom,clk-gpio = <&pm8950_gpios 5 0x00>;
-                        clocks = <&clock_gcc clk_bb_clk2_pin>;
-                        clock-names = "nfc_clk";
-                        pinctrl-names = "pn547-active", "pn547-inactive";
-                        pinctrl-0 = <&msm_gpio_33_def &msm_gpio_16_def>;
-                        pinctrl-1 = <&msm_gpio_33_def &msm_gpio_16_def>;
-                };
-        };
+	/*I2C : BLSP2 */
+	i2c@7af6000 {
+		nfc@28 {
+			compatible = "nxp,pn547";
+			reg = <0x28>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <33 0x1>;
+			nxp,irq_gpio = <&msm_gpio 33 0x00>;
+			nxp,dwld_en = <&msm_gpio 16 0x00>;
+			nxp,ven = <&msm_gpio 34 0x01>;
+			qcom,clk-src = "BBCLK2";
+			qcom,clk-gpio = <&pm8950_gpios 5 0x00>;
+			clocks = <&clock_rpmcc RPM_BB_CLK2_PIN>;
+			clock-names = "nfc_clk";
+			pinctrl-names = "pn547-active", "pn547-inactive";
+			pinctrl-0 = <&msm_gpio_33_def &msm_gpio_16_def>;
+			pinctrl-1 = <&msm_gpio_33_def &msm_gpio_16_def>;
+		};
+	};
 
 	/* SPI : BLSP3 */
 	/* Kernel default setting will be overridden by ADSP SW. */
@@ -283,8 +283,8 @@
 		reg = <0x7af0000 0x200>;
 		interrupts = <0 307 0>;
 		clock-names = "core", "iface";
-		clocks = <&clock_gcc clk_gcc_blsp2_uart2_apps_clk>,
-				<&clock_gcc clk_gcc_blsp2_ahb_clk>;
+		clocks = <&clock_gcc GCC_BLSP2_UART2_APPS_CLK>,
+				<&clock_gcc GCC_BLSP2_AHB_CLK>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&msm_gpio_20_def &msm_gpio_21_def>;
 		status = "okay";
@@ -722,10 +722,10 @@
 			<55 512 0 0>,
 			<55 512 120000 1200000>,
 			<55 512 393600 3936000>;
-		clocks = <&clock_gcc clk_crypto_clk_src>,
-			 <&clock_gcc clk_gcc_crypto_clk>,
-			 <&clock_gcc clk_gcc_crypto_ahb_clk>,
-			 <&clock_gcc clk_gcc_crypto_axi_clk>;
+		clocks = <&clock_gcc CRYPTO_CLK_SRC>,
+			 <&clock_gcc GCC_CRYPTO_CLK>,
+			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
+			 <&clock_gcc GCC_CRYPTO_AXI_CLK>;
 		clock-names = "core_clk_src", "core_clk",
 				"iface_clk", "bus_clk";
 		qcom,ce-opp-freq = <100000000>;

@@ -12,6 +12,8 @@
  * GNU General Public License for more details.
  */ 
 
+#include <dt-bindings/clock/qcom,audio-ext-clk.h>
+
 #include "msm-audio-lpass.dtsi"
 #include "msm8956-wsa881x.dtsi"
 
@@ -158,7 +160,7 @@
 		pinctrl-1 = <&pm8950_gpio_1>;
 		qcom,audio-ref-clk-gpio = <&pm8950_gpios 1 0>;
 		clock-names = "osr_clk";
-		clocks = <&clock_gcc clk_div_clk2>;
+		clocks = <&clock_rpmcc RPM_DIV_CLK2>;
 		qcom,node_has_rpm_clock;
 		#clock-cells = <1>;
 	};
@@ -237,7 +239,7 @@
 		qcom,wcd-rst-gpio-node = <&wcd_rst_gpio>;
 
 		clock-names = "wcd_clk";
-		clocks = <&clock_audio clk_audio_pmi_clk>;
+		clocks = <&clock_audio AUDIO_PMI_CLK>;
 
 		qcom,cdc-static-supplies = "cdc-vdd-buck",
 				"cdc-buck-sido",
