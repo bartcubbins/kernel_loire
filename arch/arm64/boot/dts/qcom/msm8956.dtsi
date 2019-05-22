@@ -1287,14 +1287,11 @@ cell-index = <0>;
 			 <&clock_rpmcc BIMC_USB_CLK>,
 			 <&clock_rpmcc SNOC_USB_CLK>,
 			 <&clock_rpmcc PNOC_USB_CLK>,
-			 <&clock_gcc GCC_QUSB2_PHY_BCR>,
-			 <&clock_gcc GCC_USB2_HS_PHY_ONLY_BCR>,
 			 <&clock_gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
 			 <&clock_rpmcc CXO_OTG_CLK>;
 		clock-names = "iface_clk", "core_clk", "sleep_clk",
 				"bimc_clk", "snoc_clk", "pcnoc_clk",
-				"phy_reset_clk", "phy_por_clk", "phy_csr_clk",
-				"xo";
+				"phy_csr_clk", "xo";
 		qcom,bus-clk-rate = <320000000 200000000 100000000>;
 		qcom,max-nominal-sysclk-rate = <133330000>;
 

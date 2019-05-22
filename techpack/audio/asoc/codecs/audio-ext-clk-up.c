@@ -243,7 +243,7 @@ static struct audio_ext_pmi_clk audio_pmi_clk = {
 		.div = 1,
 		.hw.init = &(struct clk_init_data){
 			.name = "audio_ext_pmi_clk",
-			.parent_names = (const char *[]){ "qpnp_clkdiv_1" },
+			.parent_names = (const char *[]){ "div_clk2" },
 			.num_parents = 1,
 			.ops = &audio_ext_pmi_clk_ops,
 		},
