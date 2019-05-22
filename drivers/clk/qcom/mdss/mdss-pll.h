@@ -40,6 +40,7 @@
 enum {
 	MDSS_DSI_PLL_10NM,
 	MDSS_DP_PLL_10NM,
+	MDSS_DSI_PLL_28HPM,
 	MDSS_UNKNOWN_PLL,
 };
 
@@ -95,6 +96,10 @@ struct mdss_pll_resources {
 	u32		cached_cfg0;
 	u32		cached_cfg1;
 	u32		cached_outdiv;
+
+	u32		cached_postdiv1;
+	u32		cached_postdiv3;
+	u32		cached_vreg_cfg;
 
 	/* dsi/edp/hmdi pll interface type */
 	u32		pll_interface_type;
