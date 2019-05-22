@@ -30,6 +30,7 @@ obj-$(CONFIG_MDM_LCC_9615) += lcc-mdm9615.o
 obj-$(CONFIG_MSM_CAMCC_SDM845) += camcc-sdm845.o
 obj-$(CONFIG_MSM_CLK_AOP_QMP) += clk-aop-qmp.o
 obj-$(CONFIG_MSM_CLK_RPMH) += clk-rpmh.o
+obj-$(CONFIG_MSM_DISPCC_MSM8976) += dispcc-msm8976.o
 obj-$(CONFIG_MSM_DISPCC_SDM845) += dispcc-sdm845.o
 obj-$(CONFIG_MSM_GCC_8660) += gcc-msm8660.o
 obj-$(CONFIG_MSM_GCC_8916) += gcc-msm8916.o
