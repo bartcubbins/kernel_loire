@@ -2804,7 +2804,7 @@ static int mdss_mdp_probe(struct platform_device *pdev)
 	rc = mdss_mdp_retention_init(mdata);
 	if (rc) {
 		pr_err("unable to initialize mdss mdp retention\n");
-		goto probe_done;
+		//goto probe_done;
 	}
 
 	pm_runtime_set_autosuspend_delay(&pdev->dev, AUTOSUSPEND_TIMEOUT_MS);
