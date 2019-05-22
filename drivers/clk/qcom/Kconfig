@@ -152,6 +152,15 @@ config MSM_DISPCC_MSM8976
 	  Say Y if you want to support display devices and functionality such as
 	  splash screen.
 
+config MSM_GPUCC_MSM8976
+	tristate "MSM8976 Graphics Clock Controller"
+	select MSM_GCC_8976
+	depends on COMMON_CLK_QCOM
+	help
+	  Support for the graphics clock controller on Qualcomm Technologies, Inc.
+	  msm8956/76 devices.
+	  Say Y if you want to support graphics controller devices.
+
 config MSM_GCC_8996
 	tristate "MSM8996 Global Clock Controller"
 	select QCOM_GDSC
