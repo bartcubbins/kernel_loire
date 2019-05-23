@@ -235,33 +235,21 @@ static struct hfpll_data cci_sr_pll_data = {
 	.l_val = 0x20,
 };
 
-static struct clk_pll a53ss_sr_pll = {
-	.mode_reg = 0x0,
-	.l_reg = 0x4,
-	.m_reg = 0x8,
-	.n_reg = 0xC,
-	.user_reg = 0x10,
-	.config_reg = 0x14,
-	.status_reg = 0x1C,
-	.status_bit = 16,
+static struct clk_hfpll a53ss_sr_pll = {
+	.d = &a53ss_sr_pll_data,
+	.init_done = false,
 	.clkr.hw.init = &(struct clk_init_data) {
 		.name = "a53ss_sr_pll",
 		.parent_names = (const char *[]) { "xo_a" },
 		.num_parents = 1,
-		.ops = &clk_pll_sr2_ops,
+		.ops = &clk_ops_hf2_pll,
 		VDD_MX_SR_FMAX_MAP2(SVS, 1000000000, NOM, 2200000000UL),
 	},
 };
 
-static struct clk_pll a72ss_hf_pll = {
-	.mode_reg = 0x0,
-	.l_reg = 0x4,
-	.m_reg = 0x8,
-	.n_reg = 0xC,
-	.user_reg = 0x10,
-	.config_reg = 0x14,
-	.status_reg = 0x1C,
-	.status_bit = 16,
+static struct clk_hfpll a72ss_hf_pll = {
+	.d = &a72ss_hf_pll_data,
+	.init_done = false,
 	.clkr.hw.init = &(struct clk_init_data) {
 		.name = "a72ss_hf_pll",
 		.parent_names = (const char *[]) { "xo_a" },
@@ -272,15 +260,9 @@ static struct clk_pll a72ss_hf_pll = {
 	},
 };
 
-static struct clk_pll cci_sr_pll = {
-	.mode_reg = 0x0,
-	.l_reg = 0x4,
-	.m_reg = 0x8,
-	.n_reg = 0xC,
-	.user_reg = 0x10,
-	.config_reg = 0x14,
-	.status_reg = 0x1C,
-	.status_bit = 16,
+static struct clk_hfpll cci_sr_pll = {
+	.d = &cci_sr_pll_data,
+	.init_done = false,
 	.clkr.hw.init = &(struct clk_init_data) {
 		.name = "cci_sr_pll",
 		.parent_names = (const char *[]) { "xo_a" },
@@ -349,7 +331,7 @@ static struct clk_fixed_factor sys_apcsaux_clk_3 = {
 	},
 };
 
-static struct clk_pll *cpu_ccpll[] = {
+static struct clk_hfpll *cpu_ccpll[] = {
 	&a53ss_sr_pll,
 	&a72ss_hf_pll,
 	&cci_sr_pll
