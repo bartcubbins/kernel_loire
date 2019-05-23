@@ -437,7 +437,7 @@ static const struct freq_tbl ftbl_apss_ahb_clk_src[] = {
 
 static struct clk_rcg2 apss_ahb_clk_src = {
 	.cmd_rcgr = 0x46000,
-	.mnd_width = 0,
+//	.mnd_width = 0,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
 	.freq_tbl = ftbl_apss_ahb_clk_src,
@@ -457,8 +457,8 @@ static const struct freq_tbl ftbl_blsp_i2c_apps_clk_src[] = {
 };
 
 static struct clk_rcg2 blsp1_qup1_i2c_apps_clk_src = {
-	.cmd_rcgr = 0x200c,
-	.mnd_width = 0,
+	.cmd_rcgr = 0x0200c,
+//	.mnd_width = 0,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
 	.freq_tbl = ftbl_blsp_i2c_apps_clk_src,
@@ -483,7 +483,7 @@ static const struct freq_tbl ftbl_blsp_spi_apps_clk_src[] = {
 };
 
 static struct clk_rcg2 blsp1_qup1_spi_apps_clk_src = {
-	.cmd_rcgr = 0x2024,
+	.cmd_rcgr = 0x02024,
 	.mnd_width = 8,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
@@ -498,8 +498,8 @@ static struct clk_rcg2 blsp1_qup1_spi_apps_clk_src = {
 };
 
 static struct clk_rcg2 blsp1_qup2_i2c_apps_clk_src = {
-	.cmd_rcgr = 0x3000,
-	.mnd_width = 0,
+	.cmd_rcgr = 0x03000,
+//	.mnd_width = 0,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
 	.freq_tbl = ftbl_blsp_i2c_apps_clk_src,
@@ -513,7 +513,7 @@ static struct clk_rcg2 blsp1_qup2_i2c_apps_clk_src = {
 };
 
 static struct clk_rcg2 blsp1_qup2_spi_apps_clk_src = {
-	.cmd_rcgr = 0x3014,
+	.cmd_rcgr = 0x03014,
 	.mnd_width = 8,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
@@ -529,7 +529,7 @@ static struct clk_rcg2 blsp1_qup2_spi_apps_clk_src = {
 
 static struct clk_rcg2 blsp1_qup3_i2c_apps_clk_src = {
 	.cmd_rcgr = 0x4000,
-	.mnd_width = 0,
+//	.mnd_width = 0,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
 	.freq_tbl = ftbl_blsp_i2c_apps_clk_src,
@@ -559,7 +559,7 @@ static struct clk_rcg2 blsp1_qup3_spi_apps_clk_src = {
 
 static struct clk_rcg2 blsp1_qup4_i2c_apps_clk_src = {
 	.cmd_rcgr = 0x5000,
-	.mnd_width = 0,
+//	.mnd_width = 0,
 	.hid_width = 5,
 	.parent_map = gcc_xo_gpll0_map,
 	.freq_tbl = ftbl_blsp_i2c_apps_clk_src,
@@ -1522,6 +1522,7 @@ static struct clk_branch gcc_apss_axi_clk = {
 		.enable_mask = BIT(13),
 		.hw.init = &(struct clk_init_data) {
 			.name = "gcc_apss_axi_clk",
+			.flags = CLK_ENABLE_HAND_OFF,
 			.ops = &clk_branch2_ops,
 		},
 	},
