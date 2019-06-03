@@ -362,6 +362,14 @@ config MSM_GCC_SDM660
 	  Say Y if you want to use peripheral devices such as UART, SPI, I2C,
 	  USB, UFS, SD/eMMC, PCIe, etc.
 
+config MSM_GPUCC_SDM660
+	tristate "SDM660 Graphics Clock Controller"
+	depends on COMMON_CLK_QCOM
+	help
+	  Support for the graphics clock controller on Qualcomm Technologies, Inc.
+	  SDM660 devices.
+	  Say Y if you want to support graphics controller devices.
+
 config MSM_GCC_SM6150
 	tristate "SM6150 Global Clock Controller"
 	depends on COMMON_CLK_QCOM

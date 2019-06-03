@@ -3,6 +3,8 @@ Qualcomm Technologies, Inc. Graphics Clock & Reset Controller Binding
 
 Required properties :
 - compatible : shall contain one of the following:
+		"qcom,gpucc-sdm630",
+		"qcom,gpucc-sdm660",
 		"qcom,gpucc-sm8150",
 		"qcom,gpucc-sdmshrike",
 		"qcom,gpucc-sm6150",
