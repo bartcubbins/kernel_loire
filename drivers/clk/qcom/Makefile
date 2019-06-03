@@ -50,6 +50,7 @@ obj-$(CONFIG_MSM_GCC_8960) += gcc-msm8960.o
 obj-$(CONFIG_MSM_GCC_8974) += gcc-msm8974.o
 obj-$(CONFIG_MSM_GCC_8994) += gcc-msm8994.o
 obj-$(CONFIG_MSM_GCC_8996) += gcc-msm8996.o
+obj-$(CONFIG_MSM_GCC_SDM660) += gcc-sdm660.o
 obj-$(CONFIG_MSM_GCC_SM6150) += gcc-sm6150.o
 obj-$(CONFIG_MSM_GCC_SM8150) += gcc-sm8150.o
 obj-$(CONFIG_MSM_GCC_SDMMAGPIE) += gcc-sdmmagpie.o
