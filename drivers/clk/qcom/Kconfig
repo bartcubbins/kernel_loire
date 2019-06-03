@@ -370,6 +370,15 @@ config MSM_GPUCC_SDM660
 	  SDM660 devices.
 	  Say Y if you want to support graphics controller devices.
 
+config MSM_MMCC_SDM660
+	tristate "SDM660 Multimedia Clock Controller"
+	depends on COMMON_CLK_QCOM
+	help
+	  Support for the multimedia clock controller on Qualcomm Technologies, Inc
+	  SDM660 devices.
+	  Say Y if you want to support multimedia devices such as display,
+	  video encode/decode, camera, etc.
+
 config MSM_GCC_SM6150
 	tristate "SM6150 Global Clock Controller"
 	depends on COMMON_CLK_QCOM
