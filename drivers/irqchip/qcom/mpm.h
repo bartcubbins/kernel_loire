@@ -28,4 +28,7 @@ extern const struct mpm_pin mpm_qcs405_gic_chip_data[];
 extern const struct mpm_pin mpm_qcs405_gpio_chip_data[];
 extern const struct mpm_pin mpm_trinket_gic_chip_data[];
 extern const struct mpm_pin mpm_trinket_gpio_chip_data[];
+
+extern const struct mpm_pin mpm_sdm630_gic_chip_data[];
+extern const struct mpm_pin mpm_sdm630_gpio_chip_data[];
 #endif /* __QCOM_MPM_H__ */

@@ -613,6 +613,10 @@ static const struct of_device_id mpm_gic_chip_data_table[] = {
 		.compatible = "qcom,mpm-gic-trinket",
 		.data = mpm_trinket_gic_chip_data,
 	},
+	{
+		.compatible = "qcom,mpm-gic-sdm630",
+		.data = mpm_sdm630_gic_chip_data,
+	},
 	{}
 };
 MODULE_DEVICE_TABLE(of, mpm_gic_chip_data_table);
@@ -629,6 +633,10 @@ static const struct of_device_id mpm_gpio_chip_data_table[] = {
 	{
 		.compatible = "qcom,mpm-gpio-trinket",
 		.data = mpm_trinket_gpio_chip_data,
+	},
+	{
+		.compatible = "qcom,mpm-gpio-sdm630",
+		.data = mpm_sdm630_gpio_chip_data,
 	},
 	{}
 };
