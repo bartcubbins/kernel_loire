@@ -1,0 +1,237 @@
+/* Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019, Pavel Dubrova <pashadubrova@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "sdm630-nile_pinctrl.dtsi"
+#include "dsi-panel-discovery.dtsi"
+
+/ {
+	reserved-memory {
+		ramoops {
+			compatible = "removed-dma-pool", "ramoops";
+			no-map;
+			reg = <0 0xffc00000 0 0x00100000>;
+			record-size = <0x10000>;
+			console-size = <0x40000>;
+			ftrace-size = <0x10000>;
+			pmsg-size = <0x20000>;
+			ecc-size = <16>;
+		};
+	};
+
+	/delete-node/ mtp_batterydata;
+
+	mtp_batterydata_sm12: qcom,battery-data-sm12 {
+		qcom,batt-id-range-pct = <15>;
+		#include "sm12-batterydata-tdk-3200mah.dtsi"
+		#include "sm12-batterydata-somc-3200mah.dtsi"
+	};
+
+	mtp_batterydata_sm22: qcom,battery-data-sm22 {
+		qcom,batt-id-range-pct = <15>;
+		#include "sm22-batterydata-3450mah.dtsi"
+	};
+
+	mtp_batterydata_sm42: qcom,battery-data-sm42 {
+		qcom,batt-id-range-pct = <15>;
+		#include "sm42-batterydata-3450mah.dtsi"
+	};
+};
+
+&soc {
+	somc_pinctrl: somc_pinctrl {
+		compatible = "somc-pinctrl";
+		pinctrl-names = "platform_common_default",
+						"product_common_default",
+						"variant_default";
+		pinctrl-0 = <>;
+
+		/* If product common default setting is needed,
+			fill pinctrl-1 value in <product>_common.dtsi */
+		pinctrl-1 = <>;
+
+		/* If variant specific default setting is needed,
+			fill pinctrl-2 value in <variant>.dtsi */
+		pinctrl-2 = <>;
+	};
+
+	qcom,sensor-information {
+		sensor_information20: qcom,sensor-information-20 { /* msm_therm */
+			qcom,sensor-type =  "adc";
+			qcom,sensor-name = "msm_therm";
+			qcom,scaling-factor = <10>;
+		};
+
+		sensor_information21: qcom,sensor-information-21 { /* quiet_therm */
+			qcom,sensor-type =  "adc";
+			qcom,sensor-name = "quiet_therm";
+			qcom,alias-name = "bl_therm";
+			qcom,scaling-factor = <10>;
+		};
+
+		sensor_information22: qcom,sensor-information-22 { /* ufs_therm */
+			qcom,sensor-type = "adc";
+			qcom,sensor-name = "ufs_therm";
+			qcom,scaling-factor = <10>;
+		};
+
+		sensor_information23: qcom,sensor-information-23 { /* flash_therm */
+			qcom,sensor-type = "adc";
+			qcom,sensor-name = "flash_therm";
+			qcom,scaling-factor = <10>;
+		};
+
+		sensor_information24: qcom,sensor-information-24 { /* xo_therm */
+			qcom,sensor-type = "adc";
+			qcom,sensor-name = "xo_therm";
+		};
+
+		sensor_information25: qcom,sensor-information-25 { /* pa_therm2 */
+			qcom,sensor-type = "adc";
+			qcom,sensor-name = "pa_therm2";
+		};
+
+		sensor_information26: qcom,sensor-information-26 { /* bms */
+			qcom,sensor-type = "adc";
+			qcom,sensor-name = "bms";
+			qcom,alias-name = "batt_therm";
+			qcom,scaling-factor = <1000>;
+		};
+	};
+
+	sim_detect {
+		compatible = "sim-detect";
+
+		sim1_det {
+			label = "sim-detection";
+			gpios = <&tlmm 90 0x1>;
+			debounce-interval = <10>;
+		};
+
+		sim2_det {
+			label = "sim2-detection";
+			gpios = <&tlmm 86 0x1>;
+			debounce-interval = <10>;
+		};
+	};
+};
+
+&usb3 {
+	dwc3@a800000 {
+		maximum-speed = "high-speed";
+		/delete-property/ snps,has-lpm-erratum;
+	};
+};
+
+&qusb_phy0 {
+	qcom,tune2-efuse-num-bits = <0>;
+	qcom,tune2-efuse-correction = <0>;
+
+	// TODO: Checkme after usb implementation
+	qcom,qusb-phy-init-seq-sm12 = <0xa7 0x80
+					0x33 0x84
+					0x83 0x88
+					0x07 0x8c
+					0x30 0x08
+					0x79 0x0c
+					0x21 0x10
+					0x14 0x9c
+					0x9f 0x1c
+					0x00 0x18>;
+		qcom,qusb-phy-init-seq-sm22 = <0xa7 0x80
+					0x33 0x84
+					0x83 0x88
+					0xc7 0x8c
+					0x30 0x08
+					0x79 0x0c
+					0x21 0x10
+					0x14 0x9c
+					0x9f 0x1c
+					0x00 0x18>;
+		qcom,qusb-phy-init-seq-sm42 = <0xa7 0x80
+					0x13 0x84
+					0x83 0x88
+					0xc7 0x8c
+					0x30 0x08
+					0x79 0x0c
+					0x21 0x10
+					0x14 0x9c
+					0x9f 0x1c
+					0x00 0x18
+					0x01 0x90>;
+};
+
+&sdhc_2 {
+	qcom,clk-rates = <384000 400000 20000000 25000000
+			50000000 100000000 200000000>;
+};
+
+&rpm_bus {
+	rpm-regulator-ldoa18 {
+		status = "okay";
+		pm660_l18: regulator-l18 {
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			status = "okay";
+		};
+	};
+};
+
+&pm660l_l6 {
+	qcom,regulator-type = <0>;  /* LDO */
+	qcom,init-enable = <0>;
+	qcom,init-ldo-mode = <1>;
+	qcom,init-pin-ctrl-enable = <0>;
+	qcom,init-pin-ctrl-mode = <0>;
+	qcom,init-voltage = <3300000>;
+};
+
+&pm660_fg {
+	/delete-property/ qcom,battery-data;
+	qcom,battery-data-sm12 = <&mtp_batterydata_sm12>;
+	qcom,battery-data-sm22 = <&mtp_batterydata_sm22>;
+	qcom,battery-data-sm42 = <&mtp_batterydata_sm42>;
+
+	qcom,fg-jeita-thresholds = <5 10 45 55>;
+	qcom,battery-thermal-coefficients = [c7 50 ff];
+};
+
+&mdss_dsi0 {
+	qcom,dsi-pref-prim-pan = <&dsi_td4328_tianma_fhdplus_cmd>;
+};
+
+&i2c_1 {
+	status = "okay";
+	synaptics@70 {
+		compatible = "synaptics,dsx-i2c";
+		reg = <0x70>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <45 0x2008>;
+		pinctrl-names = "pmx_ts_active", "pmx_ts_suspend";
+		pinctrl-0 = <&ts_int_active &ts_lcd_id_active>;
+		pinctrl-1 = <&ts_int_suspend &ts_lcd_id_suspend>;
+		synaptics,pwr-reg-name = "avdd";
+		synaptics,bus-reg-name = "vdd";
+		synaptics,ub-i2c-addr = <0x20>;
+		synaptics,irq-gpio = <&tlmm 45 0x2008>; /* IRQF_ONESHOT | IRQF_TRIGGER_LOW */
+		synaptics,irq-on-state = <0>;
+		synaptics,power-delay-ms = <200>;
+		synaptics,reset-delay-ms = <200>;
+		synaptics,reset-on-state = <0>;
+		synaptics,reset-active-ms = <20>;
+		/* uncomment and update line below as appropriate if there are 0D buttons */
+		/* synaptics,cap-button-codes = <102 158>; */
+		/* uncomment and update lines below as appropriate if there are virtual buttons */
+		/* synaptics,vir-button-codes = <102 100 900 100 60 158 300 900 100 60>; */
+		/* synaptics,max-y-for-2d = <800>; */
+	};
+};
