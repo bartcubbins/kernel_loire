@@ -85,7 +85,7 @@ static struct pll_vco gpu_vco[] = {
 };
 
 /* 800MHz configuration */
-static const struct pll_config gpu_pll0_config = {
+static const struct alpha_pll_config gpu_pll0_config = {
 	.l = 0x29,
 	.config_ctl_val = 0x4001055b,
 	.alpha = 0xaaaaab00,
@@ -141,7 +141,7 @@ static struct clk_init_data gpu_clks_init[] = {
 		.name = "gfx3d_clk_src",
 		.parent_names = gpucc_parent_names_1,
 		.num_parents = 3,
-		.ops = &clk_gfx3d_src_ops,
+		.ops = &clk_gfx3d_ops,
 		.flags = CLK_SET_RATE_PARENT,
 	},
 	[1] = {
@@ -208,7 +208,7 @@ static struct clk_rcg2 gfx3d_clk_src = {
 	.hid_width = 5,
 	.freq_tbl = ftbl_gfx3d_clk_src,
 	.parent_map = gpucc_parent_map_1,
-	.flags = FORCE_ENABLE_RCGR,
+	.flags = FORCE_ENABLE_RCG,
 	.clkr.hw.init = &gpu_clks_init[0],
 };
 
