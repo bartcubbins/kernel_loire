@@ -10,7 +10,7 @@
  * GNU General Public License for more details.
  */
 
-#include <dt-bindings/clock/mdss-pll-clk.h>
+#include <dt-bindings/clock/mdss-14nm-pll-clk.h>
 
 &soc {
 	mdss_mdp: qcom,mdss_mdp@c900000 {
@@ -438,7 +438,7 @@
 			 <&clock_mmss MMSS_MDSS_DP_CRYPTO_CLK>,
 			 <&clock_mmss MMSS_MDSS_DP_PIXEL_CLK>,
 			 <&clock_mmss DP_PIXEL_CLK_SRC>,
-			 <&mdss_dp_pll DP_VCO_DIVIDED_CLK_SRC_MUX>;
+			 <&mdss_dp_pll DP_PHY_PLL_VCO_DIV_CLK>;
 		clock-names = "core_mnoc_clk", "core_iface_clk", "core_bus_clk",
 			"core_mdp_core_clk", "core_alt_iface_clk",
 			"core_aux_clk", "core_ref_clk_src", "core_ref_clk",
