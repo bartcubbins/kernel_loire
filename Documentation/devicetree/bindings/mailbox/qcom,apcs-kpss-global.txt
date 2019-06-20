@@ -12,7 +12,8 @@ platforms.
 		    "qcom,msm8996-apcs-hmss-global",
 		    "qcom,sm8150-apcs-hmss-global",
 		    "qcom,sm8150-spcs-global",
-		    "qcom,sdxprairie-apcs-gcc"
+		    "qcom,sdm630-apcs-hmss-global",
+		    "qcom,sdxprairie-apcs-gcc",
 		    "qcom,trinket-apcs-hmss-global"
 		    "qcom,atoll-apcs-hmss-global"
 		    "qcom,atoll-apcs-hmss-ipc2"
