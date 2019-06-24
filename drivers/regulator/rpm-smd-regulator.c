@@ -57,6 +57,7 @@ enum rpm_regulator_type {
 /* Supported PMIC regulator LDO types */
 enum rpm_regulator_hw_type {
 	RPM_REGULATOR_HW_TYPE_UNKNOWN,
+	RPM_REGULATOR_HW_TYPE_PMIC3_LDO,
 	RPM_REGULATOR_HW_TYPE_PMIC4_LDO,
 	RPM_REGULATOR_HW_TYPE_PMIC5_LDO,
 	RPM_REGULATOR_HW_TYPE_MAX,
@@ -873,6 +874,8 @@ static int rpm_vreg_get_voltage(struct regulator_dev *rdev)
 	return uV;
 }
 
+#define REGULATOR_MODE_PMIC3_LDO_LPM	0
+#define REGULATOR_MODE_PMIC3_LDO_HPM	1
 #define REGULATOR_MODE_PMIC4_LDO_LPM	0
 #define REGULATOR_MODE_PMIC4_LDO_HPM	1
 #define REGULATOR_MODE_PMIC5_LDO_LPM	4
@@ -886,6 +889,10 @@ static int _rpm_vreg_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
 
 	if (mode == REGULATOR_MODE_NORMAL) {
 		switch (reg->rpm_vreg->regulator_hw_type) {
+		case RPM_REGULATOR_HW_TYPE_PMIC3_LDO:
+			hw_mode = REGULATOR_MODE_PMIC3_LDO_HPM;
+			break;
+
 		case RPM_REGULATOR_HW_TYPE_PMIC4_LDO:
 			hw_mode = REGULATOR_MODE_PMIC4_LDO_HPM;
 			break;
@@ -901,6 +908,10 @@ static int _rpm_vreg_ldo_set_mode(struct regulator_dev *rdev, unsigned int mode)
 		}
 	} else if (mode == REGULATOR_MODE_IDLE) {
 		switch (reg->rpm_vreg->regulator_hw_type) {
+		case RPM_REGULATOR_HW_TYPE_PMIC3_LDO:
+			hw_mode = REGULATOR_MODE_PMIC3_LDO_LPM;
+			break;
+
 		case RPM_REGULATOR_HW_TYPE_PMIC4_LDO:
 			hw_mode = REGULATOR_MODE_PMIC4_LDO_LPM;
 			break;
@@ -956,7 +967,8 @@ static unsigned int rpm_vreg_ldo_get_mode(struct regulator_dev *rdev)
 	u32 hw_mode;
 
 	hw_mode = reg->req.param[RPM_REGULATOR_PARAM_MODE_LDO];
-	if (hw_mode == REGULATOR_MODE_PMIC4_LDO_HPM ||
+	if (hw_mode == REGULATOR_MODE_PMIC3_LDO_HPM ||
+			hw_mode == REGULATOR_MODE_PMIC4_LDO_HPM ||
 			hw_mode == REGULATOR_MODE_PMIC5_LDO_HPM)
 		return REGULATOR_MODE_NORMAL;
 
@@ -1925,7 +1937,10 @@ static int rpm_vreg_resource_probe(struct platform_device *pdev)
 			goto fail_free_vreg;
 		}
 
-		if (!strcmp(type, "pmic4-ldo")) {
+		if (!strcmp(type, "pmic3-ldo")) {
+			rpm_vreg->regulator_hw_type
+				= RPM_REGULATOR_HW_TYPE_PMIC3_LDO;
+		} else if (!strcmp(type, "pmic4-ldo")) {
 			rpm_vreg->regulator_hw_type
 				= RPM_REGULATOR_HW_TYPE_PMIC4_LDO;
 		} else if (!strcmp(type, "pmic5-ldo")) {

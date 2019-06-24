@@ -47,6 +47,7 @@ Optional properties:
 			  has been specified with a value of 0 (LDO).
 
 			  Must be one of the below:
+			  "pmic3-ldo" for PMIC3.
 			  "pmic4-ldo" for PMIC4.
 			  "pmic5-ldo" for PMIC5.
 
