@@ -23,6 +23,7 @@
 		#iommu-cells = <1>;
 		qcom,register-save;
 		qcom,skip-init;
+		qcom,no-actlr-read;
 		#global-interrupts = <2>;
 		interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
@@ -66,6 +67,7 @@
 		#iommu-cells = <1>;
 		qcom,register-save;
 		qcom,skip-init;
+		qcom,no-actlr-read;
 		#global-interrupts = <2>;
 		interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
@@ -148,6 +150,7 @@
 		qcom,dynamic;
 		qcom,register-save;
 		qcom,skip-init;
+		qcom,no-actlr-read;
 		#global-interrupts = <2>;
 		interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
 			     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
