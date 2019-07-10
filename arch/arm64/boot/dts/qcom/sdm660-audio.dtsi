@@ -13,6 +13,7 @@
 
 #include "sdm660-wsa881x.dtsi"
 #include "sdm660-lpi.dtsi"
+#include <dt-bindings/clock/qcom,audio-ext-clk.h>
 
 &slim_aud {
 	status = "okay";
