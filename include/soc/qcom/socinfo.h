@@ -102,6 +102,10 @@
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,sdxpoorwills")
 #define early_machine_is_sdm845()	\
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,sdm845")
+#define early_machine_is_sdm630()	\
+	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,sdm630")
+#define early_machine_is_sda630()	\
+	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,sda630")
 #define early_machine_is_sdm670()	\
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,sdm670")
 #define early_machine_is_sxr1130()	\
@@ -191,6 +195,8 @@
 #define early_machine_is_mdm9607()	0
 #define early_machine_is_sdxpoorwills()	0
 #define early_machine_is_sdm845()	0
+#define early_machine_is_sdm630()	0
+#define early_machine_is_sda630()	0
 #define early_machine_is_sdm670()	0
 #define early_machine_is_sxr1130()	0
 #define early_machine_is_qcs605()	0
@@ -276,6 +282,7 @@ enum msm_cpu {
 	MSM_CPU_FALCON,
 	SDX_CPU_SDXPOORWILLS,
 	MSM_CPU_SDM845,
+	MSM_CPU_SDM630,
 	MSM_CPU_SDM670,
 	MSM_CPU_SXR1130,
 	MSM_CPU_QCS605,
