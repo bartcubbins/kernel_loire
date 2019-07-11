@@ -643,6 +643,8 @@
 		};
 	};
 
+	thermal_zones: thermal-zones {};
+
 	tsens: tsens@10ad000 {
 		compatible = "qcom,sdm630-tsens";
 		reg = <0x10ad000 0x2000>;
@@ -2161,10 +2163,11 @@
 };
 
 #include "sdm630-ion.dtsi"
-#include "msm-pm660.dtsi"
-#include "msm-pm660l.dtsi"
-#include "msm-pm660-rpm-regulator.dtsi"
-#include "msm-pm660l-rpm-regulator.dtsi"
+#include "pm660.dtsi"
+#include "pm660l.dtsi"
+#include "pm660-rpm-regulator.dtsi"
+#include "pm660l-rpm-regulator.dtsi"
+#include "sdm630-pmic-overlay.dtsi"
 #include "sdm660-bus.dtsi"
 #include "sdm630-regulator.dtsi"
 #include "msm-gdsc-660.dtsi"
@@ -2264,13 +2267,14 @@
 
 &pm660l_gpios {
 	/* GPIO 7 for VOL_UP */
-	gpio@c600 {
-		status = "okay";
-		qcom,mode = <0>;
-		qcom,pull = <0>;
-		qcom,vin-sel = <0>;
-		qcom,src-sel = <0>;
-		qcom,out-strength = <1>;
+	key_vol_up {
+		key_vol_up_default: key_vol_up_default {
+			pins = "gpio7";
+			function = "normal";
+			input-enable;
+			bias-pull-up;
+			power-source = <0>;
+		};
 	};
 };
 
