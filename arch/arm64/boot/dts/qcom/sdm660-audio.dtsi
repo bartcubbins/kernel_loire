@@ -269,13 +269,14 @@
 };
 
 &pm660_gpios {
-	gpio@c200 {
-		status = "ok";
-		qcom,mode = <1>;
-		qcom,pull = <4>;
-		qcom,vin-sel = <0>;
-		qcom,src-sel = <2>;
-		qcom,master-en = <1>;
-		qcom,out-strength = <2>;
+	tasha_mclk {
+		tasha_mclk_default: tasha_mclk_default{
+			pins = "gpio3";
+			function = "func1";
+			qcom,drive-strength = <2>;
+			power-source = <0>;
+			bias-disable;
+			output-low;
+		};
 	};
 };
