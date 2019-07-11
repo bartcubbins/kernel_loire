@@ -4015,6 +4015,13 @@ static void mdss_mdp_ctl_split_display_enable(int enable,
 			if (is_pingpong_split(main_ctl->mfd))
 				lower |= BIT(2);
 			upper = lower;
+
+			/*
+			 * align command mode stream0 output for
+			 * intferace 1 and 2 to start of frame.
+			 */
+			if (main_ctl->mdata->mdp_rev >= MDSS_MDP_HW_REV_320)
+				lower |= BIT(12);
 		} else {
 			/* interface controlling sw trigger (video mode) */
 			if (main_ctl->intf_num == MDSS_MDP_INTF2) {
@@ -4680,6 +4687,12 @@ static void __mdss_mdp_mixer_get_offsets(u32 mixer_num,
 
 static inline int __mdss_mdp_mixer_get_hw_num(struct mdss_mdp_mixer *mixer)
 {
+	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
+
+	if (mdata->mdp_rev == MDSS_MDP_HW_REV_330
+			&& mixer->num == MDSS_MDP_INTF_LAYERMIXER1)
+		return MDSS_MDP_INTF_LAYERMIXER2;
+
 	/*
 	 * mapping to hardware expectation of actual mixer programming to
 	 * happen on following registers:

@@ -2075,6 +2075,47 @@ static void mdss_mdp_hw_rev_caps_init(struct mdss_data_type *mdata)
 		mdata->has_wb_ubwc = true;
 		set_bit(MDSS_CAPS_10_BIT_SUPPORTED, mdata->mdss_caps_map);
 		break;
+	case MDSS_MDP_HW_REV_320:
+		mdss_set_quirk(mdata, MDSS_QUIRK_DSC_RIGHT_ONLY_PU);
+		mdss_set_quirk(mdata, MDSS_QUIRK_DSC_2SLICE_PU_THRPUT);
+	case MDSS_MDP_HW_REV_330:
+		mdata->max_target_zorder = 7; /* excluding base layer */
+		mdata->max_cursor_size = 512;
+		mdata->per_pipe_ib_factor.numer = 8;
+		mdata->per_pipe_ib_factor.denom = 5;
+		mdata->apply_post_scale_bytes = false;
+		mdata->hflip_buffer_reused = false;
+		mdata->min_prefill_lines = 25;
+		mdata->has_ubwc = true;
+		mdata->pixel_ram_size =
+			(mdata->mdp_rev == MDSS_MDP_HW_REV_320) ? 50 : 40;
+		mdata->pixel_ram_size *= 1024;
+		mdata->rects_per_sspp[MDSS_MDP_PIPE_TYPE_DMA] = 2;
+
+		set_bit(MDSS_QOS_PER_PIPE_IB, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_REMAPPER, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_TS_PREFILL, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_OVERHEAD_FACTOR, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_CDP, mdata->mdss_qos_map); /* cdp supported */
+		mdata->enable_cdp = false; /* disable cdp */
+		set_bit(MDSS_QOS_OTLIM, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_PER_PIPE_LUT, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_SIMPLIFIED_PREFILL, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_TS_PREFILL, mdata->mdss_qos_map);
+		set_bit(MDSS_QOS_IB_NOCR, mdata->mdss_qos_map);
+		set_bit(MDSS_CAPS_YUV_CONFIG, mdata->mdss_caps_map);
+		set_bit(MDSS_CAPS_SCM_RESTORE_NOT_REQUIRED,
+			mdata->mdss_caps_map);
+		set_bit(MDSS_CAPS_3D_MUX_UNDERRUN_RECOVERY_SUPPORTED,
+			mdata->mdss_caps_map);
+		set_bit(MDSS_CAPS_QSEED3, mdata->mdss_caps_map);
+		set_bit(MDSS_CAPS_DEST_SCALER, mdata->mdss_caps_map);
+		mdss_mdp_init_default_prefill_factors(mdata);
+		mdss_set_quirk(mdata, MDSS_QUIRK_MDP_CLK_SET_RATE);
+		mdss_set_quirk(mdata, MDSS_QUIRK_DMA_BI_DIR);
+		mdata->has_wb_ubwc = true;
+		set_bit(MDSS_CAPS_10_BIT_SUPPORTED, mdata->mdss_caps_map);
+		break;
 	default:
 		mdata->max_target_zorder = 4; /* excluding base layer */
 		mdata->max_cursor_size = 64;
@@ -4728,6 +4769,15 @@ static void apply_dynamic_ot_limit(u32 *ot_lim,
 			*ot_lim = rot_ot;
 		else
 			*ot_lim = 6;
+		break;
+	case MDSS_MDP_HW_REV_320:
+	case MDSS_MDP_HW_REV_330:
+		if ((res <= RES_1080p) && (params->frame_rate <= 30))
+			*ot_lim = 2;
+		else if ((res <= RES_1080p) && (params->frame_rate <= 60))
+			*ot_lim = 6;
+		else if ((res <= RES_UHD) && (params->frame_rate <= 30))
+			*ot_lim = 16;
 		break;
 	default:
 		if (res <= RES_1080p) {
