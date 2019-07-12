@@ -163,7 +163,8 @@ struct fb_cursor_user {
 /*      A hardware display blank revert early change occured */
 #define FB_R_EARLY_EVENT_BLANK		0x11
 
-#ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
+#if defined(CONFIG_FB_MSM_MDSS_EARLY_UNBLANK) || \
+    defined(CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL)
 /*      A hardware display extension blank early change occurred */
 #define FB_EXT_EARLY_EVENT_BLANK	0xF0
 /*      A hardware display extension blank change occurred */
