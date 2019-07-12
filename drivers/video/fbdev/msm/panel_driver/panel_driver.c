@@ -116,9 +116,9 @@ void panel_driver_detection(
 
 static int panel_driver_vreg_name_to_config(
 		struct mdss_dsi_ctrl_pdata *ctrl_pdata,
-		struct mdss_vreg *config, char *name)
+		struct dss_vreg *config, char *name)
 {
-	struct mdss_vreg *vreg_config = ctrl_pdata->panel_power_data.vreg_config;
+	struct dss_vreg *vreg_config = ctrl_pdata->panel_power_data.vreg_config;
 	int num_vreg = ctrl_pdata->panel_power_data.num_vreg;
 	int i = 0;
 	int valid = -EINVAL;
@@ -137,7 +137,7 @@ static int panel_driver_vreg_name_to_config(
 static int panel_driver_vreg_ctrl(
 		struct mdss_dsi_ctrl_pdata *ctrl_pdata, char *vreg, bool enable)
 {
-	struct mdss_vreg vreg_config;
+	struct dss_vreg vreg_config;
 	struct mdss_panel_power_seq *pw_seq = NULL;
 	int valid = 0;
 	int wait = 0;
@@ -148,10 +148,10 @@ static int panel_driver_vreg_ctrl(
 
 	if (!valid) {
 		if (enable) {
-			ret = msm_mdss_enable_vreg(&vreg_config, 1, 1);
+			ret = msm_dss_enable_vreg(&vreg_config, 1, 1);
 			pw_seq = &ctrl_pdata->spec_pdata->on_seq;
 		} else {
-			ret = msm_mdss_enable_vreg(&vreg_config, 1, 0);
+			ret = msm_dss_enable_vreg(&vreg_config, 1, 0);
 			pw_seq = &ctrl_pdata->spec_pdata->off_seq;
 		}
 
@@ -2636,7 +2636,7 @@ void panel_driver_labibb_vreg_init(
 	struct mdss_panel_info *pinfo = NULL;
 	struct mdss_panel_specific_pdata *spec_pdata = NULL;
 	struct mdss_panel_labibb_data *labibb = NULL;
-	struct mdss_vreg lab_vreg_config, ibb_vreg_config;
+	struct dss_vreg lab_vreg_config, ibb_vreg_config;
 
 	pinfo = &ctrl_pdata->panel_data.panel_info;
 	if (!pinfo) {
