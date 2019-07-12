@@ -66,6 +66,7 @@ obj-$(CONFIG_MEMORY_STATE_TIME)	+= memory_state_time.o
 
 obj-$(CONFIG_LDO_VIBRATOR)	+= ldo_vibrator.o
 obj-$(CONFIG_NFC_PN547)		+= pn547.o
+obj-$(CONFIG_POWERKEY_FORCECRASH)	+= powerkey_forcecrash.o
 
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_core.o
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_bugs.o
