@@ -70,6 +70,7 @@ obj-$(CONFIG_VXR200_XR_MISC) += vxr7200.o
 
 obj-$(CONFIG_LDO_VIBRATOR)	+= ldo_vibrator.o
 obj-$(CONFIG_NFC_PN547)		+= pn547.o
+obj-$(CONFIG_POWERKEY_FORCECRASH)	+= powerkey_forcecrash.o
 
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_core.o
 lkdtm-$(CONFIG_LKDTM)		+= lkdtm_bugs.o
