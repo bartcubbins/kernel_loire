@@ -137,6 +137,16 @@ config ARCH_SDM845
 	  This enables support for the SDM845 chipset. If you do not
 	  wish to build a kernel that runs on this chipset, say 'N' here.
 
+config ARCH_SDM630
+	bool "Enable Support for Qualcomm Technologies Inc SDM630"
+	depends on ARCH_QCOM
+	select COMMON_CLK
+	select COMMON_CLK_QCOM
+	select QCOM_GDSC
+	help
+	  This enables support for the SDM630 chipset. If you do not
+	  wish to build a kernel that runs on this chipset, say 'N' here.
+
 config ARCH_SDM670
 	bool "Enable Support for Qualcomm Technologies Inc. SDM670"
 	depends on ARCH_QCOM
@@ -375,6 +385,22 @@ config MACH_SONY_KUGO
 	help
 	  Support for the SONY Mobile Kugo device
 	  which is based on SONY Loire platform.
+
+config ARCH_SONY_NILE
+	bool "Sony Mobile Nile platform"
+	depends on ARCH_SDM630
+	help
+	  Support for the SONY Mobile Nile platform
+	  which is based on QCOM SDM630 chipset.
+	  If you enable this config,
+	  please use SONY Mobile device tree.
+
+config MACH_SONY_DISCOVERY
+	bool "Sony Mobile Discovery"
+	depends on ARCH_SONY_NILE
+	help
+	  Support for the SONY Mobile Discovery device
+	  which is based on SONY Nile platform.
 	  If you enable this config,
 	  please use SONY Mobile device tree.
 

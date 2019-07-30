@@ -22,6 +22,7 @@ obj-$(CONFIG_PINCTRL_QCOM_SSBI_PMIC) += pinctrl-ssbi-gpio.o
 obj-$(CONFIG_PINCTRL_QCOM_SSBI_PMIC) += pinctrl-ssbi-mpp.o
 obj-$(CONFIG_PINCTRL_SOMC)      += pinctrl-somc.o
 obj-$(CONFIG_PINCTRL_SDM845) += pinctrl-sdm845.o pinctrl-sdm845-v2.o
+obj-$(CONFIG_PINCTRL_SDM660) += pinctrl-sdm660.o
 obj-$(CONFIG_PINCTRL_SDM670) += pinctrl-sdm670.o
 obj-$(CONFIG_PINCTRL_SDXPOORWILLS)	+= pinctrl-sdxpoorwills.o
 obj-$(CONFIG_PINCTRL_MDM9650)	+= pinctrl-mdm9650.o

@@ -12,7 +12,7 @@
 
 #ifndef __MDSS_PLL_H
 #define __MDSS_PLL_H
-#include <linux/sde_io_util.h>
+
 #include <linux/clk-provider.h>
 #include <linux/io.h>
 #include <linux/clk.h>
@@ -22,6 +22,11 @@
 #include "../clk-regmap-divider.h"
 #include "../clk-regmap-mux.h"
 
+#if defined(CONFIG_DRM)
+#include <linux/sde_io_util.h>
+#else
+#include <linux/mdss_io_util.h>
+#endif
 
 #define MDSS_PLL_REG_W(base, offset, data)	\
 				writel_relaxed((data), (base) + (offset))
@@ -40,6 +45,8 @@
 enum {
 	MDSS_DSI_PLL_10NM,
 	MDSS_DP_PLL_10NM,
+	MDSS_DSI_PLL_14NM,
+	MDSS_DP_PLL_14NM,
 	MDSS_UNKNOWN_PLL,
 };
 
@@ -200,7 +207,12 @@ static inline bool is_gdsc_disabled(struct mdss_pll_resources *pll_res)
 		WARN(1, "gdsc_base register is not defined\n");
 		return true;
 	}
+#ifdef CONFIG_ARCH_SDM630
+	return ((readl_relaxed(pll_res->gdsc_base + 0x4) & BIT(31)) &&
+		(!(readl_relaxed(pll_res->gdsc_base) & BIT(0)))) ? false : true;
+#else
 	return readl_relaxed(pll_res->gdsc_base) & BIT(31) ? false : true;
+#endif
 }
 
 static inline int mdss_pll_div_prepare(struct clk_hw *hw)
