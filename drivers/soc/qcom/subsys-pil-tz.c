@@ -1091,7 +1091,7 @@ static int pil_tz_driver_probe(struct platform_device *pdev)
 			return rc;
 		}
 
-#ifdef CONFIG_ARCH_MSM8916
+#if defined(CONFIG_ARCH_MSM8916) || defined(CONFIG_ARCH_SDM630)
 		crypto_id = MSM_BUS_MASTER_CRYPTO_CORE0;
 #else
 		crypto_id = MSM_BUS_MASTER_CRYPTO_CORE_0;
