@@ -140,6 +140,18 @@
 			debounce-interval = <10>;
 		};
 	};
+
+	gpio_keys {
+		/delete-node/ vol_up;
+		vol_down {
+			label = "volume_down";
+			gpios = <&pm660l_gpios 7 0x1>;
+			linux,input-type = <1>;
+			linux,code = <114>;
+			gpio-key,wakeup;
+			debounce-interval = <15>;
+		};
+	};
 };
 
 &usb3 {
@@ -200,6 +212,15 @@
 			regulator-max-microvolt = <1800000>;
 			status = "okay";
 		};
+	};
+};
+
+&pm660_pon {
+	/delete-property/ kpdpwr-sw-debounce;
+	qcom,pon_2 {
+		qcom,pon-type = <1>;
+		qcom,pull-up = <1>;
+		linux,code = <115>;
 	};
 };
 
