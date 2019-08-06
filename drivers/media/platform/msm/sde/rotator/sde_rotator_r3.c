@@ -2473,8 +2473,8 @@ static void sde_hw_rotator_free_ext(struct sde_rot_mgr *mgr,
 	 * rotator session ends, so that it will be mapped again when a fresh
 	 * session starts.
 	 */
-	if (((mdata->mdss_version == MDSS_MDP_HW_REV_320) ||
-		(mdata->mdss_version == MDSS_MDP_HW_REV_330)) &&
+	if (((mdata->mdss_version == SDE_MDP_HW_REV_320) ||
+		(mdata->mdss_version == SDE_MDP_HW_REV_330)) &&
 			resinfo->rot->swts_buf.mapped)
 		sde_hw_rotator_swtc_unmap(resinfo->rot);
 
