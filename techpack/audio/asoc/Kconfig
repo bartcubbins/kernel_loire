@@ -14,7 +14,7 @@ config SND_SOC_INT_CODEC
 	bool "SND_SOC_INT_CODEC"
 
 config SND_SOC_EXT_CODEC
-	bool "SND_SOC_INT_CODEC"
+	bool "SND_SOC_EXT_CODEC"
 
 config SND_SOC_MACHINE_SDM845
 	bool "SoC Machine Driver for SDM845 Boards"
