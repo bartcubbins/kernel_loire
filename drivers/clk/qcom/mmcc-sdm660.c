@@ -534,6 +534,7 @@ static struct clk_rcg2 ahb_clk_src = {
 		.name = "ahb_clk_src",
 		.parent_names = mmcc_parent_names_10,
 		.num_parents = 5,
+		.flags = CLK_SET_RATE_PARENT,
 		.ops = &clk_rcg2_ops,
 		VDD_DIG_FMAX_MAP3(
 			LOWER, 19200000,
