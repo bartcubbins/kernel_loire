@@ -1,0 +1,21 @@
+name: Loire Kugo builder
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Cloning cross compiler
+      run: |
+        git clone --branch android-9.0.0_r47 --depth 1 https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9
+    - name: Building Loire Kugo kernel
+      run: |
+        export CROSS_COMPILE=aarch64-linux-android-4.9/bin/aarch64-linux-android-
+        time make ARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE loire_kugo_defconfig
+        time make ARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE -j$(nproc)
