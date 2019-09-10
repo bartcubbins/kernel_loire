@@ -17,6 +17,7 @@
 #include "../qcom/sdm630-mtp.dtsi"
 #include "../qcom/sdm660-internal-codec.dtsi"
 #include "sdm630-nile-discovery.dtsi"
+#include "sdm630-nile-discovery_camera.dtsi"
 
 / {
 	model = "Sony Xperia XA2 Ultra (Discovery)";
