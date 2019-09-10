@@ -248,6 +248,26 @@
 	qcom,vmax-mv = <3000>;
 };
 
+&pm660l_torch0 {
+	qcom,current-ma = <100>;
+};
+
+&pm660l_torch1 {
+	qcom,current-ma = <100>;
+};
+
+&pm660l_torch2 {
+	qcom,current-ma = <100>;
+};
+
+&pm660l_switch0 {
+	qcom,led-mask = <1>;
+};
+
+&pm660l_switch1 {
+	qcom,led-mask = <2>;
+};
+
 &mdss_dsi0 {
 	qcom,dsi-pref-prim-pan = <&dsi_td4328_tianma_fhdplus_cmd>;
 };
