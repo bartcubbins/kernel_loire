@@ -63,15 +63,6 @@
 
 #include "io-pgtable.h"
 
-/*
- * Apparently, some Qualcomm arm64 platforms which appear to expose their SMMU
- * global register space are still, in fact, using a hypervisor to mediate it
- * by trapping and emulating register accesses. Sadly, some deployed versions
- * of said trapping code have bugs wherein they go horribly wrong for stores
- * using r31 (i.e. XZR/WZR) as the source register.
- */
-#define QCOM_DUMMY_VAL -1
-
 /* Maximum number of context banks per SMMU */
 #define ARM_SMMU_MAX_CBS		128
 
@@ -1200,7 +1191,7 @@ static void __arm_smmu_tlb_sync(struct arm_smmu_device *smmu)
 	int count = 0;
 	void __iomem *gr0_base = ARM_SMMU_GR0(smmu);
 
-	writel_relaxed(QCOM_DUMMY_VAL, gr0_base + ARM_SMMU_GR0_sTLBGSYNC);
+	writel_relaxed(0, gr0_base + ARM_SMMU_GR0_sTLBGSYNC);
 	while (readl_relaxed(gr0_base + ARM_SMMU_GR0_sTLBGSTATUS)
 	       & sTLBGSTATUS_GSACTIVE) {
 		cpu_relax();
@@ -3906,8 +3897,8 @@ static void arm_smmu_device_reset(struct arm_smmu_device *smmu)
 	}
 
 	/* Invalidate the TLB, just in case */
-	writel_relaxed(QCOM_DUMMY_VAL, gr0_base + ARM_SMMU_GR0_TLBIALLH);
-	writel_relaxed(QCOM_DUMMY_VAL, gr0_base + ARM_SMMU_GR0_TLBIALLNSNH);
+	writel_relaxed(0, gr0_base + ARM_SMMU_GR0_TLBIALLH);
+	writel_relaxed(0, gr0_base + ARM_SMMU_GR0_TLBIALLNSNH);
 
 	reg = readl_relaxed(ARM_SMMU_GR0_NS(smmu) + ARM_SMMU_GR0_sCR0);
 
