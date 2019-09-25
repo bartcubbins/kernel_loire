@@ -331,6 +331,7 @@
 	qcom,use-blink;
 };
 
+#if 0
 &int_codec {
 	status = "ok";
 	/delete-property/ qcom,msm-micbias2-ext-cap;
@@ -370,3 +371,4 @@
 	qcom,wsa-aux-dev-prefix = "SpkrLeft", "SpkrLeft",
 				  "SpkrLeft", "SpkrLeft";
 };
+#endif
