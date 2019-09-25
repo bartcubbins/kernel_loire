@@ -1,0 +1,341 @@
+/* Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019, Pavel Dubrova <pashadubrova@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+ &tlmm {
+	/delete-node/ ts_mux;
+
+	/* GPIO_20 : FP_RESET_N */
+	msm_gpio_20: msm_gpio_20 {
+		mux {
+			pins = "gpio20";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio20";
+			drive-strength = <2>;
+			bias-disable;
+			output-low;
+		};
+	};
+
+	/* GPIO_20 : FP_RESET_N, state device active*/
+	msm_gpio_20_output_high: msm_gpio_20_output_high {
+		mux {
+			pins = "gpio20";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio20";
+			drive-strength = <2>;
+			bias-disable;
+			output-high;
+		};
+	};
+
+	/* GPIO_72 : FP_INT_N */
+	msm_gpio_72: msm_gpio_72 {
+		mux {
+			pins = "gpio72";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio72";
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+
+	spi_6 {
+		spi_6_active: spi_6_active {
+			mux {
+				pins = "gpio49", "gpio34",
+					"gpio22", "gpio23";
+				function = "blsp_spi6";
+			};
+
+			config {
+				pins = "gpio49", "gpio34",
+					"gpio22", "gpio23";
+				drive-strength = <6>;
+				bias-disable;
+			};
+		};
+
+		spi_6_sleep: spi_6_sleep {
+			mux {
+				pins = "gpio49", "gpio34",
+					"gpio22", "gpio23";
+				function = "blsp_spi6";
+			};
+
+			config {
+				pins = "gpio49", "gpio34",
+					"gpio22", "gpio23";
+				drive-strength = <6>;
+				bias-disable;
+			};
+		};
+	};
+
+	cam_sensor_rear_active: cam_sensor_rear_active {
+		/* RESET */
+		mux {
+			pins = "gpio46";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio46";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_suspend: cam_sensor_rear_suspend {
+		/* RESET */
+		mux {
+			pins = "gpio46";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio46";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vdig_active: cam_sensor_rear_vdig_active {
+		/* VDIG */
+		mux {
+			pins = "gpio52";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio52";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vdig_suspend: cam_sensor_rear_vdig_suspend {
+		/* VDIG */
+		mux {
+			pins = "gpio52";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio52";
+			bias-pull-down; /* PULL DOWN */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vio_active: cam_sensor_rear_vio_active {
+		/* VIO */
+		mux {
+			pins = "gpio13";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio13";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vio_suspend: cam_sensor_rear_vio_suspend {
+		/* VIO */
+		mux {
+			pins = "gpio13";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio13";
+			bias-pull-down; /* PULL DOWN */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vana_active: cam_sensor_rear_vana_active {
+		/* VANA */
+		mux {
+			pins = "gpio50";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio50";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_rear_vana_suspend: cam_sensor_rear_vana_suspend {
+		/* VANA */
+		mux {
+			pins = "gpio50";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio50";
+			bias-pull-down; /* PULL DOWN */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_mclk2_active: cam_sensor_mclk2_active {
+		/* MCLK2 */
+		mux {
+			/* CLK */
+			pins = "gpio35";
+			function = "cam_mclk";
+		};
+
+		config {
+			pins = "gpio35";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_mclk2_suspend: cam_sensor_mclk2_suspend {
+		/* MCLK2 */
+		mux {
+			/* CLK */
+			pins = "gpio35";
+			function = "cam_mclk";
+		};
+
+		config {
+			pins = "gpio35";
+			bias-pull-down; /* PULL DOWN */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_front2_active: cam_sensor_front2_active {
+		/* RESET */
+		mux {
+			pins = "gpio42";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio42";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_front2_suspend: cam_sensor_front2_suspend {
+		/* RESET */
+		mux {
+			pins = "gpio42";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio42";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_front_active: cam_sensor_front_active {
+		/* RESET */
+		mux {
+			pins = "gpio47";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio47";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	cam_sensor_cameraid: cam_sensor_cameraid {
+		mux {
+			pins = "gpio49";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio49";
+			bias-disable; /* No PULL */
+			drive-strength = <2>; /* 2 MA */
+		};
+	};
+
+	ts_int_active: ts_int_active {
+		mux {
+			pins = "gpio45";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio45";
+			drive-strength = <8>;
+			bias-pull-up;
+		};
+	};
+
+	ts_lcd_id_active: ts_lcd_id_active {
+		mux {
+			pins = "gpio56";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio56";
+			drive-strength = <8>;
+			bias-disable;
+		};
+	};
+
+	ts_int_suspend: ts_int_suspend {
+		mux {
+			pins = "gpio45";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio45";
+			drive-strength = <8>;
+			bias-pull-up;
+		};
+	};
+
+	ts_lcd_id_suspend: ts_lcd_id_suspend {
+		mux {
+			pins = "gpio56";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio56";
+			drive-strength = <8>;
+			bias-disable;
+		};
+	};
+};
