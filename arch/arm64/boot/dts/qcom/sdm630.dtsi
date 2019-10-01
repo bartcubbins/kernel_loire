@@ -281,6 +281,13 @@
 	};
 
 	clocks {
+		bi_tcxo {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <19200000>;
+			clock-output-names = "bi_tcxo";
+		};
+
 		xo_board {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
