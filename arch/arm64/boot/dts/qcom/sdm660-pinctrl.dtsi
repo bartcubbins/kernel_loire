@@ -14,7 +14,7 @@
 	tlmm: pinctrl@03000000 {
 		compatible = "qcom,sdm660-pinctrl";
 		reg = <0x03000000 0xc00000>;
-		reg-names = "pinctrl_regs";
+		reg-names = "pinctrl";
 		interrupts-extended = <&wakegic GIC_SPI 208 IRQ_TYPE_NONE>;
 		gpio-controller;
 		#gpio-cells = <2>;
