@@ -45,7 +45,9 @@
 #include <linux/input/mt.h>
 #endif
 
+#ifdef CONFIG_DRM
 #include <linux/msm_drm_notify.h>
+#endif
 #include <linux/completion.h>
 
 #define INPUT_PHYS_NAME "synaptics_dsx/touch_input"
@@ -126,15 +128,11 @@ static int synaptics_rmi4_free_fingers(struct synaptics_rmi4_data *rmi4_data);
 static int synaptics_rmi4_reinit_device(struct synaptics_rmi4_data *rmi4_data);
 static int synaptics_rmi4_reset_device(struct synaptics_rmi4_data *rmi4_data,
 		bool rebuild);
-#ifdef CONFIG_FB
 static int synaptics_rmi4_dsi_panel_notifier_cb(struct notifier_block *self,
 		unsigned long event, void *data);
-#endif
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
-#ifndef CONFIG_FB
 #define USE_EARLYSUSPEND
-#endif
 #endif
 
 #ifdef USE_EARLYSUSPEND
@@ -4279,17 +4277,19 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 	vir_button_map = bdata->vir_button_map;
 
 	rmi4_data->initialized = false;
-#ifdef CONFIG_FB
 	rmi4_data->fb_notifier.notifier_call =
 					synaptics_rmi4_dsi_panel_notifier_cb;
+#ifdef CONFIG_DRM
 	retval = msm_drm_register_client(&rmi4_data->fb_notifier);
+#else
+	retval = fb_register_client(&rmi4_data->fb_notifier);
+#endif
 	if (retval < 0) {
 		dev_err(&pdev->dev,
-				"%s: Failed to register fb notifier client\n",
+				"%s: Failed to register DRM/FB notifier client\n",
 				__func__);
 		goto err_drm_reg;
 	}
-#endif
 
 	rmi4_data->rmi4_probe_wq = create_singlethread_workqueue(
 						"Synaptics_rmi4_probe_wq");
@@ -4305,8 +4305,10 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 	return retval;
 
 err_probe_wq:
-#ifdef CONFIG_FB
+#ifdef CONFIG_DRM
 	msm_drm_unregister_client(&rmi4_data->fb_notifier);
+#else
+	fb_unregister_client(&rmi4_data->fb_notifier);
 #endif
 
 err_drm_reg:
@@ -4538,8 +4540,10 @@ err_enable_reg:
 
 err_get_reg:
 err_drm_init_wait:
-#ifdef CONFIG_FB
+#ifdef CONFIG_DRM
 	msm_drm_unregister_client(&rmi4_data->fb_notifier);
+#else
+	fb_unregister_client(&rmi4_data->fb_notifier);
 #endif
 	cancel_work_sync(&rmi4_data->rmi4_probe_work);
 	destroy_workqueue(rmi4_data->rmi4_probe_wq);
@@ -4582,8 +4586,10 @@ static int synaptics_rmi4_remove(struct platform_device *pdev)
 
 	synaptics_rmi4_irq_enable(rmi4_data, false, false);
 
-#ifdef CONFIG_FB
+#ifdef CONFIG_DRM
 	msm_drm_unregister_client(&rmi4_data->fb_notifier);
+#else
+	fb_unregister_client(&rmi4_data->fb_notifier);
 #endif
 
 #ifdef USE_EARLYSUSPEND
@@ -4628,15 +4634,16 @@ static int synaptics_rmi4_remove(struct platform_device *pdev)
 	return 0;
 }
 
-#ifdef CONFIG_FB
 static int synaptics_rmi4_dsi_panel_notifier_cb(struct notifier_block *self,
 		unsigned long event, void *data)
 {
 	int transition;
-	struct msm_drm_notifier *evdata = data;
 	struct synaptics_rmi4_data *rmi4_data =
 			container_of(self, struct synaptics_rmi4_data,
 			fb_notifier);
+
+#ifdef CONFIG_DRM
+	struct msm_drm_notifier *evdata = data;
 
 	if (!evdata || (evdata->id != 0))
 		return 0;
@@ -4666,10 +4673,40 @@ static int synaptics_rmi4_dsi_panel_notifier_cb(struct notifier_block *self,
 			}
 		}
 	}
+#else
+	struct fb_event *evdata = data;
 
+	if (!evdata)
+		return 0;
+
+	if (evdata && evdata->data && rmi4_data) {
+		if (event == FB_EARLY_EVENT_BLANK) {
+			transition = *(int *)evdata->data;
+			if (transition == FB_BLANK_POWERDOWN) {
+				if (rmi4_data->initialized)
+					synaptics_rmi4_suspend(
+							&rmi4_data->pdev->dev);
+				rmi4_data->fb_ready = false;
+			}
+		}
+	}
+
+	if (evdata && evdata->data && rmi4_data) {
+		if (event == FB_EVENT_BLANK) {
+			transition = *(int *)evdata->data;
+			if (transition == FB_BLANK_UNBLANK) {
+				if (rmi4_data->initialized)
+					synaptics_rmi4_resume(
+							&rmi4_data->pdev->dev);
+				else
+					complete(&rmi4_data->drm_init_done);
+				rmi4_data->fb_ready = true;
+			}
+		}
+	}
+#endif
 	return 0;
 }
-#endif
 
 #ifdef USE_EARLYSUSPEND
 static int synaptics_rmi4_early_suspend(struct early_suspend *h)
@@ -4911,10 +4948,8 @@ exit:
 
 #ifdef CONFIG_PM
 static const struct dev_pm_ops synaptics_rmi4_dev_pm_ops = {
-#ifndef CONFIG_FB
 	.suspend = synaptics_rmi4_suspend,
 	.resume = synaptics_rmi4_resume,
-#endif
 };
 #endif
 
