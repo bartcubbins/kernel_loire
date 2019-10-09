@@ -2034,6 +2034,18 @@ static int dsi_display_parse_boot_display_selection(void)
 	char disp_buf[MAX_CMDLINE_PARAM_LEN] = {'\0'};
 	int i, j, num_displays;
 
+#ifdef CONFIG_ARCH_SONY_NILE
+	if (strstr(saved_command_line, "qcom,mdss_dsi_td4322_innolux_fhd_cmd") != NULL) {
+		strcpy(dsi_display_primary, "dsi_td4322_innolux_fhd_cmd_display:config0");
+	} else if (strstr(saved_command_line, "qcom,mdss_dsi_td4322_truly_fhd_cmd") != NULL) {
+		strcpy(dsi_display_primary, "dsi_td4322_truly_fhd_cmd_display:config0");
+	} else if (strstr(saved_command_line, "qcom,mdss_dsi_td4322_csot_fhd_cmd") != NULL) {
+		strcpy(dsi_display_primary, "dsi_td4322_csot_fhd_cmd_display:config0");
+	} else if (strstr(saved_command_line, "qcom,mdss_dsi_td4328_tianma_fhdplus_cmd") != NULL) {
+		strcpy(dsi_display_primary, "dsi_td4328_tianma_fhdplus_cmd_display:config0");
+	}
+#endif
+
 	if (strlen(dsi_display_primary) == 0)
 		return -EINVAL;
 
