@@ -12,6 +12,7 @@
 
 #include "sdm660-pinctrl.dtsi"
 #include "sdm630-camera-sensor-mtp.dtsi"
+#include "sdm630-sde-display.dtsi"
 
 / {
 	mtp_batterydata: qcom,battery-data {
@@ -146,32 +147,6 @@
 	cd-gpios = <&tlmm 54 0x1>;
 
 	status = "ok";
-};
-
-&mdss_mdp {
-	qcom,mdss-pref-prim-intf = "dsi";
-};
-
-&mdss_dsi {
-	hw-config = "single_dsi";
-};
-
-&mdss_dsi0 {
-	qcom,dsi-pref-prim-pan = <&dsi_nt35695b_truly_fhd_video>;
-	pinctrl-names = "mdss_default", "mdss_sleep";
-	pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
-	pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
-	qcom,platform-reset-gpio = <&tlmm 53 0>;
-	qcom,platform-te-gpio = <&tlmm 59 0>;
-};
-
-&mdss_dp_ctrl {
-	pinctrl-names = "mdss_dp_active", "mdss_dp_sleep";
-	pinctrl-0 = <&mdss_dp_aux_active &mdss_dp_usbplug_cc_active>;
-	pinctrl-1 = <&mdss_dp_aux_suspend &mdss_dp_usbplug_cc_suspend>;
-	qcom,aux-en-gpio = <&tlmm 55 0>;
-	qcom,aux-sel-gpio = <&tlmm 56 0>;
-	qcom,usbplug-cc-gpio = <&tlmm 58 0>;
 };
 
 &pm660l_wled {
