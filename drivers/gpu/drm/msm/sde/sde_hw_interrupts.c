@@ -246,6 +246,7 @@ static const struct sde_intr_reg sde_intr_set[] = {
 		MDP_INTF_4_OFF+INTF_INTR_EN,
 		MDP_INTF_4_OFF+INTF_INTR_STATUS
 	},
+#ifndef CONFIG_ARCH_SDM630
 	{
 		MDP_AD4_0_OFF + MDP_AD4_INTR_CLEAR_OFF,
 		MDP_AD4_0_OFF + MDP_AD4_INTR_EN_OFF,
@@ -256,6 +257,7 @@ static const struct sde_intr_reg sde_intr_set[] = {
 		MDP_AD4_1_OFF + MDP_AD4_INTR_EN_OFF,
 		MDP_AD4_1_OFF + MDP_AD4_INTR_STATUS_OFF,
 	}
+#endif
 };
 
 /**
