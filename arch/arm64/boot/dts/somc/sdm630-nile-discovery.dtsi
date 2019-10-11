@@ -269,10 +269,6 @@
 	qcom,led-mask = <2>;
 };
 
-&mdss_dsi0 {
-	qcom,dsi-pref-prim-pan = <&dsi_td4328_tianma_fhdplus_cmd>;
-};
-
 &i2c_1 {
 	status = "okay";
 	synaptics@70 {
