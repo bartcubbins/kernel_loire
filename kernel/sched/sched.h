@@ -2930,6 +2930,11 @@ static inline int is_reserved(int cpu)
 	return 0;
 }
 
+static inline int mark_reserved(int cpu)
+{
+	return 0;
+}
+
 static inline int got_boost_kick(void)
 {
 	return 0;
