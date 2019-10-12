@@ -84,10 +84,10 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
 TARGET_KERNEL := msm-$(TARGET_KERNEL_VERSION)
 ifeq ($(TARGET_KERNEL),$(current_dir))
-    # New style, kernel/msm-version
-    BUILD_ROOT_LOC := ../../
-    TARGET_KERNEL_SOURCE := kernel/$(TARGET_KERNEL)
-    KERNEL_OUT := $(TARGET_OUT_INTERMEDIATES)/kernel/$(TARGET_KERNEL)
+    # New style, kernel/sony/msm-version
+    BUILD_ROOT_LOC := ../../../
+    TARGET_KERNEL_SOURCE := kernel/sony/$(TARGET_KERNEL)
+    KERNEL_OUT := $(TARGET_OUT_INTERMEDIATES)/kernel/sony/$(TARGET_KERNEL)
     KERNEL_SYMLINK := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ
     KERNEL_USR := $(KERNEL_SYMLINK)/usr
     KERNEL_VM_OUT := $(TARGET_OUT_INTERMEDIATES)/kernel_vm/$(TARGET_KERNEL)
@@ -164,7 +164,7 @@ $(TARGET_PREBUILT_INT_KERNEL_VM): ;
 ifneq ($(KERNEL_LEGACY_DIR),true)
 $(KERNEL_USR): $(KERNEL_HEADERS_INSTALL)
 	rm -rf $(KERNEL_SYMLINK)
-	ln -s kernel/$(TARGET_KERNEL) $(KERNEL_SYMLINK)
+	ln -s kernel/sony/$(TARGET_KERNEL) $(KERNEL_SYMLINK)
 
 $(TARGET_PREBUILT_INT_KERNEL): $(KERNEL_USR)
 
