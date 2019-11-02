@@ -881,11 +881,7 @@ static struct snd_soc_dai_link msm8952_common_fe_dai[] = {
 		.name = "MSM8X16 Compress9",
 		.stream_name = "Compress9",
 		.cpu_dai_name	= "MultiMedia16",
-#ifdef CONFIG_ARCH_SONY_LOIRE
-		.platform_name  = "msm-compress-dsp",
-#else
 		.platform_name  = "msm-pcm-dsp-noirq",
-#endif
 		.dynamic = 1,
 		.dpcm_playback = 1,
 		.trigger = {SND_SOC_DPCM_TRIGGER_POST,
