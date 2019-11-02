@@ -402,14 +402,12 @@ struct miscdevice audio_evrc_in_misc = {
 	.fops	= &audio_in_fops,
 };
 
-static int __init evrc_in_init(void)
+int __init evrc_in_init(void)
 {
 	return misc_register(&audio_evrc_in_misc);
 }
-device_initcall(evrc_in_init);
 
-static void __exit evrc_in_exit(void)
+void evrc_in_exit(void)
 {
 	misc_deregister(&audio_evrc_in_misc);
 }
-__exitcall(evrc_in_exit);

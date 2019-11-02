@@ -43,7 +43,7 @@ struct audio_notifier_cb_data {
 	int domain;
 };
 
-#ifdef CONFIG_MSM_QDSP6_NOTIFIER
+#if IS_ENABLED(CONFIG_MSM_QDSP6_NOTIFIER)
 
 /*
  * Use audio_notifier_register to register any audio

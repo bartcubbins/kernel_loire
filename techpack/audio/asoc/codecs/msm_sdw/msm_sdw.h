@@ -160,7 +160,7 @@ struct msm_sdw_priv {
 	int child_count;
 };
 
-#ifdef CONFIG_SND_SOC_MSM_SDW
+#if IS_ENABLED(CONFIG_SND_SOC_MSM_SDW)
 extern int msm_sdw_set_spkr_mode(struct snd_soc_codec *codec, int mode);
 extern int msm_sdw_set_spkr_gain_offset(struct snd_soc_codec *codec,
 					int offset);

@@ -230,7 +230,7 @@ struct sdm660_cdc_pdata {
 	struct sdm660_cdc_regulator regulator[MAX_REGULATOR];
 };
 
-#ifdef CONFIG_SND_SOC_ANALOG_CDC
+#if IS_ENABLED(CONFIG_SND_SOC_ANALOG_CDC)
 extern int msm_anlg_cdc_mclk_enable(struct snd_soc_codec *codec,
 				    int mclk_enable, bool dapm);
 extern int msm_anlg_cdc_hs_detect(struct snd_soc_codec *codec,

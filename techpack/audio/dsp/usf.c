@@ -27,6 +27,7 @@
 #include "q6usm.h"
 #include "usf.h"
 #include "usfcdev.h"
+#include "q6_init.h"
 
 /* The driver version*/
 #define DRV_VERSION "1.7.1"
@@ -2455,10 +2456,11 @@ static int __init usf_init(void)
 			break;
 		}
 	}
+	if (!rc) q6usm_init();
 
 	return rc;
 }
-device_initcall(usf_init);
+module_init(usf_init);
 
 static void __exit usf_exit(void)
 {
@@ -2467,7 +2469,6 @@ static void __exit usf_exit(void)
         for (ind = 0; ind < MAX_DEVS_NUMBER; ++ind)
 		misc_deregister(&usf_misc[ind]);
 }
-__exitcall(usf_exit);
-
+module_exit(usf_exit);
 MODULE_DESCRIPTION("Ultrasound framework driver");
 MODULE_LICENSE("GPL v2");

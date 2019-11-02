@@ -3340,20 +3340,18 @@ static struct platform_driver msm_cpe_lsm_driver = {
 	.remove = msm_cpe_lsm_remove,
 };
 
-
-static int __init msm_cpe_lsm_init(void)
+int __init msm_cpe_lsm_init(void)
 {
 	return platform_driver_register(&msm_cpe_lsm_driver);
 }
 
-static void __exit msm_cpe_lsm_exit(void)
+void __exit msm_cpe_lsm_exit(void)
 {
 	platform_driver_unregister(&msm_cpe_lsm_driver);
 }
 
 module_init(msm_cpe_lsm_init);
 module_exit(msm_cpe_lsm_exit);
-
 MODULE_DESCRIPTION("CPE LSM platform driver");
 MODULE_DEVICE_TABLE(of, msm_cpe_lsm_dt_match);
 MODULE_LICENSE("GPL v2");

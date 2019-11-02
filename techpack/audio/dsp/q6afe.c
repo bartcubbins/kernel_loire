@@ -7877,7 +7877,7 @@ done:
 	return result;
 }
 
-static int __init afe_init(void)
+int __init afe_init(void)
 {
 	int i = 0, ret;
 
@@ -7907,9 +7907,8 @@ static int __init afe_init(void)
 	config_debug_fs_init();
 	return 0;
 }
-device_initcall(afe_init);
 
-static void __exit afe_exit(void)
+void afe_exit(void)
 {
 	if (this_afe.apr) {
 		apr_reset(this_afe.apr);
@@ -7923,4 +7922,3 @@ static void __exit afe_exit(void)
 	mutex_destroy(&this_afe.afe_cmd_lock);
 	wakeup_source_trash(&wl.ws);
 }
-__exitcall(afe_exit);

@@ -394,14 +394,12 @@ struct miscdevice audio_amrnb_in_misc = {
 	.fops	= &audio_in_fops,
 };
 
-static int __init amrnb_in_init(void)
+int __init amrnb_in_init(void)
 {
 	return misc_register(&audio_amrnb_in_misc);
 }
-device_initcall(amrnb_in_init);
 
-static void __exit amrnb_in_exit(void)
+void amrnb_in_exit(void)
 {
 	misc_deregister(&audio_amrnb_in_misc);
 }
-__exitcall(amrnb_in_exit);

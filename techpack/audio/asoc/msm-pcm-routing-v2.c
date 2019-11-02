@@ -17831,7 +17831,7 @@ err:
 	return ret;
 }
 
-static int __init msm_soc_routing_platform_init(void)
+int __init msm_soc_routing_platform_init(void)
 {
 	mutex_init(&routing_lock);
 	if (msm_routing_init_cal_data())
@@ -17845,16 +17845,14 @@ static int __init msm_soc_routing_platform_init(void)
 
 	return platform_driver_register(&msm_routing_pcm_driver);
 }
-module_init(msm_soc_routing_platform_init);
 
-static void __exit msm_soc_routing_platform_exit(void)
+void msm_soc_routing_platform_exit(void)
 {
 	msm_routing_delete_cal_data();
 	memset(&be_dai_name_table, 0, sizeof(be_dai_name_table));
 	mutex_destroy(&routing_lock);
 	platform_driver_unregister(&msm_routing_pcm_driver);
 }
-module_exit(msm_soc_routing_platform_exit);
 
 MODULE_DESCRIPTION("MSM routing platform driver");
 MODULE_LICENSE("GPL v2");

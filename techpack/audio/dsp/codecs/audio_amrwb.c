@@ -216,7 +216,7 @@ static struct miscdevice audio_amrwb_misc = {
 	.fops = &audio_amrwb_fops,
 };
 
-static int __init audio_amrwb_init(void)
+int __init audio_amrwb_init(void)
 {
 	int ret = misc_register(&audio_amrwb_misc);
 
@@ -227,11 +227,9 @@ static int __init audio_amrwb_init(void)
 
 	return ret;
 }
-device_initcall(audio_amrwb_init);
 
-static void __exit audio_amrwb_exit(void)
+void audio_amrwb_exit(void)
 {
 	mutex_destroy(&audio_amrwb_ws_mgr.ws_lock);
 	misc_deregister(&audio_amrwb_misc);
 }
-__exitcall(audio_amrwb_exit);

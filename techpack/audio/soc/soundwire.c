@@ -1026,8 +1026,8 @@ static int __init soundwire_init(void)
 
 	return retval;
 }
-postcore_initcall(soundwire_init);
-__exitcall(soundwire_exit);
+module_init(soundwire_init);
+module_exit(soundwire_exit);
 
 
 MODULE_LICENSE("GPL v2");

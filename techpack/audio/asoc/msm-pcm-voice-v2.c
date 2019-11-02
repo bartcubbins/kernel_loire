@@ -782,7 +782,7 @@ static struct platform_driver msm_pcm_driver = {
 	.remove = msm_pcm_remove,
 };
 
-static int __init msm_pcm_voice_init(void)
+int __init msm_pcm_voice_init(void)
 {
 	int i = 0;
 
@@ -793,13 +793,11 @@ static int __init msm_pcm_voice_init(void)
 
 	return platform_driver_register(&msm_pcm_driver);
 }
-module_init(msm_pcm_voice_init);
 
-static void __exit msm_pcm_voice_exit(void)
+void msm_pcm_voice_exit(void)
 {
 	platform_driver_unregister(&msm_pcm_driver);
 }
-module_exit(msm_pcm_voice_exit);
 
 MODULE_DESCRIPTION("Voice PCM module platform driver");
 MODULE_LICENSE("GPL v2");
