@@ -384,13 +384,8 @@ static int msm_pcm_playback_prepare(struct snd_pcm_substream *substream)
 			return -ENOMEM;
 		}
 	} else {
-#ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_open_write_v2(prtd->audio_client,
-			fmt_type, bits_per_sample);
-#else
 		ret = q6asm_open_write_v4(prtd->audio_client,
 			fmt_type, bits_per_sample);
-#endif
 
 		if (ret < 0) {
 			pr_err("%s: q6asm_open_write_v4 failed (%d)\n",
@@ -430,19 +425,12 @@ static int msm_pcm_playback_prepare(struct snd_pcm_substream *substream)
 			runtime->channels, !prtd->set_channel_map,
 			prtd->channel_map, bits_per_sample);
 	} else {
-#ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_media_format_block_multi_ch_pcm_v2(
-				prtd->audio_client, runtime->rate,
-				runtime->channels, !prtd->set_channel_map,
-				prtd->channel_map, bits_per_sample);
-#else
 		ret = q6asm_media_format_block_multi_ch_pcm_v4(
 				prtd->audio_client, runtime->rate,
 				runtime->channels, !prtd->set_channel_map,
 				prtd->channel_map, bits_per_sample,
 				sample_word_size, ASM_LITTLE_ENDIAN,
 				DEFAULT_QF);
-#endif
 	}
 	if (ret < 0)
 		pr_info("%s: CMD Format block failed\n", __func__);
@@ -501,13 +489,8 @@ static int msm_pcm_capture_prepare(struct snd_pcm_substream *substream)
 				__func__, params_channels(params),
 				prtd->audio_client->perf_mode);
 
-#ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_open_read_v2(prtd->audio_client, FORMAT_LINEAR_PCM,
-				bits_per_sample);
-#else
 		ret = q6asm_open_read_v4(prtd->audio_client, FORMAT_LINEAR_PCM,
 				bits_per_sample, false);
-#endif
 		if (ret < 0) {
 			pr_err("%s: q6asm_open_read failed\n", __func__);
 			q6asm_audio_client_free(prtd->audio_client);
@@ -574,12 +557,6 @@ static int msm_pcm_capture_prepare(struct snd_pcm_substream *substream)
 	pr_debug("%s: Samp_rate = %d Channel = %d bit width = %d, word size = %d\n",
 			__func__, prtd->samp_rate, prtd->channel_mode,
 			bits_per_sample, sample_word_size);
-#ifdef CONFIG_ARCH_MSM8916
-	ret = q6asm_enc_cfg_blk_pcm_format_support(prtd->audio_client,
-						      prtd->samp_rate,
-						      prtd->channel_mode,
-						      bits_per_sample);
-#else
 	ret = q6asm_enc_cfg_blk_pcm_format_support_v4(prtd->audio_client,
 						      prtd->samp_rate,
 						      prtd->channel_mode,
@@ -587,7 +564,6 @@ static int msm_pcm_capture_prepare(struct snd_pcm_substream *substream)
 						      sample_word_size,
 						      ASM_LITTLE_ENDIAN,
 						      DEFAULT_QF);
-#endif
 	if (ret < 0)
 		pr_debug("%s: cmd cfg pcm was block failed", __func__);
 
