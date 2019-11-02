@@ -17,10 +17,10 @@ obj-$(CONFIG_SND_SOC_WCD9XXX_V2)	+= snd-soc-wcd9xxx-v2.o
 obj-$(CONFIG_SND_SOC_WCD9335)		+= wcd9335.o
 obj-$(CONFIG_SND_SOC_WCD_CPE)		+= wcd_cpe_core.o wcd_cpe_services.o
 
-obj-y					+= msm_bg/
-obj-y					+= wcd934x/
-obj-y					+= sdm660_cdc/
-obj-y					+= msm_sdw/
+obj-$(CONFIG_SND_SOC_BG_CODEC)		+= msm_bg/
+obj-$(CONFIG_SND_SOC_WCD934X)		+= wcd934x/
+obj-$(CONFIG_SND_SOC_SDM660_CDC)	+= sdm660_cdc/
+obj-$(CONFIG_SND_SOC_MSM_SDW)		+= msm_sdw/
 
 obj-$(CONFIG_SND_SOC_WCD_MBHC)		+= wcd-mbhc-v2.o
 obj-$(CONFIG_SND_SOC_WCD_MBHC_ADC)	+= wcd-mbhc-adc.o
