@@ -385,7 +385,7 @@ static int msm_pcm_playback_prepare(struct snd_pcm_substream *substream)
 		}
 	} else {
 #ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_open_write_v3(prtd->audio_client,
+		ret = q6asm_open_write_v2(prtd->audio_client,
 			fmt_type, bits_per_sample);
 #else
 		ret = q6asm_open_write_v4(prtd->audio_client,
@@ -431,11 +431,10 @@ static int msm_pcm_playback_prepare(struct snd_pcm_substream *substream)
 			prtd->channel_map, bits_per_sample);
 	} else {
 #ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_media_format_block_multi_ch_pcm_v3(
+		ret = q6asm_media_format_block_multi_ch_pcm_v2(
 				prtd->audio_client, runtime->rate,
 				runtime->channels, !prtd->set_channel_map,
-				prtd->channel_map, bits_per_sample,
-				sample_word_size);
+				prtd->channel_map, bits_per_sample);
 #else
 		ret = q6asm_media_format_block_multi_ch_pcm_v4(
 				prtd->audio_client, runtime->rate,
@@ -503,7 +502,7 @@ static int msm_pcm_capture_prepare(struct snd_pcm_substream *substream)
 				prtd->audio_client->perf_mode);
 
 #ifdef CONFIG_ARCH_MSM8916
-		ret = q6asm_open_read_v3(prtd->audio_client, FORMAT_LINEAR_PCM,
+		ret = q6asm_open_read_v2(prtd->audio_client, FORMAT_LINEAR_PCM,
 				bits_per_sample);
 #else
 		ret = q6asm_open_read_v4(prtd->audio_client, FORMAT_LINEAR_PCM,
@@ -576,11 +575,10 @@ static int msm_pcm_capture_prepare(struct snd_pcm_substream *substream)
 			__func__, prtd->samp_rate, prtd->channel_mode,
 			bits_per_sample, sample_word_size);
 #ifdef CONFIG_ARCH_MSM8916
-	ret = q6asm_enc_cfg_blk_pcm_format_support_v3(prtd->audio_client,
+	ret = q6asm_enc_cfg_blk_pcm_format_support(prtd->audio_client,
 						      prtd->samp_rate,
 						      prtd->channel_mode,
-						      bits_per_sample,
-						      sample_word_size);
+						      bits_per_sample);
 #else
 	ret = q6asm_enc_cfg_blk_pcm_format_support_v4(prtd->audio_client,
 						      prtd->samp_rate,
