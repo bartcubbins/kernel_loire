@@ -801,7 +801,6 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 	const char *msm_audio_ion_smmu = "qcom,smmu-version";
 	const char *msm_audio_ion_smmu_sid_mask = "qcom,smmu-sid-mask";
 	bool smmu_enabled;
-	bool smmu_force_sid;
 	enum apr_subsys_state q6_state;
 	struct device *dev = &pdev->dev;
 
@@ -857,7 +856,6 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 				__func__);
 			smmu_sid_mask = 0xFFFFFFFFFFFFFFFF;
 		}
-
 		rc = of_parse_phandle_with_args(dev->of_node, "iommus",
 						"#iommu-cells", 0, &iommuspec);
 		if (rc)
@@ -865,21 +863,6 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 				__func__, rc);
 		else
 			smmu_sid = (iommuspec.args[0] & smmu_sid_mask);
-
-		smmu_force_sid = !!of_find_property(dev->of_node,
-					"qcom,smmu-force-sid", NULL);
-		if (smmu_force_sid) {
-			rc = of_property_read_u64(dev->of_node,
-					"qcom,smmu-force-sid", &smmu_sid);
-			if (rc) {
-				dev_err(dev,
-					"%s: Invalid smmu-force-sid property value\n",
-					__func__);
-				return rc;
-			}
-		} 
-
-		pr_err("msm_audio_ion sid bit is 0x%llx\n", smmu_sid);
 
 		msm_audio_ion_data.smmu_sid_bits =
 			smmu_sid << MSM_AUDIO_SMMU_SID_OFFSET;
