@@ -41,10 +41,6 @@ obj-$(CONFIG_SND_SOC_MSM8909) += snd-soc-msm8909.o
 snd-soc-8909-dig-cdc-objs := msm8909.o
 obj-$(CONFIG_SND_SOC_8909_DIG_CDC) += snd-soc-8909-dig-cdc.o
 
-# for MSM8952 sound card driver
-snd-soc-msm8952-objs := msm8952.o msm8952-slimbus.o msm8952-dai-links.o
-obj-$(CONFIG_SND_SOC_MSM8952) += snd-soc-msm8952.o
-
 # for CPE drivers
 snd-soc-cpe-objs := msm-cpe-lsm.o
 obj-$(CONFIG_SND_SOC_CPE) += snd-soc-cpe.o

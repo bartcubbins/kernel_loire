@@ -54,11 +54,6 @@ config SND_SOC_8909_DIG_CDC
 	  To add support for SoC Machine Driver for
 	  MSM8909 Digital Codec.
 
-config SND_SOC_MSM8952
-	bool "SoC Machine Driver for MSM8952 Boards"
-	help
-	  To add support for SoC audio on MSM8952.
-
 config SND_SOC_CPE
 	bool "CPE LSM platform driver"
 	help
