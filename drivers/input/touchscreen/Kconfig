@@ -263,7 +263,6 @@ config TOUCHSCREEN_CYTTSP4_SPI
 
 config TOUCHSCREEN_CYPRESS_CYTTSP5
 	tristate "Parade TrueTouch Gen5 Touchscreen Driver"
-	default y
 	help
 	  Core driver for Parade TrueTouch(tm) Standard Product
 	  Geneartion5 touchscreen controllers.
