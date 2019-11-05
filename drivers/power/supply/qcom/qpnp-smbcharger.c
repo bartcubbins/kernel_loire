@@ -1246,7 +1246,7 @@ static int get_prop_batt_voltage_max_design(struct smbchg_chip *chip)
 }
 
 #ifndef CONFIG_QPNP_SMBCHARGER_EXTENSION
-static int get_prop_batt_cycle_count(struct smbchg_chip *chip)
+static int smbchg_get_prop_batt_cycle_count(struct smbchg_chip *chip)
 {
 	int bcc = 0, rc;
 
@@ -6141,7 +6141,6 @@ static int smbchg_dp_dm(struct smbchg_chip *chip, int val)
 	return rc;
 }
 
-#ifndef CONFIG_QPNP_SMBCHARGER_EXTENSION
 static int smbchg_get_prop_batt_charge_counter(struct smbchg_chip *chip)
 {
 	int rc;
@@ -6159,7 +6158,6 @@ static int smbchg_get_prop_batt_charge_counter(struct smbchg_chip *chip)
 
 	return val.intval;
 }
-#endif
 
 static int smbchg_get_prop_batt_current_max(struct smbchg_chip *chip)
 {
@@ -6744,12 +6742,14 @@ static int smbchg_battery_get_property(struct power_supply *psy,
 		val->intval = chip->pulse_cnt;
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
+		val->intval = smbchg_get_prop_batt_charge_counter(chip);
+		break;
+	case POWER_SUPPLY_PROP_CYCLE_COUNT:
 #ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
 		val->intval = somc_chg_get_prop_batt_cycle_count(chip);
 #else
-		val->intval = smbchg_get_prop_batt_charge_counter(chip);
+		val->intval = smbchg_get_prop_batt_cycle_count(chip);
 #endif
-		break;
 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMITED:
 		val->intval = smbchg_is_input_current_limited(chip);
 		break;
