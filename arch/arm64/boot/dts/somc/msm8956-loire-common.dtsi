@@ -517,74 +517,6 @@
 		/delete-node/ qcom,panel-supply-entry@4;
 	};
 
-	slim_msm: slim@c140000 {
-		tasha_codec {
-			qcom,cdc-micbias1-mv = <1800>;
-			qcom,cdc-micbias2-mv = <2450>;
-			qcom,cdc-micbias3-mv = <2450>;
-			qcom,cdc-micbias4-mv = <1800>;
-			qcom,cdc-dmic-sample-rate = <2400000>;
-			swr_master {
-				wsa881x_212: wsa881x@20170212 {
-					qcom,spkr-sd-n-gpio = <&msm_gpio 101 0>;
-				};
-			};
-		};
-	};
-
-	sound-9335 {
-		qcom,msm-mbhc-hphl-swh = <1>;
-		/delete-property/ qcom,cdc-us-euro-gpios;
-		qcom,ear-en-gpios = <&msm_gpio 143 0>;
-		qcom,audio-routing =
-			"AIF4 VI", "MCLK",
-			"RX_BIAS", "MCLK",
-			"LDO_H", "MCLK",
-			"AMIC1", "LDO_H",
-			"LDO_H", "AHC ISNS",
-			"AMIC2", "MIC BIAS2",
-			"MIC BIAS2", "Headset Mic",
-			"MIC BIAS2", "ANCRight Headset Mic",
-			"AMIC3", "MIC BIAS3",
-			"MIC BIAS3", "ANCLeft Headset Mic",
-			"AMIC4", "LDO_H",
-			"LDO_H", "AHC VSNS",
-			"DMIC0", "MIC BIAS1",
-			"MIC BIAS1", "Digital Mic0",
-			"DMIC3", "MIC BIAS4",
-			"MIC BIAS4", "Digital Mic3",
-			"SpkrLeft IN", "SPK1 OUT",
-			"SpkrRight IN", "SPK2 OUT";
-		qcom,msm-ext-pa = "quaternary", "quinary";
-		qcom,msm-gpios =
-			"quin_i2s",
-			"quat_i2s";
-		qcom,pinctrl-names =
-			"all_off",
-			"quin_act",
-			"quat_act",
-			"quin_quat_act";
-		pinctrl-names =
-			"all_off",
-			"quin_act",
-			"quat_act",
-			"quin_quat_act";
-		pinctrl-0 = <&pri_tlmm_lines_sus &sec_tlmm_lines_sus &sec_tlmm_2_lines_sus>;
-		pinctrl-1 = <&pri_tlmm_lines_act &sec_tlmm_lines_sus &sec_tlmm_2_lines_sus>;
-		pinctrl-2 = <&pri_tlmm_lines_sus &sec_tlmm_lines_act &sec_tlmm_2_lines_act>;
-		pinctrl-3 = <&pri_tlmm_lines_act &sec_tlmm_lines_act &sec_tlmm_2_lines_act>;
-
-		asoc-platform = <&pcm0>, <&pcm1>, <&pcm2>, <&pcm3>, <&voip>, <&voice>,
-				<&loopback>, <&compress>, <&hostless>,
-				<&afe>, <&lsm>, <&routing>, <&cpe>,
-				<&pcm_noirq>;
-		asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1", "msm-pcm-dsp.2", "msm-pcm-dsp.3",
-				"msm-voip-dsp", "msm-pcm-voice", "msm-pcm-loopback",
-				"msm-compress-dsp", "msm-pcm-hostless", "msm-pcm-afe",
-				"msm-lsm-client", "msm-pcm-routing", "msm-cpe-lsm",
-				"msm-pcm-dsp-noirq";
-	};
-
 	ldo_vibrator {
 		compatible = "ldo-vibrator";
 		gpios = <&pmi8950_gpios 2 1>;
@@ -762,6 +694,73 @@
 		qcom,msm-mi2s-rx-lines = <0>;
 		qcom,msm-mi2s-tx-lines = <1>;
 	};
+};
+
+&slim_msm {
+	tasha_codec {
+		qcom,cdc-micbias1-mv = <1800>;
+		qcom,cdc-micbias2-mv = <2450>;
+		qcom,cdc-micbias3-mv = <2450>;
+		qcom,cdc-micbias4-mv = <1800>;
+		qcom,cdc-dmic-sample-rate = <2400000>;
+	};
+};
+
+&wsa881x_212 {
+	qcom,spkr-sd-n-gpio = <&msm_gpio 101 0>;
+};
+
+&ext_codec {
+	qcom,msm-mbhc-hphl-swh = <1>;
+	/delete-property/ qcom,cdc-us-euro-gpios;
+	qcom,ear-en-gpios = <&msm_gpio 143 0>;
+	qcom,audio-routing =
+		"AIF4 VI", "MCLK",
+		"RX_BIAS", "MCLK",
+		"LDO_H", "MCLK",
+		"AMIC1", "LDO_H",
+		"LDO_H", "AHC ISNS",
+		"AMIC2", "MIC BIAS2",
+		"MIC BIAS2", "Headset Mic",
+		"MIC BIAS2", "ANCRight Headset Mic",
+		"AMIC3", "MIC BIAS3",
+		"MIC BIAS3", "ANCLeft Headset Mic",
+		"AMIC4", "LDO_H",
+		"LDO_H", "AHC VSNS",
+		"DMIC0", "MIC BIAS1",
+		"MIC BIAS1", "Digital Mic0",
+		"DMIC3", "MIC BIAS4",
+		"MIC BIAS4", "Digital Mic3",
+		"SpkrLeft IN", "SPK1 OUT",
+		"SpkrRight IN", "SPK2 OUT";
+	qcom,msm-ext-pa = "quaternary", "quinary";
+	qcom,msm-gpios =
+		"quin_i2s",
+		"quat_i2s";
+	qcom,pinctrl-names =
+		"all_off",
+		"quin_act",
+		"quat_act",
+		"quin_quat_act";
+	pinctrl-names =
+		"all_off",
+		"quin_act",
+		"quat_act",
+		"quin_quat_act";
+	pinctrl-0 = <&pri_tlmm_lines_sus &sec_tlmm_lines_sus &sec_tlmm_2_lines_sus>;
+	pinctrl-1 = <&pri_tlmm_lines_act &sec_tlmm_lines_sus &sec_tlmm_2_lines_sus>;
+	pinctrl-2 = <&pri_tlmm_lines_sus &sec_tlmm_lines_act &sec_tlmm_2_lines_act>;
+	pinctrl-3 = <&pri_tlmm_lines_act &sec_tlmm_lines_act &sec_tlmm_2_lines_act>;
+
+	asoc-platform = <&pcm0>, <&pcm1>, <&pcm2>, <&pcm3>, <&voip>, <&voice>,
+			<&loopback>, <&compress>, <&hostless>,
+			<&afe>, <&lsm>, <&routing>, <&cpe>,
+			<&pcm_noirq>;
+	asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1", "msm-pcm-dsp.2", "msm-pcm-dsp.3",
+			"msm-voip-dsp", "msm-pcm-voice", "msm-pcm-loopback",
+			"msm-compress-dsp", "msm-pcm-hostless", "msm-pcm-afe",
+			"msm-lsm-client", "msm-pcm-routing", "msm-cpe-lsm",
+			"msm-pcm-dsp-noirq";
 };
 
 &pm8950_gpios {
