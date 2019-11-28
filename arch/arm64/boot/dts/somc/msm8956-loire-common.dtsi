@@ -92,10 +92,10 @@
 		compatible = "fpc,fpc1020", "fpc1145";
 		interrupt-parent = <&msm_gpio>;
 		interrupts = <106 0x0>;
-		fpc,gpio_rst    = <&msm_gpio 69 0x0>;
-		fpc,gpio_irq    = <&msm_gpio 106 0x0>;
-		fpc,gpio_ldo    = <&msm_gpio 112 0>;
-		vcc_spi-supply  = <&pm8950_s4>;
+		fpc,gpio_rst = <&msm_gpio 69 0x0>;
+		fpc,gpio_irq = <&msm_gpio 106 0x0>;
+		fpc,gpio_ldo = <&msm_gpio 112 0>;
+		vcc_spi-supply = <&pm8950_s4>;
 
 		pinctrl-names = "fpc1145_reset_reset",
 				"fpc1145_reset_active",
@@ -160,25 +160,25 @@
 		pinctrl-1 = <&msm_gpio_19_def>;
 	};
 
-        /*I2C : BLSP2 */
-        i2c@7af6000 {
-                nfc@28 {
-                        compatible = "nxp,pn547";
-                        reg = <0x28>;
-                        interrupt-parent = <&msm_gpio>;
-                        interrupts = <33 0x1>;
-                        nxp,irq_gpio = <&msm_gpio 33 0x00>;
-                        nxp,dwld_en = <&msm_gpio 16 0x00>;
-                        nxp,ven = <&msm_gpio 34 0x01>;
-                        qcom,clk-src = "BBCLK2";
-                        qcom,clk-gpio = <&pm8950_gpios 5 0x00>;
-                        clocks = <&clock_gcc clk_bb_clk2_pin>;
-                        clock-names = "nfc_clk";
-                        pinctrl-names = "pn547-active", "pn547-inactive";
-                        pinctrl-0 = <&msm_gpio_33_def &msm_gpio_16_def>;
-                        pinctrl-1 = <&msm_gpio_33_def &msm_gpio_16_def>;
-                };
-        };
+	/*I2C : BLSP2 */
+	i2c@7af6000 {
+		nfc@28 {
+			compatible = "nxp,pn547";
+			reg = <0x28>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <33 0x1>;
+			nxp,irq_gpio = <&msm_gpio 33 0x00>;
+			nxp,dwld_en = <&msm_gpio 16 0x00>;
+			nxp,ven = <&msm_gpio 34 0x01>;
+			qcom,clk-src = "BBCLK2";
+			qcom,clk-gpio = <&pm8950_gpios 5 0x00>;
+			clocks = <&clock_gcc clk_bb_clk2_pin>;
+			clock-names = "nfc_clk";
+			pinctrl-names = "pn547-active", "pn547-inactive";
+			pinctrl-0 = <&msm_gpio_33_def &msm_gpio_16_def>;
+			pinctrl-1 = <&msm_gpio_33_def &msm_gpio_16_def>;
+		};
+	};
 
 	/* SPI : BLSP3 */
 	/* Kernel default setting will be overridden by ADSP SW. */
@@ -766,7 +766,7 @@
 &pm8950_gpios {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pm8950_gpio_2 &pm8950_gpio_5
-		     &pm8950_gpio_6 &pm8950_gpio_8>;
+		&pm8950_gpio_6 &pm8950_gpio_8>;
 
 	/* GPIO_1: CDC_PM_MCLK */
 	/* Follow QCT */
