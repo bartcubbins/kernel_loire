@@ -2325,7 +2325,7 @@ static ssize_t as3668_audio_brightness_store(struct device *dev,
 	return strnlen(buf, PAGE_SIZE);
 }
 
-static ssize_t as3668_blink_store(struct device *dev,
+static ssize_t as3668_breath_store(struct device *dev,
 		struct device_attribute *attr,
 		const char *buf, size_t size)
 {
@@ -2353,7 +2353,7 @@ static ssize_t as3668_blink_store(struct device *dev,
 	return strnlen(buf, PAGE_SIZE);
 }
 
-static ssize_t as3668_blink_show(struct device *dev,
+static ssize_t as3668_breath_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
 	struct as3668_led *led = ldev_to_led(dev_get_drvdata(dev));
@@ -2422,7 +2422,7 @@ static struct device_attribute as3668_led_attributes[] = {
 #endif /* CONFIG_LEDS_AS3668_EXTENSION */
 	AS3668_ATTR(audio_enable),
 	AS3668_ATTR(audio_brightness),
-	AS3668_ATTR(blink),
+	AS3668_ATTR(breath),
 	__ATTR_NULL
 };
 
