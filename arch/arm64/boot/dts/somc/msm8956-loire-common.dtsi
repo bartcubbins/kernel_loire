@@ -1010,6 +1010,8 @@
 };
 
 &qpnp_smbcharger {
+	/delete-property/ qcom,chg-led-support;
+	/delete-property/ qcom,chg-led-sw-controls;
 	/delete-property/ qcom,parallel-usb-min-current-ma;
 	/delete-property/ qcom,parallel-usb-9v-min-current-ma;
 	qcom,charge-unknown-battery;
