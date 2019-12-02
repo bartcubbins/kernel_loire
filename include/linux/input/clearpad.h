@@ -1,18 +1,22 @@
 /*
+ * Copyright (C) 2017 Sony Mobile Communications Inc.
+ *
  * Author: Courtney Cavin <courtney.cavin@sonyericsson.com>
  *         Yusuke Yoshimura <Yusuke.Yoshimura@sonymobile.com>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2, as
- * published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- */
-/*
- * Copyright (C) 2016 Sony Mobile Communications Inc.
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2, as
- * published by the Free Software Foundation.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 #ifndef __LINUX_CLEARPAD_H
@@ -29,7 +33,7 @@
 #define SYN_PCA_BLOCK_SIZE		16
 #define SYN_PCA_BLOCK_NUMBER_MAX	31
 
-/* #define CLEARPAD_WAKEUP_GESTURE */
+//#define CLEARPAD_WAKEUP_GESTURE
 
 enum clearpad_funcarea_kind_e {
 	SYN_FUNCAREA_INSENSIBLE,
@@ -106,9 +110,7 @@ struct clearpad_data_t {
 	struct clearpad_platform_data_t *pdata;
 	struct clearpad_bus_data_t *bdata;
 	int probe_retry;
-#ifdef CONFIG_TOUCHSCREEN_CLEARPAD_RMI_DEV
 	struct platform_device *rmi_dev;
-#endif
 };
 
 struct clearpad_ioctl_pca_info {
