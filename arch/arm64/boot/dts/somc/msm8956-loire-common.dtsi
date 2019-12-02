@@ -1254,16 +1254,6 @@
 	};
 };
 
-
-
-&vfe0 {
-	max-clk-turbo = <460000000>;
-};
-
-&vfe1 {
-	max-clk-turbo = <460000000>;
-};
-
 &spmi_bus {
 	pm8004@4 {
 		qcom,leds@a100 {
