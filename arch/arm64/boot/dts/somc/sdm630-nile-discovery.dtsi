@@ -296,38 +296,6 @@
 	};
 };
 
-&red_led {
-	linux,name = "led:rgb_red";
-	qcom,idx-len = <2>;
-	qcom,duty-pcts =
-		[00 0F];
-	qcom,lut-flags = <25>;
-	qcom,ramp-step-ms = <100>;
-	qcom,use-blink;
-};
-
-&green_led {
-	linux,name = "led:rgb_green";
-	qcom,start-idx = <2>;
-	qcom,idx-len = <2>;
-	qcom,duty-pcts =
-		[00 64];
-	qcom,lut-flags = <25>;
-	qcom,ramp-step-ms = <100>;
-	qcom,use-blink;
-};
-
-&blue_led {
-	linux,name = "led:rgb_blue";
-	qcom,start-idx = <4>;
-	qcom,idx-len = <2>;
-	qcom,duty-pcts =
-		[00 31];
-	qcom,lut-flags = <25>;
-	qcom,ramp-step-ms = <100>;
-	qcom,use-blink;
-};
-
 &int_codec {
 	status = "ok";
 	/delete-property/ qcom,msm-micbias2-ext-cap;
