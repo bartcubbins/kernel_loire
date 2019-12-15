@@ -2282,12 +2282,10 @@
 
 &soc {
 	gpio_keys {
-		status = "okay";
 		compatible = "gpio-keys";
 		input-name = "gpio-keys";
-		pinctrl-names = "tlmm_gpio_key_active","tlmm_gpio_key_suspend";
+		pinctrl-names = "default";
 		pinctrl-0 = <&gpio_key_active>;
-		pinctrl-1 = <&gpio_key_suspend>;
 
 		camera_focus {
 			label = "camera_focus";
@@ -2295,6 +2293,8 @@
 			linux,input-type = <1>;
 			linux,code = <0x210>;
 			debounce-interval = <15>;
+			linux,can-disable;
+			gpio-key,wakeup;
 		};
 
 		camera_snapshot {
@@ -2303,6 +2303,8 @@
 			linux,input-type = <1>;
 			linux,code = <0x2fe>;
 			debounce-interval = <15>;
+			linux,can-disable;
+			gpio-key,wakeup;
 		};
 
 		vol_up {
@@ -2312,6 +2314,8 @@
 			linux,code = <115>;
 			gpio-key,wakeup;
 			debounce-interval = <15>;
+			linux,can-disable;
+			gpio-key,wakeup;
 		};
 	};
 

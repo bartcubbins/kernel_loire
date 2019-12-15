@@ -148,8 +148,9 @@
 			gpios = <&pm660l_gpios 7 0x1>;
 			linux,input-type = <1>;
 			linux,code = <114>;
-			gpio-key,wakeup;
 			debounce-interval = <15>;
+			linux,can-disable;
+			gpio-key,wakeup;
 		};
 	};
 };
