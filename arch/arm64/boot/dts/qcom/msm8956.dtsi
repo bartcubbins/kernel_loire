@@ -2097,13 +2097,10 @@
 	};
 };
 
-#include "msm-pm8950-rpm-regulator.dtsi"
-//#include "msm-pm8950.dtsi"
-//#include "msm-pmi8950.dtsi"
-//#include "msm-pm8004.dtsi"
 #include "pm8950.dtsi"
 #include "pmi8950.dtsi"
 #include "pm8004.dtsi"
+#include "pm8950-rpm-regulator.dtsi"
 #include "msm8956-regulator.dtsi"
 #include "msm8956-thermal.dtsi"
 #include "msm-gdsc-8916.dtsi"
