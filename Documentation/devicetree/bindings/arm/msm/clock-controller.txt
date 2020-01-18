@@ -12,6 +12,12 @@ Required properties:
 - compatible:		Must be one of following,
 			"qcom,gcc-mdm9607"
 			"qcom,cc-debug-mdm9607"
+			"qcom,gcc-8976"
+			"qcom,gcc-8976-v1"
+			"qcom,cc-debug-8976"
+			"qcom,gcc-mdss-8976"
+			"qcom,gcc-mdss-8976-v1"
+			"qcom-gcc-gfx-8976"
 
 - reg:			Pairs of physical base addresses and region sizes of
 			memory mapped registers.
