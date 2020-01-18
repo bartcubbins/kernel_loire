@@ -53,6 +53,8 @@
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,msm8916")
 #define early_machine_is_apq8084()	\
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,apq8084")
+#define early_machine_is_msm8956()	\
+	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,msm8956")
 #define early_machine_is_msm8996()	\
 	of_flat_dt_is_compatible(of_get_flat_dt_root(), "qcom,msm8996")
 #define early_machine_is_msm8996_auto()	\
@@ -124,6 +126,7 @@
 
 #define early_machine_is_msm8916()	0
 #define early_machine_is_apq8084()	0
+#define early_machine_is_msm8956()	0
 #define early_machine_is_msm8996()	0
 #define early_machine_is_sm8150()	0
 #define early_machine_is_sm8150p()	0
@@ -168,6 +171,7 @@ enum msm_cpu {
 	MSM_CPU_8974PRO_AC,
 	MSM_CPU_8916,
 	MSM_CPU_8084,
+	MSM_CPU_8956,
 	MSM_CPU_8996,
 	MSM_CPU_SM8150,
 	MSM_CPU_SM8150P,
