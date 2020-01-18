@@ -24,3 +24,5 @@ obj-$(CONFIG_ARCH_MSM8916)	+= clock-gcc-8976.o
 obj-$(CONFIG_ARCH_MSM8916)	+= clock-rcgwr.o
 
 endif
+
+obj-y				+= mdss/
