@@ -1065,7 +1065,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1079,7 +1078,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1105,7 +1103,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1116,7 +1113,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1145,7 +1141,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1168,7 +1163,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
@@ -1179,7 +1173,6 @@
 	qcom,init-enable = <0>;
 	qcom,init-ldo-mode = <1>;
 	qcom,init-pin-ctrl-enable = <0>;
-	qcom,init-pin-ctrl-mode = <0>;
 	status = "okay";
 };
 
