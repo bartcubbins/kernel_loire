@@ -14,8 +14,8 @@
  * GNU General Public License for more details.
  */
 
-#ifndef MSM_IOMMU_PRIV_H
-#define MSM_IOMMU_PRIV_H
+#ifndef __MSM_IOMMU_PRIV_H
+#define __MSM_IOMMU_PRIV_H
 
 /* commands for SCM_SVC_MP */
 #define IOMMU_SECURE_CFG	2
@@ -245,8 +245,6 @@ struct iommu_access_ops {
 	void (*iommu_lock_acquire)(unsigned int need_extra_lock);
 	void (*iommu_lock_release)(unsigned int need_extra_lock);
 };
-void msm_set_iommu_access_ops(struct iommu_access_ops *ops);
-struct iommu_access_ops *msm_get_iommu_access_ops(void);
 
 int __enable_clocks(struct msm_iommu_drvdata *drvdata);
 void __disable_clocks(struct msm_iommu_drvdata *drvdata);
@@ -263,7 +261,6 @@ void print_ctx_regs(struct msm_iommu_context_reg regs[]);
  * message and dump useful IOMMU registers.
  */
 irqreturn_t msm_iommu_global_fault_handler(int irq, void *dev_id);
-irqreturn_t msm_iommu_fault_handler(int irq, void *dev_id);
 irqreturn_t msm_iommu_fault_handler_v2(int irq, void *dev_id);
 irqreturn_t msm_iommu_secure_fault_handler_v2(int irq, void *dev_id);
 
