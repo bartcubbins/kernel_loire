@@ -492,4 +492,6 @@ config QCOM_IOMMU
 	help
 	  Support for IOMMU on certain Qualcomm SoCs.
 
+source drivers/iommu/qcom/Kconfig
+
 endif # IOMMU_SUPPORT
