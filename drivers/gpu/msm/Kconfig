@@ -23,4 +23,4 @@ config QCOM_ADRENO_DEFAULT_GOVERNOR
 
 config QCOM_KGSL_IOMMU
 	bool
-	default y if QCOM_KGSL && (MSM_IOMMU || ARM_SMMU)
+	default y if QCOM_KGSL && (MSM_IOMMU || ARM_SMMU || QCOM_IOMMU_V1)
