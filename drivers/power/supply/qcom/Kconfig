@@ -10,10 +10,17 @@ config QPNP_FG
 	  supply property and also sends uevents when the capacity is updated.
 
 config QPNP_FG_EXTENSION
-	tristate "QPNP fuel gauge driver extension"
+	bool "QPNP fuel gauge driver extension"
 	depends on QPNP_FG
 	help
 	  Say Y here to enable extensional QPNP fuel gauge functions.
+
+config QPNP_FG_EXTENSION_DEBUG
+	bool "QPNP fuel gauge driver extension debug"
+	depends on QPNP_FG_EXTENSION
+	help
+	  Say Y here to enable debug output for extensional QPNP fuel
+	  gauge functions.
 
 config QPNP_FG_GEN3
 	tristate "QPNP GEN3 fuel gauge driver"
