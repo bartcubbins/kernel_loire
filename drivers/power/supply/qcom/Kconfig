@@ -110,10 +110,17 @@ config QPNP_SMBCHARGER
 	  power supply framework.
 
 config QPNP_SMBCHARGER_EXTENSION
-	tristate "QPNP SMB Charger driver extension"
+	bool "QPNP SMB Charger driver extension"
 	depends on QPNP_SMBCHARGER
 	help
 	  Say Y here to enable extensional QPNP SMB Charger driver functions.
+
+config QPNP_SMBCHARGER_EXTENSION_DEBUG
+	bool "QPNP SMB Charger driver extension debug"
+	depends on QPNP_SMBCHARGER_EXTENSION
+	help
+	  Say Y here to enable debug output for extensional QPNP SMB Charger
+	  driver functions.
 
 config QPNP_SMBCHARGER_ID_POLL
 	bool "Support ID polling function on QPNP SMB Charger driver"
