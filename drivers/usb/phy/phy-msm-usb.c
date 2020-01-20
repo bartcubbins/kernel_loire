@@ -3539,19 +3539,20 @@ static void msm_otg_pnoc_errata_fix(struct msm_otg *motg)
 {
 	int ret;
 	struct msm_otg_platform_data *pdata = motg->pdata;
-	struct msm_otg_scm_cmd_buf cmd_buf;
+	struct scm_desc desc = {0};
 
 	if (!pdata->pnoc_errata_fix)
 		return;
 
 	dev_dbg(motg->phy.dev, "applying fix for pnoc h/w issue\n");
 
-	cmd_buf.device_id = MSM_OTG_DEVICE_ID;
-	cmd_buf.vmid_idx = MSM_OTG_VMID_IDX;
-	cmd_buf.mem_type = MSM_OTG_MEM_TYPE;
+	desc.args[0] = MSM_OTG_DEVICE_ID;
+	desc.args[1] = MSM_OTG_VMID_IDX;
+	desc.args[2] = MSM_OTG_MEM_TYPE;
+	desc.arginfo = SCM_ARGS(3);
 
-	ret = scm_call(SCM_SVC_MP, MSM_OTG_CMD_ID, &cmd_buf,
-				sizeof(cmd_buf), NULL, 0);
+	ret = scm_call2(SCM_SIP_FNID(SCM_SVC_MP, MSM_OTG_CMD_ID),
+				&desc);
 
 	if (ret)
 		dev_err(motg->phy.dev, "scm command failed to update VMIDMT\n");
