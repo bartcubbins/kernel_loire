@@ -6750,6 +6750,7 @@ static int smbchg_battery_get_property(struct power_supply *psy,
 #else
 		val->intval = smbchg_get_prop_batt_cycle_count(chip);
 #endif
+		break;
 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMITED:
 		val->intval = smbchg_is_input_current_limited(chip);
 		break;
