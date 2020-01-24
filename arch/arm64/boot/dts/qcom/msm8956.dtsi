@@ -2103,7 +2103,7 @@
 #include "pm8950-rpm-regulator.dtsi"
 #include "msm8956-regulator.dtsi"
 #include "msm8956-thermal.dtsi"
-#include "msm-gdsc-8916.dtsi"
+#include "msm8956-gdsc.dtsi"
 #include "msm8956-audio.dtsi"
 #include "msm8956-vidc.dtsi"
 #include "msm8956-camera.dtsi"
