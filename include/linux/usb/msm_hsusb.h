@@ -28,7 +28,6 @@
 #include <linux/power_supply.h>
 #include <linux/cdev.h>
 #include <linux/usb_bam.h>
-#include <linux/extcon.h>
 #include <linux/regulator/driver.h>
 /**
  * Requested USB votes for NOC frequency
@@ -167,11 +166,8 @@ enum usb_id_state {
  * @phy_irq_pending: Gets set when PHY IRQ arrives in LPM.
  * @id_state: Indicates USBID line status.
  * @rm_pulldown: Indicates pulldown status on D+ and D- data lines.
- * @extcon_vbus: Used for VBUS notification registration.
- * @extcon_id: Used for ID notification registration.
  * @vbus_nb: Notification callback for VBUS event.
  * @id_nb: Notification callback for ID event.
- * @extcon_registered: indicates if extcon notifier registered or not.
  * @dpdm_desc: Regulator descriptor for D+ and D- voting.
  * @dpdm_rdev: Regulator class device for dpdm regulator.
  * @dbg_idx: Dynamic debug buffer Index.
@@ -181,7 +177,6 @@ enum usb_id_state {
 		nominal mode.
  * @sdp_check: SDP detection work in case of USB_FLOAT power supply
  * @notify_charger_work: Charger notification work.
- * @extcon_register_work: Extcon registration work.
  * @psy_nb: Notification callback for PSY registration.
  */
 struct msm_otg {
@@ -294,11 +289,8 @@ struct msm_otg {
 	bool phy_irq_pending;
 	enum usb_id_state id_state;
 	bool rm_pulldown;
-	struct extcon_dev       *extcon_vbus;
-	struct extcon_dev       *extcon_id;
 	struct notifier_block   vbus_nb;
 	struct notifier_block   id_nb;
-	bool			extcon_registered;
 	struct regulator_desc	dpdm_rdesc;
 	struct regulator_dev	*dpdm_rdev;
 /* Maximum debug message length */
@@ -317,7 +309,6 @@ struct msm_otg {
 	struct delayed_work perf_vote_work;
 	struct delayed_work sdp_check;
 	struct work_struct notify_charger_work;
-	struct work_struct extcon_register_work;
 	struct notifier_block psy_nb;
 };
 

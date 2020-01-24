@@ -3710,7 +3710,8 @@ static int msm_otg_vbus_notifier(struct notifier_block *nb, unsigned long event,
 static int msm_otg_id_notifier(struct notifier_block *nb, unsigned long event,
 				void *ptr)
 {
-	struct msm_otg *motg = container_of(nb, struct msm_otg, id_nb);
+	struct usb_phy *usb_phy = container_of(nb, struct usb_phy, id_nb);
+	struct msm_otg *motg = container_of(usb_phy, struct msm_otg, phy);
 
 	if (event)
 		motg->id_state = USB_ID_GROUND;
@@ -3720,104 +3721,6 @@ static int msm_otg_id_notifier(struct notifier_block *nb, unsigned long event,
 	msm_id_status_w(&motg->id_status_work.work);
 
 	return NOTIFY_DONE;
-}
-
-static int msm_otg_extcon_register(struct msm_otg *motg)
-{
-	struct device_node *node = motg->pdev->dev.of_node;
-	struct extcon_dev *edev;
-	int ret = 0;
-
-	if (motg->extcon_registered) {
-		dev_info(&motg->pdev->dev, "extcon_nb already registered\n");
-		return 0;
-	}
-
-	if (!of_property_read_bool(node, "extcon"))
-		return 0;
-
-	edev = extcon_get_edev_by_phandle(&motg->pdev->dev, 0);
-	if (IS_ERR(edev) && PTR_ERR(edev) != -ENODEV)
-		return PTR_ERR(edev);
-
-	if (!IS_ERR(edev)) {
-		motg->extcon_vbus = edev;
-		motg->vbus_nb.notifier_call = msm_otg_vbus_notifier;
-		ret = extcon_register_notifier(edev, EXTCON_USB,
-							&motg->vbus_nb);
-		if (ret < 0) {
-			dev_err(&motg->pdev->dev, "failed to register notifier for USB\n");
-			return ret;
-		}
-	}
-
-	if (of_count_phandle_with_args(node, "extcon", NULL) > 1) {
-		edev = extcon_get_edev_by_phandle(&motg->pdev->dev, 1);
-		if (IS_ERR(edev) && PTR_ERR(edev) != -ENODEV) {
-			ret = PTR_ERR(edev);
-			goto err;
-		}
-	}
-
-	if (!IS_ERR(edev)) {
-		motg->extcon_id = edev;
-		motg->id_nb.notifier_call = msm_otg_id_notifier;
-		ret = extcon_register_notifier(edev, EXTCON_USB_HOST,
-							&motg->id_nb);
-		if (ret < 0) {
-			dev_err(&motg->pdev->dev, "failed to register notifier for USB-HOST\n");
-			goto err;
-		}
-	}
-	motg->extcon_registered = true;
-
-	return 0;
-err:
-	if (motg->extcon_vbus)
-		extcon_unregister_notifier(motg->extcon_vbus, EXTCON_USB,
-								&motg->vbus_nb);
-
-	return ret;
-}
-
-static void msm_otg_handle_initial_extcon(struct msm_otg *motg)
-{
-	if (motg->extcon_vbus && extcon_get_state(motg->extcon_vbus,
-						EXTCON_USB))
-		msm_otg_vbus_notifier(&motg->vbus_nb, true, motg->extcon_vbus);
-
-	if (motg->extcon_id && extcon_get_state(motg->extcon_id,
-						EXTCON_USB_HOST))
-		msm_otg_id_notifier(&motg->id_nb, true, motg->extcon_id);
-}
-
-static void msm_otg_extcon_register_work(struct work_struct *w)
-{
-	struct msm_otg *motg = container_of(w, struct msm_otg,
-						extcon_register_work);
-
-	power_supply_unreg_notifier(&motg->psy_nb);
-
-	if (msm_otg_extcon_register(motg)) {
-		dev_err(&motg->pdev->dev, "failed to register extcon\n");
-		return;
-	}
-
-	msm_otg_handle_initial_extcon(motg);
-}
-
-static int msm_otg_psy_changed(struct notifier_block *nb, unsigned long evt,
-							void *ptr)
-{
-	struct msm_otg *motg = container_of(nb, struct msm_otg, psy_nb);
-
-	if (strcmp(((struct power_supply *)ptr)->desc->name, "usb") ||
-						evt != PSY_EVENT_PROP_CHANGED)
-		return 0;
-
-	queue_work(motg->otg_wq, &motg->extcon_register_work);
-
-	return 0;
 }
 
 struct msm_otg_platform_data *msm_otg_dt_to_pdata(struct platform_device *pdev)
@@ -4369,7 +4272,6 @@ static int msm_otg_probe(struct platform_device *pdev)
 	INIT_DELAYED_WORK(&motg->perf_vote_work, msm_otg_perf_vote_work);
 	INIT_DELAYED_WORK(&motg->sdp_check, check_for_sdp_connection);
 	INIT_WORK(&motg->notify_charger_work, msm_otg_notify_charger_work);
-	INIT_WORK(&motg->extcon_register_work, msm_otg_extcon_register_work);
 	motg->otg_wq = alloc_ordered_workqueue("k_otg", WQ_FREEZABLE);
 	if (!motg->otg_wq) {
 		pr_err("%s: Unable to create workqueue otg_wq\n",
@@ -4423,6 +4325,9 @@ static int msm_otg_probe(struct platform_device *pdev)
 	phy->set_power = msm_otg_set_power;
 	phy->set_suspend = msm_otg_set_suspend;
 	phy->dbg_event = msm_otg_dbg_log_event;
+	phy->type = USB_PHY_TYPE_USB2;
+	phy->vbus_nb.notifier_call = msm_otg_vbus_notifier;
+	phy->id_nb.notifier_call = msm_otg_id_notifier;
 
 	phy->io_ops = &msm_otg_io_ops;
 
@@ -4435,9 +4340,9 @@ static int msm_otg_probe(struct platform_device *pdev)
 	if (pdata->enable_sec_phy)
 		phy->flags |= ENABLE_SECONDARY_PHY;
 
-	ret = usb_add_phy(&motg->phy, USB_PHY_TYPE_USB2);
+	ret = usb_add_phy_dev(&motg->phy);
 	if (ret) {
-		dev_err(&pdev->dev, "usb_add_phy failed\n");
+		dev_err(&pdev->dev, "usb_add_phy_dev failed\n");
 		goto destroy_wq;
 	}
 
@@ -4578,20 +4483,13 @@ static int msm_otg_probe(struct platform_device *pdev)
 		}
 	}
 
-	/*
-	 * Try to register extcon handle from probe; by this time USB psy may or
-	 * may not have been registered. If this fails, then wait for the USB
-	 * psy to get registered which will again try to register extcon via
-	 * notifier call.
-	 */
-	ret = msm_otg_extcon_register(motg);
-	if (ret) {
-		dev_dbg(&pdev->dev, "Registering PSY notifier for extcon\n");
-		motg->psy_nb.notifier_call = msm_otg_psy_changed;
-		power_supply_reg_notifier(&motg->psy_nb);
-	} else {
-		msm_otg_handle_initial_extcon(motg);
-	}
+	ret = extcon_get_state(phy->edev, EXTCON_USB);
+	if (ret)
+		msm_otg_vbus_notifier(&phy->vbus_nb, true, phy->edev);
+	
+	ret = extcon_get_state(phy->id_edev, EXTCON_USB_HOST);
+	if (ret)
+		msm_otg_id_notifier(&phy->id_nb, true, phy->id_edev);
 
 	if (gpio_is_valid(motg->pdata->hub_reset_gpio)) {
 		ret = devm_gpio_request(&pdev->dev,
@@ -4699,10 +4597,6 @@ static int msm_otg_remove(struct platform_device *pdev)
 
 	unregister_pm_notifier(&motg->pm_notify);
 	power_supply_unreg_notifier(&motg->psy_nb);
-	extcon_unregister_notifier(motg->extcon_id, EXTCON_USB_HOST,
-							&motg->id_nb);
-	extcon_unregister_notifier(motg->extcon_vbus, EXTCON_USB,
-							&motg->vbus_nb);
 
 	if (pdev->dev.of_node)
 		msm_otg_setup_devices(pdev, motg->pdata->mode, false);
@@ -4716,7 +4610,6 @@ static int msm_otg_remove(struct platform_device *pdev)
 	msm_otg_perf_vote_update(motg, false);
 	cancel_work_sync(&motg->sm_work);
 	cancel_work_sync(&motg->notify_charger_work);
-	cancel_work_sync(&motg->extcon_register_work);
 	destroy_workqueue(motg->otg_wq);
 
 	pm_runtime_resume(&pdev->dev);
