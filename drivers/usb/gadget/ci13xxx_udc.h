@@ -87,7 +87,6 @@ struct ci13xxx_multi_req {
 /* Extension of usb_request */
 struct ci13xxx_req {
 	struct usb_request   req;
-	unsigned int	     map;
 	struct list_head     queue;
 	struct ci13xxx_td   *ptr;
 	dma_addr_t           dma;
