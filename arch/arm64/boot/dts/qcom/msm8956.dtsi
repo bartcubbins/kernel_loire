@@ -103,7 +103,7 @@
 
 		modem_mem: modem_region@86c00000 {
 			compatible = "removed-dma-pool";
-			no-map-fixup;
+			no-map;
 			reg = <0x0 0x86c00000 0x0 0x05600000>;
 			label = "modem_mem";
 		};
