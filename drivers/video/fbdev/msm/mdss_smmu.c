@@ -894,6 +894,13 @@ int mdss_smmu_probe(struct platform_device *pdev)
 
 	mdss_smmu->base.dev = dev;
 
+	if (!dev->dma_parms)
+		dev->dma_parms = devm_kzalloc(dev,
+				sizeof(*dev->dma_parms), GFP_KERNEL);
+
+	dma_set_max_seg_size(dev, DMA_BIT_MASK(32));
+	dma_set_seg_boundary(dev, DMA_BIT_MASK(64));
+
 	iommu_set_fault_handler(mdss_smmu->mmu_mapping->domain,
 			mdss_smmu_fault_handler, mdss_smmu);
 	address = of_get_address(pdev->dev.of_node, 0, 0, 0);
