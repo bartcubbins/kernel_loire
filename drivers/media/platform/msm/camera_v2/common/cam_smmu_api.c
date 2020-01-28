@@ -18,6 +18,7 @@
 #include <linux/dma-direction.h>
 #include <linux/of_platform.h>
 #include <linux/iommu.h>
+#include <linux/ion_kernel.h>
 #include <linux/slab.h>
 #include <linux/dma-mapping.h>
 #include <linux/msm_dma_iommu_mapping.h>
@@ -25,8 +26,7 @@
 #include <linux/sizes.h>
 #include <soc/qcom/scm.h>
 #include <soc/qcom/secure_buffer.h>
-#include <msm_camera_tz_util.h>
-#include <linux/ion_kernel.h>
+#include "msm_camera_tz_util.h"
 #include "cam_smmu_api.h"
 
 #define SCRATCH_ALLOC_START SZ_128K
