@@ -27,17 +27,21 @@ Required properties:
 - clock-rate:		List of clock rates in Hz.
 
 Optional properties:
-- label:	       	A string used to describe the driver used.
+- label:		A string used to describe the driver used.
 - vcca-supply:		Phandle for vcca regulator device node.
 
 
 - qcom,dsi-pll-ssc-en:	Boolean property to indicate that ssc is enabled.
 - qcom,dsi-pll-ssc-mode: Spread-spectrum clocking. It can be either "down-spread"
+- qcom,ssc-enable:	Boolean property to specify if the MDSS PLL Spread
+			Spectrum Clock feature is enabled.
 			or "center-spread". Default is "down-spread" if it is not specified.
 - qcom,ssc-frequency-hz:	Integer property to specify the spread frequency
 			to be programmed for the SSC.
 - qcom,ssc-ppm:		Integer property to specify the Parts per Million
 			value of SSC.
+- qcom,ssc-spread-mode:	A string that specifies the supported spread modes of
+			of SSC. 1.) "down" 2.) "centre".
 
 - qcom,platform-supply-entries:	A node that lists the elements of the supply. There
 				can be more than one instance of this binding,
@@ -78,8 +82,10 @@ Example:
 		qcom,dsi-pll-slave;
 		qcom,dsi-pll-ssc-en;
 		qcom,dsi-pll-ssc-mode = "down-spread";
+		qcom,ssc-enable;
 		qcom,ssc-frequency-hz = <30000>;
 		qcom,ssc-ppm = <5000>;
+		qcom,ssc-spread-mode = "down";
 
 		qcom,platform-supply-entries {
 			#address-cells = <1>;
