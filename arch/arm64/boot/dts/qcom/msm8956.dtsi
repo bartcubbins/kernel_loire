@@ -1849,8 +1849,8 @@
 		gpios = <&msm_gpio 40 0>, <&msm_gpio 41 0>, <&msm_gpio 42 0>,
 			<&msm_gpio 43 0>, <&msm_gpio 44 0>;
 
-		clocks = <&clock_rpmcc clk_xo_wlan_clk>,
-			 <&clock_rpmcc clk_rf_clk2>,
+		clocks = <&clock_gcc clk_xo_wlan_clk>,
+			 <&clock_gcc clk_rf_clk2>,
 			 <&clock_debug clk_gcc_debug_mux>,
 			 <&clock_gcc clk_wcnss_m_clk>;
 
