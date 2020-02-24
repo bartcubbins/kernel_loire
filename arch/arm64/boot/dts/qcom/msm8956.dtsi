@@ -49,7 +49,6 @@
 
 	chosen {
 		stdout-path = "serial0";
-		bootargs = "restore_msm_uart=0x01014000";
 	};
 
 	clocks {
