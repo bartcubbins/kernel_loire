@@ -1,4 +1,4 @@
-/* Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,25 +16,35 @@
 		compatible = "qcom,kgsl-busmon";
 	};
 
+	gpu_bw_tbl: gpu-bw-tbl {
+		compatible = "operating-points-v2";
+
+		opp-0   { opp-hz = /bits/ 64 < 0 >;    }; /* off                            */
+		opp-105 { opp-hz = /bits/ 64 < 805 >;  }; /* DDR: 105.6 MHz BIMC:  52.8 MHz */
+		opp-163 { opp-hz = /bits/ 64 < 1245 >; }; /* DDR: 163.2 MHz BIMC:  81.6 MHz */
+		opp-211 { opp-hz = /bits/ 64 < 1611 >; }; /* DDR: 211.2 MHz BIMC: 105.6 MHz */
+		opp-278 { opp-hz = /bits/ 64 < 2124 >; }; /* DDR: 278.4 MHz BIMC: 139.2 MHz */
+		opp-384 { opp-hz = /bits/ 64 < 2929 >; }; /* DDR: 384.0 MHz BIMC: 192.0 MHz */
+		opp-537 { opp-hz = /bits/ 64 < 4101 >; }; /* DDR: 537.6 MHz BIMC: 268.8 MHz */
+		opp-672 { opp-hz = /bits/ 64 < 5126 >; }; /* DDR: 672.0 MHz BIMC: 336.0 MHz */
+		opp-748 { opp-hz = /bits/ 64 < 5712 >; }; /* DDR: 748.8 MHz BIMC: 374.4 MHz */
+		opp-806 { opp-hz = /bits/ 64 < 6152 >; }; /* DDR: 806.4 MHz BIMC: 403.2 MHz */
+		opp-931 { opp-hz = /bits/ 64 < 7104 >; }; /* DDR: 931.2 MHz BIMC: 465.6 MHz */
+	};
+
 	/* Bus governor */
 	gpubw: qcom,gpubw {
 		compatible = "qcom,devbw";
 		governor = "bw_vbif";
 		qcom,src-dst-ports = <26 512>;
+		operating-points-v2 = <&gpu_bw_tbl>;
 
+		/*
+ 		 * active-only flag is used while registering the bus
+ 		 * governor. It helps release the bus vote when the CPU
+ 		 * subsystem is inactive
+ 		 */
 		qcom,active-only;
-		qcom,bw-tbl =
-			< 0 >,    /* off                            */
-			< 805  >, /* DDR: 105.6 MHz BIMC:  52.8 MHz */
-			< 1245 >, /* DDR: 163.2 MHz BIMC:  81.6 MHz */
-			< 1611 >, /* DDR: 211.2 MHz BIMC: 105.6 MHz */
-			< 2124 >, /* DDR: 278.4 MHz BIMC: 139.2 MHz */
-			< 2929 >, /* DDR: 384.0 MHz BIMC: 192.0 MHz */
-			< 4101 >, /* DDR: 537.6 MHz BIMC: 268.8 MHz */
-			< 5126 >, /* DDR: 672.0 MHz BIMC: 336.0 MHz */
-			< 5712 >, /* DDR: 748.8 MHz BIMC: 374.4 MHz */
-			< 6152 >, /* DDR: 806.4 MHz BIMC: 403.2 MHz */
-			< 7104 >; /* DDR: 931.2 MHz BIMC: 465.6 MHz */
 	};
 
 	msm_gpu: qcom,kgsl-3d0@01c00000 {
