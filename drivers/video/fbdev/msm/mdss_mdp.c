@@ -2452,6 +2452,7 @@ static int mdss_mdp_get_cmdline_config(struct platform_device *pdev)
 	pan_cfg->lk_cfg = true;
 
 	len = strlen(mdss_mdp_panel);
+
 	if (len > 0) {
 		rc = mdss_mdp_get_pan_cfg(pan_cfg);
 		if (!rc) {

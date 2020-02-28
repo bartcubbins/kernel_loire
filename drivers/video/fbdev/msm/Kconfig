@@ -1,5 +1,4 @@
 source "drivers/video/fbdev/msm/msm_dba/Kconfig"
-source "drivers/video/fbdev/msm/panel_driver/Kconfig"
 
 if FB_MSM
 
