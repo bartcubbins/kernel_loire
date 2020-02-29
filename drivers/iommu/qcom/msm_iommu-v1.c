@@ -603,6 +603,12 @@ static void __program_context(struct msm_iommu_drvdata *iommu_drvdata,
 	SET_CB_SCTLR_ASIDPNE(cb_base, ctx, 1);
 	SET_CB_SCTLR_M(cb_base, ctx, 1);
 
+	/* Enable context fault error report */
+	if (iommu_drvdata->report_error_on_fault) {
+		SET_CB_SCTLR_HUPCF(cb_base, ctx, 1);
+		SET_CB_SCTLR_CFRE(cb_base, ctx, 1);
+	}
+
 	mb();
 }
 

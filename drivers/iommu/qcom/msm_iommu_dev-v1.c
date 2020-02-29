@@ -259,6 +259,9 @@ static int msm_iommu_parse_dt(struct platform_device *pdev,
 	if (ret)
 		goto fail;
 
+	drvdata->report_error_on_fault = of_property_read_bool(pdev->dev.of_node,
+						      "qcom,report-error-on-fault");
+
 	drvdata->sec_id = -1;
 	get_secure_id(pdev->dev.of_node, drvdata);
 

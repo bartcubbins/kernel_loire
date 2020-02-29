@@ -165,7 +165,8 @@ struct msm_iommu_bfb_settings {
  * @list:	List head to link all iommus together
  * @halt_enabled: Set to 1 if IOMMU halt is supported in the IOMMU, 0 otherwise.
  * @ctx_attach_count: Count of how many context are attached.
- * @bus_client  : Bus client needed to vote for bus bandwidth.
+ * @bus_client: Bus client needed to vote for bus bandwidth.
+ * @report_error_on_fault: True if error is returned back to master
  *
  * A msm_iommu_drvdata holds the global driver data about a single piece
  * of an IOMMU hardware instance.
@@ -191,6 +192,7 @@ struct msm_iommu_drvdata {
 	struct iommu_device iommu;
 	struct idr asid_idr;
 	struct list_head masters;
+	bool report_error_on_fault;
 };
 
 /**
