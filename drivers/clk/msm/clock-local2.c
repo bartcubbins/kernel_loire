@@ -2299,7 +2299,7 @@ struct clk_div_ops div_reg_ops = {
 	.get_div = div_reg_get_div,
 };
 
-const struct clk_div_ops postdiv_reg_ops = {
+struct clk_div_ops postdiv_reg_ops = {
 	.set_div = postdiv_reg_set_div,
 	.get_div = postdiv_reg_get_div,
 };
