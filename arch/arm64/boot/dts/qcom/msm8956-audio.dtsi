@@ -16,15 +16,6 @@
 #include "msm8956-wsa881x.dtsi"
 
 &soc {
-	qcom,msm-audio-apr {
-		compatible = "qcom,msm-audio-apr";
-		qcom,subsys-name = "apr_adsp";
-
-		q6core: qcom,q6core-audio {
-			compatible = "qcom,q6core-audio";
-		};
-	};
-
 	qcom,avtimer@c0a300c {
 		compatible = "qcom,avtimer";
 		reg = <0x0c0a300c 0x4>,
@@ -198,12 +189,6 @@
 					<0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
 		};
 	};
-};
-
-&msm_audio_ion {
-	qcom,smmu-sid-mask = /bits/ 64 <0xf>;
-	qcom,smmu-sid = <0x1>;
-	iommus = <&apps_smmu 14>;
 };
 
 &dai_pri_auxpcm {
