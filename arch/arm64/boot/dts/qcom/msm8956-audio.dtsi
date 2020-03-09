@@ -15,14 +15,13 @@
 #include "msm-audio-lpass.dtsi"
 #include "msm8956-wsa881x.dtsi"
 
-&soc {
-	qcom,msm-audio-apr {
-		compatible = "qcom,msm-audio-apr";
-		msm_audio_apr_dummy {
-			compatible = "qcom,msm-audio-apr-dummy";
-		};
+&audio_apr {
+	q6core: qcom,q6core-audio {
+		compatible = "qcom,q6core-audio";
 	};
+};
 
+&soc {
 	qcom,avtimer@c0a300c {
 		compatible = "qcom,avtimer";
 		reg = <0x0c0a300c 0x4>,
