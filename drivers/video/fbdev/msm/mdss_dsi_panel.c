@@ -331,9 +331,6 @@ specific_panel_err:
 
 int mdss_dsi_bl_gpio_ctrl(struct mdss_panel_data *pdata, int enable)
 {
-#ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
-	return panel_driver_reset_panel(pdata, enable);
-#else
 	struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
 	int rc = 0, val = 0;
 
@@ -405,11 +402,13 @@ free:
 	gpio_free(ctrl_pdata->bklt_en_gpio);
 ret:
 	return rc;
-#endif /* CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL */
 }
 
 int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 {
+#ifdef CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL
+	return panel_driver_reset_panel(pdata, enable);
+#else
 	struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
 	struct mdss_panel_info *pinfo = NULL;
 	int i, rc = 0;
@@ -542,6 +541,7 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 
 exit:
 	return rc;
+#endif /* CONFIG_FB_MSM_MDSS_SPECIFIC_PANEL */
 }
 
 /**
