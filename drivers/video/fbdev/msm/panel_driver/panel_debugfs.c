@@ -1375,7 +1375,7 @@ static void mipi_dsi_panel_create_debugfs(struct msm_fb_data_type *mfd)
 
 	dev = &pdev->dev;
 
-	if (!&dev->kobj) {
+	if (&dev->kobj == NULL) {
 		pr_err("%s: no &dev->kobj\n", __func__);
 		return;
 	}
