@@ -2290,7 +2290,7 @@ static int fusb301_probe(struct i2c_client *client,
 		goto err1;
 	}
 
-	if (&client->dev.of_node) {
+	if (&client->dev.of_node != NULL) {
 		struct fusb301_data *data = devm_kzalloc(cdev,
 				sizeof(struct fusb301_data), GFP_KERNEL);
 
@@ -2469,7 +2469,7 @@ err3:
 	wakeup_source_trash(&chip->wake_src);
 	fusb301_free_gpio(chip);
 err2:
-	if (&client->dev.of_node)
+	if (&client->dev.of_node != NULL)
 		devm_kfree(cdev, chip->pdata);
 err1:
 	i2c_set_clientdata(client, NULL);
@@ -2515,7 +2515,7 @@ static int fusb301_remove(struct i2c_client *client)
 	wakeup_source_trash(&chip->wake_src);
 	fusb301_free_gpio(chip);
 
-	if (&client->dev.of_node)
+	if (&client->dev.of_node != NULL)
 		devm_kfree(cdev, chip->pdata);
 
 	i2c_set_clientdata(client, NULL);
