@@ -122,6 +122,9 @@ struct msm_eeprom_cfg_data32 {
 };
 
 struct msm_camera_i2c_seq_reg_setting32 {
+/* extension begin */
+	uint16_t slave_addr;
+/* extension end */
 	compat_uptr_t reg_setting;
 	uint16_t size;
 	enum msm_camera_i2c_reg_addr_type addr_type;
@@ -255,6 +258,13 @@ struct msm_flash_cfg_data_t32 {
 		compat_uptr_t settings;
 	} cfg;
 };
+
+/* extension begin */
+struct msm_sensor_event_data32 {
+	uint32_t sof_count;
+	struct compat_timeval mono_timestamp;
+};
+/* extension end */
 
 #define VIDIOC_MSM_ACTUATOR_CFG32 \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 6, struct msm_actuator_cfg_data32)

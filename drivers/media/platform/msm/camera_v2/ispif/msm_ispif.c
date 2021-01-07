@@ -1617,7 +1617,11 @@ static inline void msm_ispif_read_irq_status(struct ispif_irq_status *out,
 
 		ispif_process_irq(ispif, out, VFE0);
 	}
+#if defined(CONFIG_SONY_CAM_V4L2)
+	if (ispif->vfe_info.num_vfe > 1) {
+#else
 	if (ispif->hw_num_isps > 1) {
+#endif
 		if (out[VFE1].ispifIrqStatus0 & RESET_DONE_IRQ) {
 			if (atomic_dec_and_test(&ispif->reset_trig[VFE1]))
 				complete(&ispif->reset_complete[VFE1]);
@@ -1909,9 +1913,20 @@ static long msm_ispif_subdev_ioctl_unlocked(struct v4l2_subdev *sd,
 {
 	struct ispif_device *ispif =
 		(struct ispif_device *)v4l2_get_subdevdata(sd);
+#if defined(CONFIG_SONY_CAM_V4L2)
+	struct ispif_cfg_data *pcdata = (struct ispif_cfg_data *)arg;
+#endif
 
 	switch (cmd) {
 	case VIDIOC_MSM_ISPIF_CFG:
+#if defined(CONFIG_SONY_CAM_V4L2)
+		if (pcdata->cfg_type == ISPIF_RELEASE) {
+			ispif->ispif_sof_debug = 0;
+			ispif->ispif_rdi0_debug = 0;
+			ispif->ispif_rdi1_debug = 0;
+			ispif->ispif_rdi2_debug = 0;
+		}
+#endif
 		return msm_ispif_cmd(sd, arg);
 	case VIDIOC_MSM_ISPIF_CFG_EXT:
 		return msm_ispif_cmd_ext(sd, arg);
@@ -2038,6 +2053,9 @@ static int ispif_probe(struct platform_device *pdev)
 		if (rc)
 			/* backward compatibility */
 			ispif->hw_num_isps = 1;
+#if defined(CONFIG_SONY_CAM_V4L2)
+		ispif->vfe_info.num_vfe = ispif->hw_num_isps;
+#endif
 		/* not an error condition */
 		rc = 0;
 	}

@@ -16,6 +16,9 @@
 #include <linux/regulator/consumer.h>
 #include <linux/gpio.h>
 #include <linux/clk.h>
+#ifdef CONFIG_SONY_CAM_V4L2
+#include <linux/io.h>
+#endif
 #include <linux/slab.h>
 #include <linux/interrupt.h>
 #include <soc/qcom/camera2.h>
@@ -38,9 +41,25 @@ struct msm_cam_dump_string_info {
 	uint32_t offset;
 };
 
+#if defined(CONFIG_SONY_CAM_V4L2)
+static inline void msm_camera_io_w(u32 data, void __iomem *addr)
+{
+	writel_relaxed_no_log((data), (addr));
+}
+#else
 void msm_camera_io_w(u32 data, void __iomem *addr);
+#endif
 void msm_camera_io_w_mb(u32 data, void __iomem *addr);
+#if defined(CONFIG_SONY_CAM_V4L2)
+static inline u32 msm_camera_io_r(void __iomem *addr)
+{
+	uint32_t data = readl_relaxed_no_log(addr);
+
+	return data;
+}
+#else
 u32 msm_camera_io_r(void __iomem *addr);
+#endif
 u32 msm_camera_io_r_mb(void __iomem *addr);
 void msm_camera_io_dump(void __iomem *addr, int size, int enable);
 void msm_camera_io_memcpy(void __iomem *dest_addr,

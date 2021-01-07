@@ -580,6 +580,16 @@ struct sensor_init_cfg_data {
 	} cfg;
 };
 
+/* extension begin */
+#define SENSOR_EVENT_BASE           (V4L2_EVENT_PRIVATE_START)
+#define SENSOR_EVENT_SOF            (SENSOR_EVENT_BASE + 0)
+
+struct msm_sensor_event_data {
+	uint32_t sof_count;
+	struct timeval mono_timestamp;
+};
+/* extension end */
+
 #define VIDIOC_MSM_SENSOR_CFG \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 1, struct sensorb_cfg_data)
 

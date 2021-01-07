@@ -123,6 +123,12 @@ static int msm_cpp_dump_addr(struct cpp_device *cpp_dev,
 	struct msm_cpp_frame_info_t *frame_info);
 static int32_t msm_cpp_reset_vbif_and_load_fw(struct cpp_device *cpp_dev);
 
+#if defined(CONFIG_SONY_CAM_V4L2)
+#define CPP_DBG(fmt, args...)
+#define CPP_LOW(fmt, args...)
+#define ERR_USER_COPY(to)
+#define ERR_COPY_FROM_USER()
+#else
 #if CONFIG_MSM_CPP_DBG
 #define CPP_DBG(fmt, args...) pr_err(fmt, ##args)
 #else
@@ -137,6 +143,7 @@ static int32_t msm_cpp_reset_vbif_and_load_fw(struct cpp_device *cpp_dev);
 #define ERR_USER_COPY(to) pr_err("copy %s user\n", \
 			((to) ? "to" : "from"))
 #define ERR_COPY_FROM_USER() ERR_USER_COPY(0)
+#endif
 
 #define msm_dequeue(queue, member, pop_dir) ({	   \
 	unsigned long flags;		  \
@@ -303,7 +310,11 @@ static void cpp_timer_callback(unsigned long data);
 static uint8_t induce_error;
 static int msm_cpp_enable_debugfs(struct cpp_device *cpp_dev);
 
+#if defined(CONFIG_SONY_CAM_V4L2)
+static inline void msm_cpp_write(u32 data, void __iomem *cpp_base)
+#else
 static void msm_cpp_write(u32 data, void __iomem *cpp_base)
+#endif
 {
 	msm_camera_io_w((data), cpp_base + MSM_CPP_MICRO_FIFO_RX_DATA);
 }
@@ -1085,6 +1096,14 @@ static int cpp_init_hardware(struct cpp_device *cpp_dev)
 		goto reg_enable_failed;
 	}
 
+#if defined(CONFIG_SONY_CAM_V4L2)
+/* TODO: Temporary fix for cpp poll command fail */
+	rc = msm_cpp_set_micro_clk(cpp_dev);
+	if (rc < 0) {
+		pr_err("%s: reset micro clk failed\n", __func__);
+		goto clk_failed;
+	}
+#else
 	if (cpp_dev->micro_reset) {
 		rc = msm_cpp_set_micro_clk(cpp_dev);
 		if (rc < 0) {
@@ -1092,6 +1111,7 @@ static int cpp_init_hardware(struct cpp_device *cpp_dev)
 			goto clk_failed;
 		}
 	}
+#endif
 
 	rc = msm_camera_clk_enable(&cpp_dev->pdev->dev, cpp_dev->clk_info,
 			cpp_dev->cpp_clk, cpp_dev->num_clks, true);
