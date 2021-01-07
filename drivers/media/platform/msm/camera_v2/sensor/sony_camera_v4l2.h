@@ -6,7 +6,7 @@
  * of the License, or (at your option) any later version.
  */
 /*
- * Copyright (C) 2016 Sony Mobile Communications Inc.
+ * Copyright (C) 2015 Sony Mobile Communications Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2, as
@@ -18,7 +18,6 @@
 
 #ifdef __KERNEL__
 
-#define MAX_CONFIG_DELAY_NUM 20
 #define MAX_PLL_NUM 30
 
 enum sony_camera_cmd {
@@ -26,12 +25,11 @@ enum sony_camera_cmd {
 	SONY_CAM_VIO,
 	SONY_CAM_VANA,
 	SONY_CAM_VAF,
-	SONY_GPIO_AF,
+	SONY_GPIO_VDIG,
+	SONY_GPIO_VIO,
+	SONY_GPIO_VANA,
+	SONY_GPIO_VAF,
 	SONY_GPIO_RESET,
-	SONY_CAM_VDIG_GPIO,
-	SONY_CAM_VIO_GPIO,
-	SONY_CAM_VANA_GPIO,
-	SONY_CAM_VAF_GPIO,
 	SONY_CAM_CLK,
 	SONY_I2C_WRITE,
 	EXIT,
@@ -51,9 +49,6 @@ struct sony_camera_module {
 	uint32_t		mount_angle;
 	uint32_t		sensor_rotation;
 	uint32_t		sensor_facing;
-	uint32_t		sensor_config_delay_num;
-	uint32_t		sensor_config_delay[MAX_CONFIG_DELAY_NUM];
-	uint32_t		temperature_check_skip_num;
 	uint32_t		total_pixel_number_w;
 	uint32_t		total_pixel_number_h;
 	uint32_t		active_pixel_number_x;
@@ -67,31 +62,12 @@ struct sony_camera_module {
 	const char		*unit_cell_size_h;
 	const char		*min_f_number;
 	const char		*max_f_number;
-	uint32_t		min_focus_pos;
-	uint32_t		max_focus_pos;
-	uint32_t		min_focus_dac;
-	uint32_t		max_focus_dac;
-	uint32_t		focus_inf_range_offset;
-	uint32_t		focus_macro_range_offset;
-	uint32_t		focus_lens_stroke_inf_to_1m;
-	uint32_t		focus_lens_stroke_1m_to_macro;
-	uint32_t		focus_lens_stroke_inf_to_macro;
-	uint32_t		focus_calc_type;
-	uint32_t		focus_wob_time;
 	uint32_t		has_3a;
 	uint32_t		has_focus_actuator;
 	uint32_t		need_standby_af;
 	uint32_t		i2c_freq_mode;
 	uint32_t		has_pdaf;
 	uint32_t		has_rs;
-	uint32_t		has_multi_output;
-	uint32_t		has_super_slow;
-	uint32_t		has_sub_sensor;
-	uint32_t		has_aube;
-	uint32_t		has_flicker_detector;
-	uint32_t		has_hdr;
-	uint32_t		has_seamless_mode_change;
-	uint32_t		has_gph;
 	uint32_t		pdaf_free_area_num;
 	uint32_t		pdaf_fixed_area_size_w;
 	uint32_t		pdaf_fixed_area_size_h;
@@ -105,7 +81,6 @@ struct sony_camera_info {
 	uint16_t			eeprom_addr;
 	int				eeprom_type;
 	uint16_t			eeprom_max_len;
-	int				gpio_af;
 	int				subdev_code;
 	struct sony_camera_module	*modules;
 	int				modules_num;

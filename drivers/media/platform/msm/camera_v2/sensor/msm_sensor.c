@@ -214,16 +214,6 @@ static int32_t msm_sensor_get_dt_data(struct device_node *of_node,
 		goto FREE_SENSOR_INFO;
 	}
 
-	/*Get clocks information*/
-	rc = msm_camera_get_clk_info(s_ctrl->pdev,
-		&s_ctrl->sensordata->power_info.clk_info,
-		&s_ctrl->sensordata->power_info.clk_ptr,
-		&s_ctrl->sensordata->power_info.clk_info_size);
-	if (rc < 0) {
-		pr_err("failed: msm_camera_get_clk_info rc %d", rc);
-		goto FREE_CSI;
-	}
-
 	rc = msm_camera_get_dt_vreg_data(of_node,
 			&sensordata->power_info.cam_vreg,
 			&sensordata->power_info.num_vreg);
@@ -378,8 +368,8 @@ FREE_CLK_DATA:
 		&s_ctrl->sensordata->power_info.clk_info,
 		&s_ctrl->sensordata->power_info.clk_ptr,
 		s_ctrl->sensordata->power_info.clk_info_size);
-FREE_CSI:
-	kfree(s_ctrl->sensordata->csi_lane_params);
+//FREE_CSI:
+//	kfree(s_ctrl->sensordata->csi_lane_params);
 FREE_SENSOR_INFO:
 	kfree(s_ctrl->sensordata->sensor_info);
 FREE_SENSORDATA:
