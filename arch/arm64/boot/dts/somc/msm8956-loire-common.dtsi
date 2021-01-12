@@ -559,6 +559,15 @@
 		qcom,msm-pcm-bit;
 	};
 
+	bcmdhd_wlan {
+		compatible = "android,bcmdhd_wlan";
+		gpios = <&msm_gpio 48 0x00>, /* WL_REG_ON */
+			<&msm_gpio 45 0x00>; /* WL_HOST_WAKE */
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&msm_gpio_48_def &msm_gpio_45_def>;
+		pinctrl-1 = <&msm_gpio_48_def &msm_gpio_45_def>;
+	};
+
 	usb_otg: usb@78db000 {
 		qcom,usb-switch-sel-gpio = <&pmi8950_gpios 1 0>;
 		qcom,usbin-vadc = <&pmi8950_vadc>;
@@ -1311,13 +1320,6 @@
 	somc,use-for-wifi;
 
 	status = "ok";
-	brcmf: brcmf@1 {
-		reg = <1>;
-		compatible = "brcm,bcm4329-fmac";
-		interrupt-parent = <&msm_gpio>;
-		interrupts = <45 8>;
-		interrupt-names = "host-wake";
-	};
 };
 
 &other_ext_mem {

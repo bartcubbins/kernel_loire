@@ -14,5 +14,18 @@ if WLAN_VENDOR_BROADCOM
 source "drivers/net/wireless/broadcom/b43/Kconfig"
 source "drivers/net/wireless/broadcom/b43legacy/Kconfig"
 source "drivers/net/wireless/broadcom/brcm80211/Kconfig"
+source "drivers/net/wireless/broadcom/bcmdhd/Kconfig"
+
+config BROADCOM_WIFI_RESERVED_MEM
+	bool "BROADCOM Reserved memory for wifi device"
+	depends on SOMC_WIFI_CONTROL
+	default n
+	---help---
+	  This is a configuration for broadcom WLAN driver.
+
+config SOMC_WIFI_CONTROL
+	bool "Enable/disable SOMC WiFi control function"
+	---help---
+	  A SOMC adaptation for the WLAN driver module
 
 endif # WLAN_VENDOR_BROADCOM
