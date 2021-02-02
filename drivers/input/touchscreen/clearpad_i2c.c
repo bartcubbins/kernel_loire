@@ -1,23 +1,19 @@
 /*
  * Copyright (c) 2011 Synaptics Incorporated
  * Copyright (c) 2011 Unixphere
- * Copyright (C) 2017 Sony Mobile Communications Inc.
  *
  * Author: Yusuke Yoshimura <Yusuke.Yoshimura@sonyericsson.com>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 2, as
+ * published by the Free Software Foundation.
+ */
+/*
+ * Copyright (C) 2016 Sony Mobile Communications Inc.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2, as
+ * published by the Free Software Foundation.
  */
 
 #include <linux/async.h>
@@ -214,7 +210,9 @@ static int clearpad_i2c_probe(struct i2c_client *client,
 		.pdata = NULL,
 		.bdata = &clearpad_i2c_bus_data,
 		.probe_retry = 0,
+#ifdef CONFIG_TOUCHSCREEN_CLEARPAD_RMI_DEV
 		.rmi_dev = NULL,
+#endif
 	};
 	struct clearpad_i2c_t *this;
 	int rc;
