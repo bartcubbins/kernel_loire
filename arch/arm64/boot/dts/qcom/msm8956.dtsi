@@ -918,7 +918,6 @@
 			<78 512 1000 0>; /* Max. bandwidth */
 		qcom,bus-vector-names = "MIN", "MAX";
 		qcom,instance-type = "sdcc";
-		status = "disabled";
 	};
 
 	sdhc_1: sdhci@7824900 {
@@ -926,7 +925,7 @@
 		reg = <0x7824900 0x500>, <0x7824000 0x800>, <0x7824e00 0x200>;
 		reg-names = "hc_mem", "core_mem", "cmdq_mem";
 
-		//sdhc-msm-crypto = <&sdcc1_ice>;
+		sdhc-msm-crypto = <&sdcc1_ice>;
 		interrupts = <0 123 0>, <0 138 0>;
 		interrupt-names = "hc_irq", "pwr_irq";
 
