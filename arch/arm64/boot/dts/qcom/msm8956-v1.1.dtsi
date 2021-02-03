@@ -35,9 +35,9 @@
 };
 
 &soc {
-	/delete-node/ qcom,cpu-clock-8976@b016000;
+	/delete-node/ qcom,cpu-clock-8976@b114000;
 
-	clock_cpu: qcom,cpu-clock-8976@b016000 {
+	clock_cpu: qcom,cpu-clock-8976@b114000 {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		compatible = "qcom,cpu-clock-8976";

@@ -597,7 +597,7 @@
 		qcom,cpr-enable;
 	};
 
-	mem_acc_gfx_vreg_corner: mem-acc-gfx-regulator {
+	mem_acc_gfx_vreg_corner: mem-acc-gfx-regulator@1944130 {
 		compatible = "qcom,mem-acc-regulator";
 		reg = <0x01944130 0x4>;
 		reg-names = "acc-sel-l1";

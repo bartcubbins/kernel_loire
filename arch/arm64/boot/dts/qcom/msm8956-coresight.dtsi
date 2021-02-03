@@ -33,7 +33,7 @@
 		clock-names = "core_clk", "core_a_clk";
 	};
 
-	tpiu: tpiu@820000 {
+	tpiu: tpiu@6020000 {
 		compatible = "arm,coresight-tpiu";
 		reg = <0x6020000 0x1000>,
 		      <0x1100000 0xb0000>;

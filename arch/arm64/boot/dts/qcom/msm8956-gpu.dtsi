@@ -22,6 +22,11 @@
 		governor = "bw_vbif";
 		qcom,src-dst-ports = <26 512>;
 
+		/*
+		 * active-only flag is used while registering the bus
+		 * governor.It helps release the bus vote when the CPU
+		 * subsystem is inactive.
+		 */
 		qcom,active-only;
 		qcom,bw-tbl =
 			< 0 >,    /* off                            */
@@ -37,7 +42,7 @@
 			< 7104 >; /* DDR: 931.2 MHz BIMC: 465.6 MHz */
 	};
 
-	msm_gpu: qcom,kgsl-3d0@01c00000 {
+	msm_gpu: qcom,kgsl-3d0@1c00000 {
 		label = "kgsl-3d0";
 		compatible = "qcom,kgsl-3d0", "qcom,kgsl-3d";
 		reg = <0x1C00000 0x40000
@@ -192,8 +197,7 @@
 		};
 	};
 
-	/* ahb_base_offset: 0x40000 */
-	kgsl_msm_iommu: qcom,kgsl-iommu {
+	kgsl_msm_iommu: qcom,kgsl-iommu@1f00000 {
 		compatible = "qcom,kgsl-smmu-v2";
 		reg = <0x1f00000 0x10000>;
 		/*
@@ -209,18 +213,21 @@
 		clock-names = "gpu_ahb_clk", "gcc_bimc_gfx_clk";
 
 		qcom,secure_align_mask = <0xfff>;
+
 		gfx3d_user: gfx3d_user {
 			compatible = "qcom,smmu-kgsl-cb";
 			label = "gfx3d_user";
 			iommus = <&kgsl_smmu 0>;
 			qcom,gpu-offset = <0x48000>;
 		};
+
 		gfx3d_secure: gfx3d_secure {
 			compatible = "qcom,smmu-kgsl-cb";
 			label = "gfx3d_secure";
 			iommus = <&kgsl_smmu 2>;
 			memory-region = <&secure_mem>;
 		};
+
 /*		gfx3d_priv: gfx3d_priv {
 			compatible = "qcom,smmu-kgsl-cb";
 			label = "gfx3d_priv";

@@ -348,7 +348,7 @@
 		#clock-cells = <1>;
 	};
 
-	clock_cpu: qcom,cpu-clock-8976@b016000 {
+	clock_cpu: qcom,cpu-clock-8976@b114000 {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		compatible = "qcom,cpu-clock-8976";
@@ -1075,7 +1075,7 @@
 		status = "disabled";
 	};
 
-	uartblsp1dm1: serial@78af0000 {
+	uartblsp1dm1: serial@78af000 {
 		compatible = "qcom,msm-lsuart-v14";
 		reg = <0x78af000 0x200>;
 		interrupts = <0 107 0>;
@@ -1360,7 +1360,7 @@
 		};
 	};
 
-	android_usb: android_usb@086000c8 {
+	android_usb: android_usb@86000c8 {
 		compatible = "qcom,android-usb";
 		reg = <0x086000c8 0xc8>;
 		qcom,pm-qos-latency = <2 1001 12701>;
@@ -1378,7 +1378,7 @@
 		qcom,ea-pc = <0x170>;
 	};
 
-	ipa_hw: qcom,ipa@07900000 {
+	ipa_hw: qcom,ipa@7900000 {
 		compatible = "qcom,ipa";
 		reg = <0x07900000 0x4effc>, <0x07904000 0x26934>;
 		reg-names = "ipa-base", "bam-base";
@@ -1515,7 +1515,7 @@
 		clock-names = "iface_clk";
 	};
 
-	qcom_tzlog: tz-log@08600720 {
+	qcom_tzlog: tz-log@8600720 {
 		compatible = "qcom,tz-log";
 		reg = <0x08600720 0x2000>;
 		qcom,hyplog-enabled;
@@ -1899,7 +1899,7 @@
 		memory-region = <&reloc_mem>;
 	};
 
-	spi_0: spi@0x78B5000 { /* BLSP1 QUP0 */
+	spi_0: spi@78b5000 { /* BLSP1 QUP0 */
 		compatible = "qcom,spi-qup-v2";
 		reg-names = "spi_physical", "spi_bam_physical";
 		reg = <0x78B5000 0x600>,
